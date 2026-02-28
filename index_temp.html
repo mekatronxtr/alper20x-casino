@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>alper20x — Casino & Crypto</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="logo">alper20x</div>
+    <nav>
+      <a href="#profile" class="active">Profil</a>
+      <a href="#trade">Kripto</a>
+      <a href="#crash">Crash</a>
+      <a href="#casino">Casino</a>
+      <a href="#aviator">Aviator</a>
+      <a href="#leaderboard">Sıralama</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div id="vipBadge" style="display:none;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:20px;background:linear-gradient(135deg,#f0c040,#ff9f40);color:#111;letter-spacing:1px"></div>
+      <button onclick="claimBonus()" id="bonusBtn" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;display:none">🎁 Bonus Al!</button>
+      <div class="bal-chip">💰 <span id="headerBal">10,000</span> aXC</div>
+    </div>
+  </div>
+</header>
+
+<!-- PROFILE -->
+<section class="hero" id="profile">
+  <div class="hero-inner">
+    <div class="profile-pic-wrap">
+      <div class="profile-pic-inner">👑</div>
+    </div>
+    <div class="profile-info">
+      <h1><span>alper20x</span></h1>
+      <div class="bio">🎰 Profesyonel Casino Oyuncusu | 🚀 Crypto Trader | 🎯 High Roller</div>
+      <a href="https://instagram.com/alper20x" target="_blank" class="ig-btn">📸 Instagram'da Takip Et</a>
+      <div class="stats">
+        <div class="stat-item">
+          <b>2,450,000</b>
+          <span>Bakiye</span>
+        </div>
+        <div class="stat-item">
+          <b>1,247</b>
+          <span>Kazanma</span>
+        </div>
+        <div class="stat-item">
+          <b>58.2%</b>
+          <span>Win Rate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRYPTO TRADING -->
+<section id="trade">
+  <div class="section">
+    <div class="sec-title">📈 KRİPTO TRADİNG</div>
+    <div class="coin-tabs">
+      <div class="coin-tab active" data-coin="BTC" onclick="switchCoin('BTC',this)">₿ Bitcoin</div>
+      <div class="coin-tab" data-coin="ETH" onclick="switchCoin('ETH',this)">Ξ Ethereum</div>
+      <div class="coin-tab" data-coin="SOL" onclick="switchCoin('SOL',this)">◎ Solana</div>
+      <div class="coin-tab" data-coin="DOGE" onclick="switchCoin('DOGE',this)">Ð Dogecoin</div>
+    </div>
+    <div class="trade-layout">
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="coin-info">
+            <div class="coin-icon" id="coinIcon">₿</div>
+            <div>
+              <div class="coin-name" id="coinName">Bitcoin (BTC)</div>
+              <div style="font-size:.75rem;color:var(--muted)">aXC / Sahte Para</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="coin-price" id="coinPrice">42,000</div>
+            <div class="coin-change up" id="coinChange">+0.00%</div>
+          </div>
+        </div>
+        <canvas id="chartCv" height="260"></canvas>
+      </div>
+      <div class="trade-panel">
+        <div class="panel-box">
+          <h3>İşlem Yap</h3>
+          <div class="trade-form">
+            <div>
+              <label>Miktar (aXC)</label>
+              <input type="number" id="tradeAmt" value="500" min="10" step="10"/>
+            </div>
+            <div class="amount-presets">
+              <div class="preset" onclick="setAmt(100)">100</div>
+              <div class="preset" onclick="setAmt(500)">500</div>
+              <div class="preset" onclick="setAmt(1000)">1K</div>
+              <div class="preset" onclick="setAmt(2500)">2.5K</div>
+            </div>
+            <div class="tf-row">
+              <button class="tf-btn buy-btn" onclick="tradeBuy()">AL</button>
+              <button class="tf-btn sell-all-btn" onclick="tradeQuickSell()">SAT (Tümü)</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>Açık Pozisyonlar</h3>
+          <div class="pos-list" id="posList">
+            <div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">Henüz pozisyon yok</div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>Portföy</h3>
+          <div id="portfolioInfo" style="font-size:.82rem;display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRASH / BALLOON -->
+<section id="crash">
+  <div class="section">
+    <div class="sec-title">🎈 BALON CRASH — Para Biriktirir, Patlamadan Çek!</div>
+    <div class="crash-layout">
+      <div class="crash-box">
+        <canvas id="crashCv" height="320"></canvas>
+        <div class="mult-display safe" id="multDisplay">1.00x</div>
+        <div class="crash-status" id="crashStatus">Bahis gir ve BAŞLAT'a bas</div>
+      </div>
+      <div class="crash-panel">
+        <div class="panel-box">
+          <h3>BAHİS</h3>
+          <div class="trade-form">
+            <div>
+              <label>Bahis Miktarı (aXC)</label>
+              <input type="number" id="crashAmt" value="200" min="10" step="10"/>
+            </div>
+            <div class="amount-presets">
+              <div class="preset" onclick="setCrashAmt(100)">100</div>
+              <div class="preset" onclick="setCrashAmt(500)">500</div>
+              <div class="preset" onclick="setCrashAmt(1000)">1K</div>
+              <div class="preset" onclick="setCrashAmt(2500)">2.5K</div>
+            </div>
+            <div>
+              <label>Otomatik Çekiş (0 = manuel)</label>
+              <input type="number" id="autoCashout" value="0" min="0" step="0.1"/>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+              <input type="checkbox" id="autoReplay"/>
+              <label for="autoReplay" style="margin:0;font-size:.8rem">Otomatik Tekrar</label>
+            </div>
+            <div class="tf-row">
+              <button class="tf-btn" id="crashStartBtn" onclick="startCrash()" style="background:var(--green);color:#fff">BAŞLAT</button>
+              <button class="tf-btn" id="crashCashoutBtn" onclick="cashout()" style="background:var(--gold);color:#111" disabled>ÇEKİ</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>SON TURLAR</h3>
+          <div class="rounds-list" id="roundsList">
+            <div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">Henüz tur yok</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASINO GAMES -->
+<section id="casino">
+  <div class="section">
+    <div class="sec-title">🎰 CASİNO OYUNLARI</div>
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="game-icon">🪙</div>
+        <div class="game-name">Coin Flip</div>
+        <div class="game-desc">Tura/Yazı ile 2x kazanç</div>
+        <button class="game-btn" onclick="openCoinFlip()">OYNA</button>
+      </div>
+      <div class="game-card">
+        <div class="game-icon">🎲</div>
+        <div class="game-name">Dice</div>
+        <div class="game-desc">Zar tahmini 1-100</div>
+        <button class="game-btn" onclick="openDice()">OYNA</button>
+      </div>
+      <div class="game-card">
+        <div class="game-icon">🎡</div>
+        <div class="game-name">Roulette</div>
+        <div class="game-desc">Klasik rulet</div>
+        <button class="game-btn" onclick="openRoulette()">OYNA</button>
+      </div>
+      <div class="game-card">
+        <div class="game-icon">💣</div>
+        <div class="game-name">Mines</div>
+        <div class="game-desc">Mayın tarlası</div>
+        <button class="game-btn" onclick="openMines()">OYNA</button>
+      </div>
+      <div class="game-card">
+        <div class="game-icon">🎰</div>
+        <div class="game-name">Slot Machine</div>
+        <div class="game-desc">Klasik slot</div>
+        <button class="game-btn" onclick="openSlot()">OYNA</button>
+      </div>
+      <div class="game-card">
+        <div class="game-icon">♠️</div>
+        <div class="game-name">Blackjack</div>
+        <div class="game-desc">21'e ulaş</div>
+        <button class="game-btn" onclick="openBlackjack()">OYNA</button>
+      </div>
+      <div class="game-card">
+        <div class="game-icon">🎯</div>
+        <div class="game-name">Keno</div>
+        <div class="game-desc">Sayı tahmini</div>
+        <button class="game-btn" onclick="openKeno()">OYNA</button>
+      </div>
+      <div class="game-card">
+        <div class="game-icon">📈</div>
+        <div class="game-name">Hi-Lo</div>
+        <div class="game-desc">Yüksek/Düşük</div>
+        <button class="game-btn" onclick="openHilo()">OYNA</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVIATOR -->
+<section id="aviator">
+  <div class="section">
+    <div class="sec-title">✈️ AVIATOR — Uçak Kaçmadan Önce Çek!</div>
+    <div class="aviator-layout">
+      <div class="aviator-box">
+        <canvas id="aviatorCv" height="400"></canvas>
+        <div class="aviator-mult" id="aviatorMult">1.00x</div>
+        <div class="aviator-status" id="aviatorStatus">Bahis gir ve BAŞLAT'a bas</div>
+      </div>
+      <div class="aviator-panel">
+        <div class="panel-box">
+          <h3>BAHİS</h3>
+          <div class="trade-form">
+            <div>
+              <label>Bahis Miktarı (aXC)</label>
+              <input type="number" id="aviatorAmt" value="100" min="10" step="10"/>
+            </div>
+            <div class="amount-presets">
+              <div class="preset" onclick="setAviatorAmt(50)">50</div>
+              <div class="preset" onclick="setAviatorAmt(100)">100</div>
+              <div class="preset" onclick="setAviatorAmt(500)">500</div>
+              <div class="preset" onclick="setAviatorAmt(1000)">1K</div>
+            </div>
+            <div class="tf-row">
+              <button class="tf-btn" id="aviatorStartBtn" onclick="startAviator()" style="background:var(--green);color:#fff">BAŞLAT</button>
+              <button class="tf-btn" id="aviatorCashoutBtn" onclick="cashoutAviator()" style="background:var(--gold);color:#111" disabled>ÇEKİ</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>SON UÇUŞLAR</h3>
+          <div class="flights-list" id="flightsList">
+            <div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">Henüz uçuş yok</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section id="leaderboard">
+  <div class="section">
+    <div class="sec-title">🏆 EN İYİ OYUNCULAR</div>
+    <div class="leaderboard-container">
+      <div class="leaderboard-tabs">
+        <button class="lb-tab active" onclick="switchLeaderboard('wealth')">💰 En Zenginler</button>
+        <button class="lb-tab" onclick="switchLeaderboard('wins')">🎯 En Çok Kazananlar</button>
+        <button class="lb-tab" onclick="switchLeaderboard('crash')">🎈 Crash Ustaları</button>
+      </div>
+      <div class="leaderboard-list" id="leaderboardList">
+        <!-- Leaderboard items will be generated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODALS -->
+<div id="coinFlipModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🪙 Coin Flip</h3>
+      <button class="modal-close" onclick="closeModal('coinFlipModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="coin-display" id="coinDisplay">🪙</div>
+      <div class="coin-result" id="coinResult">Tura veya Yazı seç</div>
+      <div class="trade-form">
+        <div>
+          <label>Bahis Miktarı (aXC)</label>
+          <input type="number" id="coinAmt" value="100" min="10" step="10"/>
+        </div>
+        <div class="tf-row">
+          <button class="tf-btn" onclick="flipCoin('heads')" style="background:var(--accent);color:#fff">TURA</button>
+          <button class="tf-btn" onclick="flipCoin('tails')" style="background:var(--red);color:#fff">YAZI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="diceModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🎲 Dice</h3>
+      <button class="modal-close" onclick="closeModal('diceModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="dice-display" id="diceDisplay">🎲</div>
+      <div class="dice-result" id="diceResult">1-100 arası sayı seç</div>
+      <div class="trade-form">
+        <div>
+          <label>Tahmin (1-100)</label>
+          <input type="number" id="diceGuess" value="50" min="1" max="100"/>
+        </div>
+        <div>
+          <label>Bahis Miktarı (aXC)</label>
+          <input type="number" id="diceAmt" value="100" min="10" step="10"/>
+        </div>
+        <button class="tf-btn" onclick="rollDice()" style="background:var(--green);color:#fff">ZAR AT</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="rouletteModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🎡 Roulette</h3>
+      <button class="modal-close" onclick="closeModal('rouletteModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="roulette-wheel" id="rouletteWheel">🎡</div>
+      <div class="roulette-result" id="rouletteResult">Sayı veya renk seç</div>
+      <div class="trade-form">
+        <div>
+          <label>Bahis Miktarı (aXC)</label>
+          <input type="number" id="rouletteAmt" value="100" min="10" step="10"/>
+        </div>
+        <div class="roulette-bets">
+          <button class="roulette-btn" onclick="betRoulette('red')" style="background:var(--red);color:#fff">KIRMIZI</button>
+          <button class="roulette-btn" onclick="betRoulette('black')" style="background:#333;color:#fff">SİYAH</button>
+          <button class="roulette-btn" onclick="betRoulette('green')" style="background:var(--green);color:#fff">YEŞİL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="notif" id="notif"></div>
+
+<footer>
+</footer>
+
+<script>
+// GLOBAL STATE
+let balance = 10000;
+let currentCoin = 'BTC';
+let positions = [];
+let crashRunning = false;
+let crashMult = 1;
+let crashInterval;
+let currentLeaderboardType = 'wealth';
+
+// COIN DATA
+const coinData = {
+  BTC: { price: 42000, change: 0, icon: '₿', name: 'Bitcoin', color: '#f7931a' },
+  ETH: { price: 2800, change: 0, icon: 'Ξ', name: 'Ethereum', color: '#627eea' },
+  SOL: { price: 120, change: 0, icon: '◎', name: 'Solana', color: '#9945ff' },
+  DOGE: { price: 0.08, change: 0, icon: 'Ð', name: 'Dogecoin', color: '#c2a633' }
+};
+
+// UTILITY FUNCTIONS
+function updateBalance(amount) {
+  balance += amount;
+  document.getElementById('headerBal').textContent = balance.toLocaleString();
+}
+
+function showNotif(message, type = 'info') {
+  const notif = document.getElementById('notif');
+  const item = document.createElement('div');
+  item.className = `notif-item ${type}-toast`;
+  item.textContent = message;
+  notif.appendChild(item);
+  setTimeout(() => item.remove(), 3000);
+}
+
+function openModal(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+// CRYPTO TRADING
+function switchCoin(coin, btn) {
+  currentCoin = coin;
+  document.querySelectorAll('.coin-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  
+  const data = coinData[coin];
+  document.getElementById('coinIcon').textContent = data.icon;
+  document.getElementById('coinName').textContent = `${data.name} (${coin})`;
+  document.getElementById('coinPrice').textContent = data.price.toLocaleString();
+  
+  const changeEl = document.getElementById('coinChange');
+  changeEl.textContent = `${data.change >= 0 ? '+' : ''}${data.change.toFixed(2)}%`;
+  changeEl.className = `coin-change ${data.change >= 0 ? 'up' : 'dn'}`;
+  
+  drawChart();
+  updatePortfolio();
+}
+
+function setAmt(amt) {
+  document.getElementById('tradeAmt').value = amt;
+}
+
+function tradeBuy() {
+  const amt = parseInt(document.getElementById('tradeAmt').value);
+  if (amt > balance) {
+    showNotif('❌ Yetersiz bakiye!', 'lose');
+    return;
+  }
+  
+  updateBalance(-amt);
+  positions.push({
+    coin: currentCoin,
+    amount: amt,
+    entryPrice: coinData[currentCoin].price,
+    timestamp: Date.now()
+  });
+  
+  updatePositions();
+  updatePortfolio();
+  showNotif(`✅ ${currentCoin} alındı: ${amt} aXC`, 'win');
+}
+
+function tradeQuickSell() {
+  if (positions.length === 0) {
+    showNotif('❌ Satılacak pozisyon yok!', 'lose');
+    return;
+  }
+  
+  const totalValue = positions.reduce((sum, pos) => {
+    return sum + (pos.amount * coinData[pos.coin].price / pos.entryPrice);
+  }, 0);
+  
+  updateBalance(Math.floor(totalValue));
+  positions = [];
+  
+  updatePositions();
+  updatePortfolio();
+  showNotif(`✅ Tüm pozisyonlar satıldı: ${Math.floor(totalValue)} aXC`, 'win');
+}
+
+function updatePositions() {
+  const list = document.getElementById('posList');
+  if (positions.length === 0) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">Henüz pozisyon yok</div>';
+    return;
+  }
+  
+  list.innerHTML = positions.map(pos => {
+    const currentPrice = coinData[pos.coin].price;
+    const pnl = ((currentPrice - pos.entryPrice) / pos.entryPrice * 100).toFixed(2);
+    const value = Math.floor(pos.amount * currentPrice / pos.entryPrice);
+    
+    return `
+      <div class="pos-item">
+        <div class="pi-row">
+          <span>${pos.coin}</span>
+          <span style="color:${pnl >= 0 ? 'var(--green)' : 'var(--red)'}">${pnl}%</span>
+        </div>
+        <div class="pi-row">
+          <span>${pos.amount} → ${value} aXC</span>
+          <button class="sell-btn" onclick="sellPosition(${positions.indexOf(pos)})">SAT</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function sellPosition(index) {
+  const pos = positions[index];
+  const currentPrice = coinData[pos.coin].price;
+  const value = Math.floor(pos.amount * currentPrice / pos.entryPrice);
+  
+  updateBalance(value);
+  positions.splice(index, 1);
+  
+  updatePositions();
+  updatePortfolio();
+  showNotif(`✅ ${pos.coin} satıldı: ${value} aXC`, 'win');
+}
+
+function updatePortfolio() {
+  const info = document.getElementById('portfolioInfo');
+  const totalValue = positions.reduce((sum, pos) => {
+    return sum + (pos.amount * coinData[pos.coin].price / pos.entryPrice);
+  }, 0);
+  
+  info.innerHTML = `
+    <div style="display:flex;justify-content:space-between">
+      <span>Açık Pozisyonlar</span>
+      <b>${positions.length}</b>
+    </div>
+    <div style="display:flex;justify-content:space-between">
+      <span>Toplam Değer</span>
+      <b>${Math.floor(totalValue)} aXC</b>
+    </div>
+    <div style="display:flex;justify-content:space-between">
+      <span>Bakiye</span>
+      <b>${balance} aXC</b>
+    </div>
+  `;
+}
+
+// CHART
+function drawChart() {
+  const canvas = document.getElementById('chartCv');
+  const ctx = canvas.getContext('2d');
+  const width = canvas.offsetWidth;
+  const height = 260;
+  
+  canvas.width = width;
+  canvas.height = height;
+  
+  // Generate random data
+  const points = [];
+  let price = coinData[currentCoin].price;
+  for (let i = 0; i < 50; i++) {
+    price += (Math.random() - 0.5) * price * 0.02;
+    points.push(price);
+  }
+  
+  // Draw grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 5; i++) {
+    const y = (height / 5) * i;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+  }
+  
+  // Draw line
+  ctx.strokeStyle = coinData[currentCoin].color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  
+  points.forEach((point, i) => {
+    const x = (width / points.length) * i;
+    const y = height - ((point - Math.min(...points)) / (Math.max(...points) - Math.min(...points))) * height * 0.8 - height * 0.1;
+    
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  
+  ctx.stroke();
+}
+
+// CRASH GAME
+function setCrashAmt(amt) {
+  document.getElementById('crashAmt').value = amt;
+}
+
+function startCrash() {
+  if (crashRunning) return;
+  
+  const amt = parseInt(document.getElementById('crashAmt').value);
+  if (amt > balance) {
+    showNotif('❌ Yetersiz bakiye!', 'lose');
+    return;
+  }
+  
+  updateBalance(-amt);
+  crashRunning = true;
+  crashMult = 1;
+  
+  document.getElementById('crashStartBtn').disabled = true;
+  document.getElementById('crashCashoutBtn').disabled = false;
+  document.getElementById('crashStatus').textContent = 'Uçuyor...';
+  
+  const canvas = document.getElementById('crashCv');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = 320;
+  
+  let y = canvas.height - 50;
+  let x = 50;
+  
+  crashInterval = setInterval(() => {
+    crashMult += Math.random() * 0.1;
+    y -= Math.random() * 5;
+    x += Math.random() * 3;
+    
+    document.getElementById('multDisplay').textContent = crashMult.toFixed(2) + 'x';
+    document.getElementById('multDisplay').className = crashMult > 2 ? 'mult-display danger' : 'mult-display safe';
+    
+    // Clear and redraw
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw balloon
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.arc(x, y, 30, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Draw string
+    ctx.strokeStyle = '#666';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x, y + 30);
+    ctx.lineTo(x, y + 80);
+    ctx.stroke();
+    
+    // Random crash
+    if (Math.random() < 0.02 || crashMult > 100) {
+      crashGameEnd(false);
+    }
+    
+    // Auto cashout
+    const autoCashout = parseFloat(document.getElementById('autoCashout').value);
+    if (autoCashout > 0 && crashMult >= autoCashout) {
+      cashout();
+    }
+  }, 100);
+}
+
+function cashout() {
+  if (!crashRunning) return;
+  
+  const amt = parseInt(document.getElementById('crashAmt').value);
+  const winAmt = Math.floor(amt * crashMult);
+  
+  crashGameEnd(true, winAmt);
+}
+
+function crashGameEnd(cashedOut, winAmt = 0) {
+  clearInterval(crashInterval);
+  crashRunning = false;
+  
+  document.getElementById('crashStartBtn').disabled = false;
+  document.getElementById('crashCashoutBtn').disabled = true;
+  document.getElementById('multDisplay').className = 'mult-display popped';
+  
+  if (cashedOut) {
+    updateBalance(winAmt);
+    document.getElementById('crashStatus').textContent = `Çekildi! Kazanç: ${winAmt} aXC (${crashMult.toFixed(2)}x)`;
+    showNotif(`🎉 Crash kazancı: ${winAmt} aXC!`, 'win');
+  } else {
+    document.getElementById('crashStatus').textContent = `Patladı! ${crashMult.toFixed(2)}x`;
+    showNotif(`💥 Balon patladı!`, 'lose');
+  }
+  
+  // Add to history
+  const roundsList = document.getElementById('roundsList');
+  const roundDiv = document.createElement('div');
+  roundDiv.className = 'round-item';
+  roundDiv.innerHTML = `
+    <span style="color:${cashedOut ? 'var(--green)' : 'var(--red)'}">${crashMult.toFixed(2)}x</span>
+    <span style="color:var(--muted);font-size:.7rem">${cashedOut ? 'Çekildi' : 'Patladı'}</span>
+  `;
+  roundsList.insertBefore(roundDiv, roundsList.firstChild);
+  
+  if (roundsList.children.length > 10) roundsList.removeChild(roundsList.lastChild);
+  
+  // Auto replay
+  if (document.getElementById('autoReplay').checked && cashedOut) {
+    setTimeout(startCrash, 2000);
+  }
+}
+
+// AVIATOR GAME
+function setAviatorAmt(amt) {
+  document.getElementById('aviatorAmt').value = amt;
+}
+
+function startAviator() {
+  const amt = parseInt(document.getElementById('aviatorAmt').value);
+  if (amt > balance) {
+    showNotif('❌ Yetersiz bakiye!', 'lose');
+    return;
+  }
+  
+  updateBalance(-amt);
+  
+  document.getElementById('aviatorStartBtn').disabled = true;
+  document.getElementById('aviatorCashoutBtn').disabled = false;
+  document.getElementById('aviatorStatus').textContent = 'Uçuyor...';
+  
+  const canvas = document.getElementById('aviatorCv');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = 400;
+  
+  let mult = 1;
+  let planeY = canvas.height / 2;
+  let planeX = 50;
+  
+  const interval = setInterval(() => {
+    mult += Math.random() * 0.15;
+    planeY -= Math.random() * 8;
+    planeX += Math.random() * 4;
+    
+    document.getElementById('aviatorMult').textContent = mult.toFixed(2) + 'x';
+    
+    // Clear and redraw
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw plane
+    ctx.fillStyle = '#3b82f6';
+    ctx.font = '40px Arial';
+    ctx.fillText('✈️', planeX, planeY);
+    
+    // Draw trail
+    ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(50, canvas.height / 2);
+    ctx.lineTo(planeX, planeY);
+    ctx.stroke();
+    
+    // Random fly away
+    if (Math.random() < 0.015 || mult > 100) {
+      clearInterval(interval);
+      document.getElementById('aviatorStartBtn').disabled = false;
+      document.getElementById('aviatorCashoutBtn').disabled = true;
+      document.getElementById('aviatorStatus').textContent = `Uçtu! ${mult.toFixed(2)}x`;
+      showNotif(`✈️ Uçak kaçtı!`, 'lose');
+      
+      // Add to history
+      const flightsList = document.getElementById('flightsList');
+      const flightDiv = document.createElement('div');
+      flightDiv.className = 'flight-item';
+      flightDiv.innerHTML = `<span style="color:var(--red)">${mult.toFixed(2)}x</span>`;
+      flightsList.insertBefore(flightDiv, flightsList.firstChild);
+      
+      if (flightsList.children.length > 10) flightsList.removeChild(flightsList.lastChild);
+    }
+  }, 100);
+  
+  // Store interval for cashout
+  window.aviatorInterval = interval;
+  window.aviatorAmt = amt;
+  window.aviatorMult = mult;
+}
+
+function cashoutAviator() {
+  if (!window.aviatorInterval) return;
+  
+  clearInterval(window.aviatorInterval);
+  const winAmt = Math.floor(window.aviatorAmt * window.aviatorMult);
+  
+  updateBalance(winAmt);
+  
+  document.getElementById('aviatorStartBtn').disabled = false;
+  document.getElementById('aviatorCashoutBtn').disabled = true;
+  document.getElementById('aviatorStatus').textContent = `Çekildi! Kazanç: ${winAmt} aXC (${window.aviatorMult.toFixed(2)}x)`;
+  showNotif(`🎉 Aviator kazancı: ${winAmt} aXC!`, 'win');
+  
+  // Add to history
+  const flightsList = document.getElementById('flightsList');
+  const flightDiv = document.createElement('div');
+  flightDiv.className = 'flight-item';
+  flightDiv.innerHTML = `<span style="color:var(--green)">${window.aviatorMult.toFixed(2)}x</span>`;
+  flightsList.insertBefore(flightDiv, flightsList.firstChild);
+  
+  if (flightsList.children.length > 10) flightsList.removeChild(flightsList.lastChild);
+  
+  window.aviatorInterval = null;
+}
+
+// CASINO GAMES
+function openCoinFlip() {
+  openModal('coinFlipModal');
+}
+
+function openDice() {
+  openModal('diceModal');
+}
+
+function openRoulette() {
+  openModal('rouletteModal');
+}
+
+function openMines() {
+  showNotif('🚧 Mines oyunu yakında!', 'info');
+}
+
+function openSlot() {
+  showNotif('🚧 Slot oyunu yakında!', 'info');
+}
+
+function openBlackjack() {
+  showNotif('🚧 Blackjack oyunu yakında!', 'info');
+}
+
+function openKeno() {
+  showNotif('🚧 Keno oyunu yakında!', 'info');
+}
+
+function openHilo() {
+  showNotif('🚧 Hi-Lo oyunu yakında!', 'info');
+}
+
+function flipCoin(choice) {
+  const amt = parseInt(document.getElementById('coinAmt').value);
+  if (amt > balance) {
+    showNotif('❌ Yetersiz bakiye!', 'lose');
+    return;
+  }
+  
+  updateBalance(-amt);
+  
+  const coin = document.getElementById('coinDisplay');
+  coin.style.transform = 'rotateY(720deg)';
+  
+  setTimeout(() => {
+    const result = Math.random() < 0.5 ? 'heads' : 'tails';
+    const won = result === choice;
+    
+    coin.textContent = result === 'heads' ? '🪙 Tura' : '🪙 Yazı';
+    coin.style.transform = 'rotateY(0deg)';
+    
+    if (won) {
+      updateBalance(amt * 2);
+      document.getElementById('coinResult').textContent = `🎉 Kazandın! +${amt} aXC`;
+      showNotif(`🎉 Coin Flip kazancı: ${amt} aXC!`, 'win');
+    } else {
+      document.getElementById('coinResult').textContent = `😞 Kaybettin! -${amt} aXC`;
+      showNotif(`😞 Coin Flip kayıp: ${amt} aXC`, 'lose');
+    }
+  }, 600);
+}
+
+function rollDice() {
+  const guess = parseInt(document.getElementById('diceGuess').value);
+  const amt = parseInt(document.getElementById('diceAmt').value);
+  
+  if (amt > balance) {
+    showNotif('❌ Yetersiz bakiye!', 'lose');
+    return;
+  }
+  
+  updateBalance(-amt);
+  
+  const dice = document.getElementById('diceDisplay');
+  dice.style.transform = 'rotate(720deg)';
+  
+  setTimeout(() => {
+    const result = Math.floor(Math.random() * 100) + 1;
+    const diff = Math.abs(result - guess);
+    let winAmt = 0;
+    
+    if (diff === 0) winAmt = amt * 10;
+    else if (diff <= 5) winAmt = amt * 3;
+    else if (diff <= 10) winAmt = amt * 2;
+    
+    dice.textContent = `🎲 ${result}`;
+    dice.style.transform = 'rotate(0deg)';
+    
+    if (winAmt > 0) {
+      updateBalance(winAmt);
+      document.getElementById('diceResult').textContent = `🎉 Kazandın! +${winAmt - amt} aXC`;
+      showNotif(`🎉 Dice kazancı: ${winAmt - amt} aXC!`, 'win');
+    } else {
+      document.getElementById('diceResult').textContent = `😞 Kaybettin! -${amt} aXC`;
+      showNotif(`😞 Dice kayıp: ${amt} aXC`, 'lose');
+    }
+  }, 600);
+}
+
+function betRoulette(color) {
+  const amt = parseInt(document.getElementById('rouletteAmt').value);
+  if (amt > balance) {
+    showNotif('❌ Yetersiz bakiye!', 'lose');
+    return;
+  }
+  
+  updateBalance(-amt);
+  
+  const wheel = document.getElementById('rouletteWheel');
+  wheel.style.transform = 'rotate(1440deg)';
+  
+  setTimeout(() => {
+    const colors = ['red', 'black', 'green'];
+    const result = colors[Math.floor(Math.random() * colors.length)];
+    const won = result === color;
+    
+    wheel.style.transform = 'rotate(0deg)';
+    
+    if (won) {
+      const winAmt = color === 'green' ? amt * 14 : amt * 2;
+      updateBalance(winAmt);
+      document.getElementById('rouletteResult').textContent = `🎉 ${result.toUpperCase()} - Kazandın! +${winAmt - amt} aXC`;
+      showNotif(`🎉 Roulette kazancı: ${winAmt - amt} aXC!`, 'win');
+    } else {
+      document.getElementById('rouletteResult').textContent = `😞 ${result.toUpperCase()} - Kaybettin! -${amt} aXC`;
+      showNotif(`😞 Roulette kayıp: ${amt} aXC`, 'lose');
+    }
+  }, 1000);
+}
+
+// BONUS SYSTEM
+function claimBonus() {
+  updateBalance(500);
+  document.getElementById('bonusBtn').style.display = 'none';
+  showNotif('🎁 Bonus alındı! +500 aXC', 'win');
+}
+
+// LEADERBOARD
+const mockLeaderboardData = {
+  wealth: [
+    { rank: 1, name: "alper20x", avatar: "👑", balance: 250000, wins: 1240, loss: 890, winRate: "58.2%" },
+    { rank: 2, name: "CryptoKing", avatar: "👑", balance: 185000, wins: 980, loss: 720, winRate: "57.6%" },
+    { rank: 3, name: "LuckyStar", avatar: "👑", balance: 142000, wins: 750, loss: 680, winRate: "52.5%" },
+    { rank: 4, name: "BetMaster", avatar: "🎯", balance: 98000, wins: 520, loss: 480, winRate: "52.0%" },
+    { rank: 5, name: "HighRoller", avatar: "💎", balance: 76000, wins: 380, loss: 420, winRate: "47.5%" },
+    { rank: 6, name: "CasinoPro", avatar: "🎰", balance: 65000, wins: 420, loss: 380, winRate: "52.5%" },
+    { rank: 7, name: "RiskTaker", avatar: "🔥", balance: 54000, wins: 290, loss: 310, winRate: "48.3%" },
+    { rank: 8, name: "SmartBettor", avatar: "🧠", balance: 48000, wins: 340, loss: 260, winRate: "56.7%" }
+  ],
+  wins: [
+    { rank: 1, name: "alper20x", avatar: "👑", balance: 250000, wins: 1240, loss: 890, winRate: "58.2%" },
+    { rank: 2, name: "CryptoKing", avatar: "👑", balance: 185000, wins: 980, loss: 720, winRate: "57.6%" },
+    { rank: 3, name: "LuckyStar", avatar: "👑", balance: 142000, wins: 750, loss: 680, winRate: "52.5%" },
+    { rank: 4, name: "SmartBettor", avatar: "🧠", balance: 48000, wins: 340, loss: 260, winRate: "56.7%" },
+    { rank: 5, name: "BetMaster", avatar: "🎯", balance: 98000, wins: 520, loss: 480, winRate: "52.0%" },
+    { rank: 6, name: "CasinoPro", avatar: "🎰", balance: 65000, wins: 420, loss: 380, winRate: "52.5%" },
+    { rank: 7, name: "RiskTaker", avatar: "🔥", balance: 54000, wins: 290, loss: 310, winRate: "48.3%" },
+    { rank: 8, name: "HighRoller", avatar: "💎", balance: 76000, wins: 380, loss: 420, winRate: "47.5%" }
+  ],
+  crash: [
+    { rank: 1, name: "CrashMaster", avatar: "🎈", balance: 89000, wins: 680, loss: 220, winRate: "75.6%", crashHigh: "124.5x" },
+    { rank: 2, name: "alper20x", avatar: "👑", balance: 250000, wins: 450, loss: 180, winRate: "71.4%", crashHigh: "89.2x" },
+    { rank: 3, name: "BalloonHunter", avatar: "🎯", balance: 67000, wins: 380, loss: 150, winRate: "71.7%", crashHigh: "67.8x" },
+    { rank: 4, name: "CashoutKing", avatar: "💰", balance: 45000, wins: 290, loss: 120, winRate: "70.7%", crashHigh: "45.3x" },
+    { rank: 5, name: "RiskGuru", avatar: "🔥", balance: 38000, wins: 220, loss: 95, winRate: "69.9%", crashHigh: "38.9x" }
+  ]
+};
+
+function switchLeaderboard(type) {
+  currentLeaderboardType = type;
+  
+  // Update tab states
+  document.querySelectorAll('.lb-tab').forEach(tab => tab.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  // Update leaderboard content
+  updateLeaderboard();
+}
+
+function updateLeaderboard() {
+  const leaderboardList = document.getElementById('leaderboardList');
+  const data = mockLeaderboardData[currentLeaderboardType] || [];
+  
+  leaderboardList.innerHTML = '';
+  
+  data.forEach(player => {
+    const rankClass = player.rank === 1 ? 'gold' : player.rank === 2 ? 'silver' : player.rank === 3 ? 'bronze' : '';
+    
+    const playerElement = document.createElement('div');
+    playerElement.className = 'lb-item';
+    playerElement.innerHTML = `
+      <div class="lb-rank ${rankClass}">#${player.rank}</div>
+      <div class="lb-avatar">${player.avatar}</div>
+      <div class="lb-info">
+        <div class="lb-name">${player.name}</div>
+        <div class="lb-stats">
+          <div class="lb-stat">
+            <span>Bakiye</span>
+            <b>${player.balance.toLocaleString()} aXC</b>
+          </div>
+          <div class="lb-stat">
+            <span>Kazanma</span>
+            <b>${player.wins}</b>
+          </div>
+          <div class="lb-stat">
+            <span>Kaybetme</span>
+            <b>${player.loss}</b>
+          </div>
+          <div class="lb-stat">
+            <span>Win Rate</span>
+            <b>${player.winRate}</b>
+          </div>
+          ${player.crashHigh ? `
+          <div class="lb-stat">
+            <span>En Yüksek</span>
+            <b>${player.crashHigh}</b>
+          </div>
+          ` : ''}
+        </div>
+      </div>
+      <div class="lb-value">${player.balance.toLocaleString()} aXC</div>
+    `;
+    
+    leaderboardList.appendChild(playerElement);
+  });
+}
+
+// INIT
+drawChart();
+updateLeaderboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Whack-a-Mole – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
+    .wrap{display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:16px;flex:1}
+    h1{font-family:monospace;font-size:1.4rem;letter-spacing:3px;color:#43e97b}
+    .info{display:flex;gap:20px;align-items:center}
+    .panel{background:#0f1521;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:8px 18px;text-align:center}
+    .panel label{font-size:.7rem;color:#7a8394;display:block;letter-spacing:1px}
+    .panel b{font-size:1.1rem;color:#fff;font-family:monospace}
+    #timer-bar{width:300px;height:10px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden}
+    #timer-fill{height:100%;background:linear-gradient(90deg,#43e97b,#f0c040);border-radius:5px;transition:width .1s linear}
+    #holes{display:grid;grid-template-columns:repeat(3,110px);grid-template-rows:repeat(3,110px);gap:12px}
+    .hole{width:110px;height:110px;background:linear-gradient(180deg,#1a3010,#0f2008);border:2px solid rgba(67,233,123,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3rem;cursor:pointer;position:relative;overflow:hidden;transition:background .15s;user-select:none}
+    .hole.active{background:linear-gradient(180deg,#2a5020,#1a3510);border-color:rgba(67,233,123,.5)}
+    .hole:active{transform:scale(.94)}
+    .hit-fx{position:absolute;font-size:1.1rem;font-weight:700;color:#f0c040;pointer-events:none;animation:pop .5s forwards}
+    @keyframes pop{0%{opacity:1;transform:scale(1) translateY(0)}100%{opacity:0;transform:scale(1.4) translateY(-30px)}}
+    #msg{font-size:.9rem;color:#7a8394;text-align:center;min-height:22px}
+    .btn{background:linear-gradient(135deg,#43e97b,#0fa04a);color:#fff;border:none;padding:10px 28px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer}.btn:hover{opacity:.85}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap">
+  <h1>🔨 WHACK-A-MOLE</h1>
+  <div class="info">
+    <div class="panel"><label>SKOR</label><b id="score">0</b></div>
+    <div class="panel"><label>EN İYİ</label><b id="best">0</b></div>
+    <div>
+      <div style="font-size:.7rem;color:#7a8394;text-align:center;letter-spacing:1px;margin-bottom:4px">SÜRE</div>
+      <div id="timer-bar"><div id="timer-fill" style="width:100%"></div></div>
+    </div>
+  </div>
+  <div id="holes"></div>
+  <div id="msg">Köstebeklere vur! Başla'ya bas.</div>
+  <button class="btn" id="startBtn">Başla</button>
+</div>
+<script>
+const MOLES=['🐭','🐹','🦔'];
+let score,best=0,state='idle',holes=[],moleTimer,gameTimer,timeLeft,showDur;
+const holesEl=document.getElementById('holes');
+for(let i=0;i<9;i++){
+  const h=document.createElement('div');h.className='hole';h.textContent='';
+  h.addEventListener('click',()=>whack(i));
+  holesEl.appendChild(h);holes.push(h);
+}
+function whack(i){
+  if(state!=='play'||!holes[i].classList.contains('active'))return;
+  holes[i].classList.remove('active');holes[i].textContent='';score+=10;
+  document.getElementById('score').textContent=score;
+  if(score>best){best=score;document.getElementById('best').textContent=best;}
+  clearTimeout(holes[i]._timer);
+  const fx=document.createElement('div');fx.className='hit-fx';fx.textContent='+10';holes[i].appendChild(fx);
+  setTimeout(()=>fx.remove(),500);
+}
+function showMole(){
+  if(state!=='play')return;
+  const idx=Math.floor(Math.random()*9);
+  if(!holes[idx].classList.contains('active')){
+    holes[idx].classList.add('active');holes[idx].textContent=MOLES[Math.floor(Math.random()*3)];
+    holes[idx]._timer=setTimeout(()=>{holes[idx].classList.remove('active');holes[idx].textContent='';},showDur);
+  }
+  moleTimer=setTimeout(showMole,Math.random()*600+300);
+}
+function tick(){
+  timeLeft-=100;const pct=timeLeft/30000*100;
+  document.getElementById('timer-fill').style.width=pct+'%';
+  if(timeLeft<=0){endGame();}else gameTimer=setTimeout(tick,100);
+}
+function endGame(){
+  state='over';clearTimeout(moleTimer);clearTimeout(gameTimer);
+  holes.forEach(h=>{h.classList.remove('active');h.textContent='';});
+  document.getElementById('msg').textContent='Oyun bitti! Skor: '+score+(score>best-10?' Harika!':'');
+}
+function start(){
+  score=0;timeLeft=30000;showDur=900;state='play';
+  document.getElementById('score').textContent=0;
+  document.getElementById('timer-fill').style.width='100%';
+  document.getElementById('msg').textContent='';
+  holes.forEach(h=>{h.classList.remove('active');h.textContent='';});
+  clearTimeout(moleTimer);clearTimeout(gameTimer);
+  showMole();tick();
+  setInterval(()=>{showDur=Math.max(400,showDur-20);},3000);
+}
+document.getElementById('startBtn').addEventListener('click',start);
+</script>
+</body>
+</html>

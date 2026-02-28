@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Tetris – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
+    .wrap{display:flex;align-items:flex-start;gap:24px;padding:30px 20px;flex:1}
+    h1{font-family:monospace;font-size:1.3rem;letter-spacing:3px;color:#6c63ff;margin-bottom:16px;text-align:center}
+    canvas{border:2px solid rgba(108,99,255,.3);border-radius:10px;background:#090b14;box-shadow:0 0 40px rgba(108,99,255,.15)}
+    .side{display:flex;flex-direction:column;gap:16px;min-width:120px}
+    .panel{background:#0f1521;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px}
+    .panel label{font-size:.7rem;color:#7a8394;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px}
+    .panel b{font-size:1.3rem;color:#fff;font-family:monospace}
+    #nextCv{border:1px solid rgba(255,255,255,.07);border-radius:8px;background:#090b14}
+    #msg{font-size:.85rem;color:#7a8394;text-align:center}
+    .btn{background:linear-gradient(135deg,#6c63ff,#8b5cf6);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;transition:opacity .2s;width:100%}.btn:hover{opacity:.85}
+    .ctrl{font-size:.72rem;color:#7a8394;line-height:1.9}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap">
+  <div>
+    <h1>🟦 TETRİS</h1>
+    <canvas id="c" width="200" height="400"></canvas>
+  </div>
+  <div class="side">
+    <div class="panel"><label>Skor</label><b id="score">0</b></div>
+    <div class="panel"><label>En İyi</label><b id="best">0</b></div>
+    <div class="panel"><label>Seviye</label><b id="lvl">1</b></div>
+    <div class="panel"><label>Satır</label><b id="lines">0</b></div>
+    <div class="panel"><label>Sıradaki</label><canvas id="nextCv" width="80" height="80"></canvas></div>
+    <div id="msg">Başlamak için<br>Enter'a bas</div>
+    <button class="btn" id="startBtn">Başla</button>
+    <div class="ctrl">← → Hareket<br>↑ / Z Döndür<br>↓ Hızlı Düş<br>Space Direk Düş</div>
+  </div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const nc=document.getElementById('nextCv'),nctx=nc.getContext('2d');
+const W=10,H=20,SZ=20;
+const SHAPES=[
+  [[1,1,1,1]],
+  [[1,1],[1,1]],
+  [[0,1,0],[1,1,1]],
+  [[1,0,0],[1,1,1]],
+  [[0,0,1],[1,1,1]],
+  [[0,1,1],[1,1,0]],
+  [[1,1,0],[0,1,1]]
+];
+const COLORS=['#00f0f0','#f0f000','#a000f0','#f0a000','#0000f0','#00f000','#f00000'];
+let board,piece,next,score,best=0,lvl,lines,running,loop,held=false;
+function newBoard(){return Array.from({length:H},()=>new Array(W).fill(0))}
+function randPiece(){const i=Math.floor(Math.random()*7);return{shape:SHAPES[i],color:COLORS[i],x:3,y:0}}
+function rotate(s){return s[0].map((_,i)=>s.map(r=>r[i]).reverse())}
+function valid(s,ox,oy){return s.every((r,y)=>r.every((v,x)=>!v||((ox+x>=0&&ox+x<W&&oy+y<H)&&!(oy+y>=0&&board[oy+y][ox+x]))))}
+function place(){
+  piece.shape.forEach((r,y)=>r.forEach((v,x)=>{if(v&&piece.y+y>=0)board[piece.y+y][piece.x+x]=piece.color}));
+  let cleared=0;
+  for(let y=H-1;y>=0;){
+    if(board[y].every(c=>c)){board.splice(y,1);board.unshift(new Array(W).fill(0));cleared++;}
+    else y--;
+  }
+  if(cleared){const pts=[0,100,300,500,800];score+=pts[cleared]*lvl;lines+=cleared;lvl=Math.floor(lines/10)+1;
+    document.getElementById('score').textContent=score;
+    document.getElementById('lvl').textContent=lvl;
+    document.getElementById('lines').textContent=lines;
+    if(score>best){best=score;document.getElementById('best').textContent=best;}
+    clearInterval(loop);loop=setInterval(tick,Math.max(50,600-lvl*50));
+  }
+  piece=next;next=randPiece();
+  if(!valid(piece.shape,piece.x,piece.y)){running=false;clearInterval(loop);document.getElementById('msg').textContent='Oyun bitti!';}
+  drawNext();
+}
+function drop(){if(!valid(piece.shape,piece.x,piece.y+1))place();else piece.y++;}
+function hardDrop(){while(valid(piece.shape,piece.x,piece.y+1))piece.y++;place();}
+function tick(){drop();draw();}
+function drawNext(){
+  nctx.fillStyle='#090b14';nctx.fillRect(0,0,80,80);
+  const s=next.shape,ox=Math.floor((4-s[0].length)/2)*16+8,oy=Math.floor((4-s.length)/2)*16+8;
+  s.forEach((r,y)=>r.forEach((v,x)=>{if(v){nctx.fillStyle=next.color;nctx.fillRect(ox+x*16+1,oy+y*16+1,14,14);}}));
+}
+function draw(){
+  ctx.fillStyle='#090b14';ctx.fillRect(0,0,W*SZ,H*SZ);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    if(board[y][x]){ctx.fillStyle=board[y][x];ctx.fillRect(x*SZ+1,y*SZ+1,SZ-2,SZ-2);}
+    ctx.strokeStyle='rgba(255,255,255,.03)';ctx.strokeRect(x*SZ,y*SZ,SZ,SZ);
+  }
+  let ghost=piece.y;while(valid(piece.shape,piece.x,ghost+1))ghost++;
+  piece.shape.forEach((r,y)=>r.forEach((v,x)=>{
+    if(v){ctx.fillStyle='rgba(255,255,255,.12)';ctx.fillRect(piece.x*SZ+x*SZ+1,(ghost+y)*SZ+1,SZ-2,SZ-2);}
+  }));
+  piece.shape.forEach((r,y)=>r.forEach((v,x)=>{
+    if(v){ctx.fillStyle=piece.color;ctx.fillRect(piece.x*SZ+x*SZ+1,(piece.y+y)*SZ+1,SZ-2,SZ-2);}
+  }));
+}
+function start(){
+  board=newBoard();score=0;lvl=1;lines=0;
+  piece=randPiece();next=randPiece();running=true;
+  document.getElementById('score').textContent=0;document.getElementById('lvl').textContent=1;document.getElementById('lines').textContent=0;
+  document.getElementById('msg').textContent='';
+  clearInterval(loop);loop=setInterval(tick,600);drawNext();draw();
+}
+document.getElementById('startBtn').addEventListener('click',start);
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){if(!running)start();return;}
+  if(!running)return;
+  if(e.key==='ArrowLeft'&&valid(piece.shape,piece.x-1,piece.y))piece.x--;
+  else if(e.key==='ArrowRight'&&valid(piece.shape,piece.x+1,piece.y))piece.x++;
+  else if(e.key==='ArrowDown'){drop();}
+  else if(e.key==='ArrowUp'||e.key==='z'||e.key==='Z'){const r=rotate(piece.shape);if(valid(r,piece.x,piece.y))piece.shape=r;}
+  else if(e.key===' '){hardDrop();}
+  else return;
+  e.preventDefault();draw();
+});
+draw();
+</script>
+</body>
+</html>

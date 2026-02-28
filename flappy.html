@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Flappy Bird – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
+    .wrap{display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:12px;flex:1}
+    h1{font-family:monospace;font-size:1.4rem;letter-spacing:3px;color:#f0c040}
+    canvas{border:2px solid rgba(240,192,64,.3);border-radius:10px;cursor:pointer;box-shadow:0 0 40px rgba(240,192,64,.1)}
+    #msg{font-size:.9rem;color:#7a8394;text-align:center}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap">
+  <h1>🐦 FLAPPY BIRD</h1>
+  <canvas id="c" width="360" height="500"></canvas>
+  <div id="msg">SPACE veya tıkla, başla!</div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const W=360,H=500,GAP=150,PIPE_W=52,SPEED=2.2,GRAVITY=0.38,JUMP=-7.5;
+let bird,pipes,score,best=0,state='idle',raf;
+function init(){bird={x:80,y:H/2,vy:0,r:14};pipes=[];score=0;addPipe();}
+function addPipe(){const top=80+Math.random()*(H-GAP-160);pipes.push({x:W,top,scored:false});}
+function flap(){if(state==='idle'||state==='dead'){init();state='play';}bird.vy=JUMP;}
+function update(){
+  bird.vy+=GRAVITY;bird.y+=bird.vy;
+  if(bird.y-bird.r<0||bird.y+bird.r>H){die();return;}
+  pipes.forEach(p=>{
+    p.x-=SPEED;
+    if(!p.scored&&p.x+PIPE_W<bird.x){p.scored=true;score++;if(score>best)best=score;}
+    if(bird.x+bird.r>p.x&&bird.x-bird.r<p.x+PIPE_W&&(bird.y-bird.r<p.top||bird.y+bird.r>p.top+GAP)){die();}
+  });
+  if(pipes.length===0||pipes[pipes.length-1].x<W-200)addPipe();
+  pipes=pipes.filter(p=>p.x>-PIPE_W-10);
+}
+function die(){state='dead';}
+function draw(){
+  const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#0a1428');sky.addColorStop(1,'#1a2a4a');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+  pipes.forEach(p=>{
+    const g=ctx.createLinearGradient(p.x,0,p.x+PIPE_W,0);g.addColorStop(0,'#2a7a2a');g.addColorStop(1,'#43b043');
+    ctx.fillStyle=g;
+    ctx.fillRect(p.x,0,PIPE_W,p.top);
+    ctx.fillRect(p.x,p.top+GAP,PIPE_W,H-p.top-GAP);
+    ctx.fillStyle='#3a8a3a';ctx.fillRect(p.x-4,p.top-20,PIPE_W+8,20);ctx.fillRect(p.x-4,p.top+GAP,PIPE_W+8,20);
+  });
+  ctx.fillStyle='#3a6a1a';ctx.fillRect(0,H-30,W,30);
+  const bg=ctx.createRadialGradient(bird.x,bird.y,2,bird.x,bird.y,bird.r);
+  bg.addColorStop(0,'#fff0a0');bg.addColorStop(1,'#f0c040');
+  ctx.beginPath();ctx.arc(bird.x,bird.y,bird.r,0,Math.PI*2);ctx.fillStyle=bg;ctx.fill();
+  ctx.fillStyle='#a05010';ctx.beginPath();ctx.ellipse(bird.x+8,bird.y+2,6,4,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#202020';ctx.beginPath();ctx.arc(bird.x+4,bird.y-4,3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(bird.x+5,bird.y-5,1.5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 22px monospace';ctx.textAlign='center';ctx.fillText(score,W/2,40);
+  ctx.fillStyle='rgba(255,255,255,.4)';ctx.font='14px monospace';ctx.fillText('En İyi: '+best,W/2,60);
+  if(state==='idle'){ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#f0c040';ctx.font='bold 28px monospace';ctx.fillText('FLAPPY BIRD',W/2,H/2-20);ctx.fillStyle='#fff';ctx.font='16px monospace';ctx.fillText('SPACE veya Tıkla',W/2,H/2+16);}
+  if(state==='dead'){ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ff6584';ctx.font='bold 28px monospace';ctx.fillText('GAME OVER',W/2,H/2-30);ctx.fillStyle='#fff';ctx.font='18px monospace';ctx.fillText('Skor: '+score,W/2,H/2+4);ctx.fillText('En İyi: '+best,W/2,H/2+28);ctx.font='14px monospace';ctx.fillStyle='#7a8394';ctx.fillText('Tekrar için Tıkla / SPACE',W/2,H/2+58);}
+}
+function loop(){if(state==='play')update();draw();raf=requestAnimationFrame(loop);}
+document.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();flap();}});
+cv.addEventListener('click',flap);
+init();loop();
+</script>
+</body>
+</html>

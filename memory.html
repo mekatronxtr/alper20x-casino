@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Memory – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
+    .wrap{display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:16px;flex:1}
+    h1{font-family:monospace;font-size:1.4rem;letter-spacing:3px;color:#ab47bc}
+    .info{display:flex;gap:24px}
+    .panel{background:#0f1521;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:8px 20px;text-align:center}
+    .panel label{font-size:.7rem;color:#7a8394;display:block;letter-spacing:1px}
+    .panel b{font-size:1.1rem;color:#fff;font-family:monospace}
+    #grid{display:grid;grid-template-columns:repeat(4,90px);gap:10px}
+    .card{width:90px;height:90px;border-radius:12px;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform .4s;user-select:none}
+    .card.flipped{transform:rotateY(180deg)}
+    .card.matched{transform:rotateY(180deg);opacity:.65;cursor:default}
+    .front,.back-face{position:absolute;inset:0;border-radius:12px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;font-size:2.4rem}
+    .front{background:linear-gradient(135deg,#1a1030,#2a1860);border:2px solid rgba(171,71,188,.3)}
+    .back-face{background:linear-gradient(135deg,#1a1030,#3a0a4a);border:2px solid rgba(171,71,188,.5);transform:rotateY(180deg)}
+    #msg{font-size:.9rem;color:#7a8394;text-align:center;min-height:22px}
+    .btn{background:linear-gradient(135deg,#ab47bc,#7b1fa2);color:#fff;border:none;padding:10px 28px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer}.btn:hover{opacity:.85}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap">
+  <h1>🃏 MEMORY</h1>
+  <div class="info">
+    <div class="panel"><label>HAMLE</label><b id="moves">0</b></div>
+    <div class="panel"><label>EŞLEŞTİ</label><b id="matched">0/8</b></div>
+    <div class="panel"><label>EN İYİ</label><b id="best">-</b></div>
+  </div>
+  <div id="grid"></div>
+  <div id="msg">Kartları eşleştir!</div>
+  <button class="btn" id="newBtn">Yeni Oyun</button>
+</div>
+<script>
+const EMOJIS=['🦊','🐬','🌈','⚡','🍕','💎','🚀','🎮'];
+let cards,flipped=[],moves,matched,best=Infinity,locked;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function init(){
+  moves=0;matched=0;flipped=[];locked=false;
+  document.getElementById('moves').textContent=0;
+  document.getElementById('matched').textContent='0/8';
+  document.getElementById('msg').textContent='Kartları eşleştir!';
+  const vals=shuffle([...EMOJIS,...EMOJIS]);
+  const grid=document.getElementById('grid');grid.innerHTML='';
+  cards=vals.map((v,i)=>{
+    const c=document.createElement('div');c.className='card';c.innerHTML=`<div class="front">❓</div><div class="back-face">${v}</div>`;
+    c.dataset.val=v;c.dataset.idx=i;
+    c.addEventListener('click',()=>flip(c));
+    grid.appendChild(c);return c;
+  });
+}
+function flip(c){
+  if(locked||c.classList.contains('flipped')||c.classList.contains('matched'))return;
+  c.classList.add('flipped');flipped.push(c);
+  if(flipped.length===2){
+    locked=true;moves++;document.getElementById('moves').textContent=moves;
+    setTimeout(()=>{
+      if(flipped[0].dataset.val===flipped[1].dataset.val){
+        flipped.forEach(f=>f.classList.add('matched'));matched++;
+        document.getElementById('matched').textContent=matched+'/8';
+        if(matched===8){if(moves<best)best=moves;document.getElementById('best').textContent=best+'hml';document.getElementById('msg').textContent='Tebrikler! '+moves+' hamlede bitirdin!';}
+      } else flipped.forEach(f=>f.classList.remove('flipped'));
+      flipped=[];locked=false;
+    },800);
+  }
+}
+document.getElementById('newBtn').addEventListener('click',init);
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Breakout – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
+    .wrap{display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:12px;flex:1}
+    h1{font-family:monospace;font-size:1.4rem;letter-spacing:3px;color:#ff6584}
+    canvas{border:2px solid rgba(255,101,132,.3);border-radius:10px;background:#090b14;box-shadow:0 0 40px rgba(255,101,132,.12)}
+    #msg{font-size:.9rem;color:#7a8394;text-align:center}
+    .btn{background:linear-gradient(135deg,#ff6584,#ff3560);color:#fff;border:none;padding:10px 28px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer}.btn:hover{opacity:.85}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap">
+  <h1>🧱 BREAKOUT</h1>
+  <canvas id="c" width="400" height="480"></canvas>
+  <div id="msg">← → veya Fare ile raket, SPACE ile başla</div>
+  <button class="btn" id="startBtn">Başla</button>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const W=400,H=480,COLS=10,ROWS=6,BW=34,BH=14,BPADX=2,BPADY=2;
+const COLORS=['#ff6584','#ff8c69','#f0c040','#43e97b','#4fc3f7','#ab47bc'];
+let paddle,ball,bricks,score,lives,best=0,state='idle';
+function makeBricks(){return Array.from({length:ROWS},(_,r)=>Array.from({length:COLS},(_,c)=>({x:2+c*(BW+BPADX),y:50+r*(BH+BPADY),alive:true,color:COLORS[r]})));}
+function init(){paddle={x:150,w:80,y:440,speed:0};ball={x:200,y:400,vx:3,vy:-3.5,r:7};bricks=makeBricks();score=0;lives=3;}
+function update(){
+  paddle.x+=paddle.speed;if(paddle.x<0)paddle.x=0;if(paddle.x+paddle.w>W)paddle.x=W-paddle.w;
+  ball.x+=ball.vx;ball.y+=ball.vy;
+  if(ball.x-ball.r<0){ball.x=ball.r;ball.vx*=-1;}
+  if(ball.x+ball.r>W){ball.x=W-ball.r;ball.vx*=-1;}
+  if(ball.y-ball.r<0){ball.y=ball.r;ball.vy*=-1;}
+  if(ball.y+ball.r>paddle.y&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w&&ball.vy>0){
+    ball.vy*=-1;ball.vx+=((ball.x-(paddle.x+paddle.w/2))/paddle.w)*3;
+    ball.vx=Math.max(-5,Math.min(5,ball.vx));
+  }
+  if(ball.y>H){lives--;if(lives<=0){state='dead';}else{ball={x:paddle.x+paddle.w/2,y:400,vx:3,vy:-3.5,r:7};}return;}
+  for(const row of bricks)for(const b of row){
+    if(!b.alive)continue;
+    if(ball.x>b.x&&ball.x<b.x+BW&&ball.y>b.y&&ball.y<b.y+BH){
+      b.alive=false;ball.vy*=-1;score+=10;if(score>best)best=score;
+    }
+  }
+  if(bricks.every(r=>r.every(b=>!b.alive))){state='win';}
+}
+function draw(){
+  ctx.fillStyle='#090b14';ctx.fillRect(0,0,W,H);
+  bricks.forEach(row=>row.forEach(b=>{if(!b.alive)return;ctx.fillStyle=b.color;ctx.fillRect(b.x+1,b.y+1,BW-2,BH-2);ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(b.x+1,b.y+1,BW-2,4);}));
+  const pg=ctx.createLinearGradient(paddle.x,0,paddle.x+paddle.w,0);pg.addColorStop(0,'#6c63ff');pg.addColorStop(1,'#8b5cf6');
+  ctx.fillStyle=pg;ctx.beginPath();ctx.roundRect(paddle.x,paddle.y,paddle.w,12,6);ctx.fill();
+  const bg=ctx.createRadialGradient(ball.x,ball.y,1,ball.x,ball.y,ball.r);bg.addColorStop(0,'#fff');bg.addColorStop(1,'#6c63ff');
+  ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fillStyle=bg;ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='14px monospace';ctx.textAlign='left';ctx.fillText('SKOR: '+score,8,22);
+  ctx.textAlign='center';ctx.fillText('EN İYİ: '+best,W/2,22);
+  ctx.textAlign='right';ctx.fillText('CAN: '+'❤️'.repeat(lives),W-8,22);
+  if(state==='idle'){ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ff6584';ctx.font='bold 26px monospace';ctx.textAlign='center';ctx.fillText('BREAKOUT',W/2,H/2-20);ctx.fillStyle='#fff';ctx.font='15px monospace';ctx.fillText('← → veya Fare | SPACE Başla',W/2,H/2+14);}
+  if(state==='dead'){ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ff6584';ctx.font='bold 26px monospace';ctx.textAlign='center';ctx.fillText('GAME OVER',W/2,H/2-30);ctx.fillStyle='#fff';ctx.font='16px monospace';ctx.fillText('Skor: '+score,W/2,H/2+4);ctx.font='13px monospace';ctx.fillStyle='#7a8394';ctx.fillText('Başla düğmesine bas',W/2,H/2+34);}
+  if(state==='win'){ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#43e97b';ctx.font='bold 26px monospace';ctx.textAlign='center';ctx.fillText('TEBRİKLER!',W/2,H/2-30);ctx.fillStyle='#fff';ctx.font='16px monospace';ctx.fillText('Skor: '+score,W/2,H/2+4);ctx.font='13px monospace';ctx.fillStyle='#7a8394';ctx.fillText('Tekrar oynamak için Başla',W/2,H/2+34);}
+}
+function loop(){if(state==='play')update();draw();requestAnimationFrame(loop);}
+document.addEventListener('keydown',e=>{
+  if(e.key===' '){if(state!=='play'){init();state='play';}e.preventDefault();}
+  if(e.key==='ArrowLeft')paddle.speed=-5;if(e.key==='ArrowRight')paddle.speed=5;
+});
+document.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight')paddle.speed=0;});
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();paddle.x=e.clientX-r.left-paddle.w/2;});
+cv.addEventListener('click',()=>{if(state!=='play'){init();state='play';}});
+document.getElementById('startBtn').addEventListener('click',()=>{init();state='play';});
+init();loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,2979 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>alper20x — Casino & Crypto</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090f;--surface:#0d1117;--card:#111827;--border:rgba(255,255,255,.07);
+  --accent:#6c63ff;--gold:#f0c040;--green:#22c55e;--red:#ef4444;--blue:#38bdf8;
+  --text:#e2e8f0;--muted:#6b7280;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d1117}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+
+/* HEADER */
+header{background:rgba(7,9,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;padding:0 24px}
+.hdr{max-width:1300px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.1rem;background:linear-gradient(90deg,var(--gold),#ff9f40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+nav{display:flex;gap:4px}
+nav a{color:var(--muted);text-decoration:none;font-size:.85rem;padding:7px 14px;border-radius:8px;transition:.2s;font-weight:500}
+nav a:hover,nav a.active{background:rgba(255,255,255,.07);color:#fff}
+.bal-chip{background:rgba(240,192,64,.1);border:1px solid rgba(240,192,64,.3);color:var(--gold);font-weight:700;font-size:.85rem;padding:6px 14px;border-radius:20px;font-family:'Orbitron',sans-serif;cursor:default}
+
+/* HERO / PROFILE */
+.hero{background:linear-gradient(180deg,rgba(108,99,255,.06) 0%,transparent 100%);border-bottom:1px solid var(--border);padding:50px 24px 40px}
+.hero-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:36px;flex-wrap:wrap}
+.profile-pic-wrap{position:relative;cursor:pointer;flex-shrink:0}
+.profile-pic-wrap::after{content:'';position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#ff9f40,var(--accent));z-index:-1;animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.profile-pic{width:110px;height:110px;border-radius:50%;border:3px solid var(--bg);object-fit:cover;display:block;background:linear-gradient(135deg,#2a1e0a,#3a2808)}
+.profile-pic-inner{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#1a1206,#2a1e10);display:flex;align-items:center;justify-content:center;font-size:3rem;border:3px solid var(--bg)}
+.profile-info h1{font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:900;margin-bottom:4px}
+.profile-info h1 span{background:linear-gradient(90deg,var(--gold),#ff9f40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.profile-info .bio{color:var(--muted);font-size:.9rem;margin-bottom:12px;line-height:1.6}
+.ig-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;font-weight:700;font-size:.88rem;padding:9px 20px;border-radius:10px;text-decoration:none;transition:opacity .2s,transform .2s}
+.ig-btn:hover{opacity:.88;transform:scale(1.03)}
+.stats{display:flex;gap:24px;margin-top:16px}
+.stat-item{text-align:center}.stat-item b{display:block;font-size:1.1rem;color:#fff;font-family:'Orbitron',sans-serif}.stat-item span{font-size:.75rem;color:var(--muted)}
+
+/* SECTIONS */
+.section{max-width:1300px;margin:0 auto;padding:40px 24px}
+.sec-title{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:2px;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* CRYPTO TRADING */
+#trade{background:var(--bg);border-bottom:1px solid var(--border)}
+.trade-layout{display:grid;grid-template-columns:1fr 280px;gap:20px}
+@media(max-width:900px){.trade-layout{grid-template-columns:1fr}}
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.coin-info{display:flex;align-items:center;gap:10px}
+.coin-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f7931a,#ffb347);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;color:#fff;font-family:'Orbitron',sans-serif}
+.coin-name{font-weight:700;font-size:1rem}
+.coin-price{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900}
+.coin-change{font-size:.8rem;font-weight:600;padding:3px 8px;border-radius:6px}
+.up{color:var(--green);background:rgba(34,197,94,.12)}
+.dn{color:var(--red);background:rgba(239,68,68,.12)}
+canvas#chartCv{width:100%;display:block;border-radius:8px}
+.trade-panel{display:flex;flex-direction:column;gap:12px}
+.panel-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.panel-box h3{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;font-weight:600}
+.pos-list{display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto}
+.pos-item{background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:.8rem}
+.pos-item .pi-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pos-item .sell-btn{background:var(--red);color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:.75rem;font-weight:700;cursor:pointer;transition:opacity .2s}.pos-item .sell-btn:hover{opacity:.8}
+.trade-form{display:flex;flex-direction:column;gap:10px}
+.tf-row{display:flex;gap:8px}
+.tf-btn{flex:1;padding:10px;border-radius:10px;border:none;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.buy-btn{background:var(--green);color:#fff}.buy-btn:hover{opacity:.85}
+.sell-all-btn{background:var(--red);color:#fff}.sell-all-btn:hover{opacity:.85}
+input[type=number],input[type=range]{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);color:#fff;border-radius:8px;padding:9px 12px;font-size:.88rem;outline:none;font-family:'Inter',sans-serif}
+input[type=number]:focus{border-color:var(--accent)}
+input[type=range]{padding:4px 0;accent-color:var(--accent)}
+label{font-size:.78rem;color:var(--muted);display:block;margin-bottom:3px}
+.amount-presets{display:flex;gap:6px}
+.preset{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:.75rem;cursor:pointer;transition:.2s}.preset:hover{background:rgba(108,99,255,.2);color:var(--accent);border-color:var(--accent)}
+.coin-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.coin-tab{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:.8rem;cursor:pointer;font-weight:600;transition:.2s}
+.coin-tab.active{background:rgba(247,147,26,.15);color:#f7931a;border-color:rgba(247,147,26,.4)}
+
+/* CRASH / BALLOON GAME */
+#crash{background:var(--bg);border-bottom:1px solid var(--border)}
+.crash-layout{display:grid;grid-template-columns:1fr 260px;gap:20px;align-items:start}
+@media(max-width:900px){.crash-layout{grid-template-columns:1fr}}
+.crash-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
+#crashCv{width:100%;border-radius:12px;display:block}
+.mult-display{font-family:'Orbitron',sans-serif;font-size:3rem;font-weight:900;margin:10px 0;transition:color .3s}
+.mult-display.safe{color:var(--green)}
+.mult-display.danger{color:#ff9f40}
+.mult-display.popped{color:var(--red)}
+.crash-status{font-size:.9rem;color:var(--muted);margin-bottom:8px;min-height:22px}
+.crash-panel{display:flex;flex-direction:column;gap:12px}
+.crash-history{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto}
+.ch-item{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);border-radius:8px;padding:7px 10px;font-size:.8rem}
+.big-btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:900;font-size:1rem;cursor:pointer;font-family:'Orbitron',sans-serif;letter-spacing:1px;transition:all .2s}
+.cashout-btn{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff}.cashout-btn:hover:not(:disabled){transform:scale(1.03)}
+.cashout-btn:disabled{opacity:.4;cursor:not-allowed}
+.start-round-btn{background:linear-gradient(135deg,var(--gold),#e07000);color:#111}
+.start-round-btn:hover{opacity:.88}
+
+/* CASINO */
+#casino{background:var(--bg);border-bottom:1px solid var(--border)}
+.casino-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.casino-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.casino-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.casino-icon{font-size:1.5rem}
+.casino-title{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700}
+.casino-body{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.result-display{background:rgba(255,255,255,.04);border-radius:10px;padding:16px;text-align:center;min-height:70px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;font-size:1.8rem}
+.result-msg{font-size:.85rem;font-weight:600;min-height:20px}
+.game-btn{width:100%;padding:11px;border-radius:10px;border:none;font-weight:700;font-size:.9rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.purple-btn{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff}.purple-btn:hover{opacity:.85}
+.gold-btn{background:linear-gradient(135deg,var(--gold),#e07000);color:#111}.gold-btn:hover{opacity:.88}
+.blue-btn{background:linear-gradient(135deg,var(--blue),#0284c7);color:#fff}.blue-btn:hover{opacity:.85}
+.pick-row{display:flex;gap:8px}
+.pick-btn{flex:1;padding:8px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;cursor:pointer;font-size:.85rem;transition:.2s}
+.pick-btn.selected{border-color:var(--accent);background:rgba(108,99,255,.15);color:var(--accent)}
+.pick-btn:hover:not(.selected){border-color:var(--muted)}
+
+/* ROULETTE */
+#roulCv{display:block;margin:0 auto}
+.roul-bets{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.rb{padding:6px 14px;border-radius:8px;border:none;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .2s}
+.rb-r{background:rgba(239,68,68,.2);color:var(--red);border:1px solid rgba(239,68,68,.3)}.rb-r.sel,.rb-r:hover{background:var(--red);color:#fff}
+.rb-b{background:rgba(56,189,248,.15);color:var(--blue);border:1px solid rgba(56,189,248,.3)}.rb-b.sel,.rb-b:hover{background:var(--blue);color:#fff}
+.rb-g{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}.rb-g.sel,.rb-g:hover{background:var(--green);color:#111}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;top:-10px;border-radius:2px;animation:confettiFall linear forwards;pointer-events:none;z-index:9999}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+/* COIN FLOAT */
+.coin-float{position:fixed;font-size:1.4rem;pointer-events:none;z-index:9998;animation:coinUp .9s ease forwards}
+@keyframes coinUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.5)}}
+/* PULSE WIN */
+@keyframes pulseWin{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{box-shadow:0 0 0 20px rgba(34,197,94,0)}}
+.win-pulse{animation:pulseWin .6s ease 3}
+.notif{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.notif-item{background:#1e2533;border:1px solid var(--border);border-radius:12px;padding:12px 18px;font-size:.85rem;font-weight:600;min-width:220px;animation:slideIn .3s ease;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+
+/* TOAST */
+.win-toast{border-left:3px solid var(--green)}
+.lose-toast{border-left:3px solid var(--red)}
+.info-toast{border-left:3px solid var(--accent)}
+
+/* CS:GO CASE OPENING STYLES */
+.case-categories{display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap}
+.case-cat-btn{background:rgba(255,255,255,.1);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;transition:.2s}
+.case-cat-btn.active{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;border:none}
+.case-cat-btn:hover:not(.active){background:rgba(108,99,255,.2);border-color:var(--accent);color:var(--accent)}
+
+.featured-banner{background:linear-gradient(135deg,rgba(255,0,0,.1),rgba(139,0,139,.1));border:2px solid rgba(255,0,0,.3);border-radius:20px;padding:32px;margin-bottom:40px;text-align:center;position:relative;overflow:hidden}
+.banner-particles{position:absolute;inset:0;pointer-events:none}
+.cases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+
+/* Case Opening Modal */
+.case-modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.9);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.case-modal.open{display:flex}
+.case-modal-content{background:var(--card);border:2px solid var(--border);border-radius:24px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.case-modal-header{padding:24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.case-modal-title{font-family:'Orbitron',sans-serif;font-size:1.5rem;font-weight:700;color:#fff}
+.case-modal-close{background:rgba(255,255,255,.1);border:none;color:var(--muted);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.2rem;transition:.2s}
+.case-modal-close:hover{background:var(--red);color:#fff}
+.case-modal-body{padding:24px}
+
+/* Case Opening Animation */
+.case-roulette{position:relative;height:120px;background:linear-gradient(90deg,var(--surface),var(--card),var(--surface));border-radius:16px;margin:20px 0;overflow:hidden;border:2px solid var(--border)}
+.case-roulette-track{position:absolute;inset:0;display:flex;align-items:center;transition:transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)}
+.case-item{flex-shrink:0;width:100px;height:80px;background:var(--surface);border:2px solid var(--border);border-radius:12px;margin:0 8px;display:flex;align-items:center;justify-content:center;font-size:2rem;transition:.2s}
+.case-item.winner{border-color:var(--gold);background:rgba(240,192,64,.1);box-shadow:0 0 30px rgba(240,192,64,.5)}
+.case-roulette-arrow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-top:30px solid var(--gold);z-index:10;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+
+/* Inventory System */
+#inventory{background:var(--bg);border-bottom:1px solid var(--border)}
+.inventory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.inventory-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;position:relative;transition:.2s}
+.inventory-item:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 8px 24px rgba(108,99,255,.3)}
+.inventory-item-icon{font-size:3rem;margin-bottom:8px}
+.inventory-item-name{font-weight:700;color:#fff;margin-bottom:4px;font-size:.9rem}
+.inventory-item-value{color:var(--gold);font-family:'Orbitron',sans-serif;font-weight:700}
+.inventory-item-rarity{position:absolute;top:8px;right:8px;font-size:.7rem;padding:2px 8px;border-radius:20px;font-weight:600}
+.rarity-common{background:rgba(176,195,217,.2);color:#b0c3d9;border-color:rgba(176,195,217,.4)}
+.rarity-rare{background:rgba(75,105,255,.2);color:#4b69ff;border-color:rgba(75,105,255,.4)}
+.rarity-epic{background:rgba(136,71,255,.2);color:#8847ff;border-color:rgba(136,71,255,.4)}
+.rarity-legendary{background:rgba(255,215,0,.2);color:var(--gold);border-color:rgba(255,215,0,.4)}
+
+/* Upgrade System */
+#upgrade{background:var(--bg);border-bottom:1px solid var(--border)}
+.upgrade-layout{display:grid;grid-template-columns:1fr 300px;gap:24px}
+@media(max-width:768px){.upgrade-layout{grid-template-columns:1fr}}
+.upgrade-area{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center}
+.upgrade-slots{display:flex;gap:16px;justify-content:center;align-items:center;margin:20px 0}
+.upgrade-slot{width:120px;height:120px;background:var(--surface);border:2px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+.upgrade-slot.target{border-color:var(--gold);box-shadow:0 0 20px rgba(240,192,64,.3)}
+.upgrade-arrow{font-size:2rem;color:var(--muted)}
+.upgrade-chance{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;padding:16px;margin:16px 0}
+.upgrade-success-rate{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:700;color:var(--green)}
+.upgrade-btn{width:100%;padding:16px;border-radius:12px;border:none;font-weight:700;font-size:1rem;cursor:pointer;font-family:'Orbitron',sans-serif;transition:.2s}
+.upgrade-btn-success{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff}
+.upgrade-btn-success:hover:not(:disabled){opacity:.85;transform:scale(1.02)}
+.upgrade-btn:disabled{opacity:.4;cursor:not-allowed}
+</style>
+<section id="leaderboard">
+  <div class="section">
+    <div class="sec-title">🏆 EN İYİ OYUNCULAR</div>
+    <div class="leaderboard-container">
+      <div class="leaderboard-tabs">
+        <button class="lb-tab active" onclick="switchLeaderboard('wealth')">💰 En Zenginler</button>
+        <button class="lb-tab" onclick="switchLeaderboard('wins')">🎯 En Çok Kazananlar</button>
+        <button class="lb-tab" onclick="switchLeaderboard('crash')">🎈 Crash Ustaları</button>
+      </div>
+      <div class="leaderboard-content">
+        <div class="leaderboard-list" id="leaderboardList">
+        <!-- Leaderboard items will be generated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+</footer>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="logo">alper20x</div>
+    <nav>
+      <a href="#profile" class="active">Profil</a>
+      <a href="#trade">📈 Kripto</a>
+      <a href="#cases">💎 Kasalar</a>
+      <a href="#inventory">🎒 Envanter</a>
+      <a href="#upgrade">⬆ Yükselt</a>
+      <a href="#crash">Crash</a>
+      <a href="#casino">Casino</a>
+      <a href="#leaderboard">Sıralama</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onclick="showPromocode()" style="background:rgba(108,99,255,.2);border:1px solid rgba(108,99,255,.4);color:var(--accent);padding:6px 12px;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s">🎁 Promocode</button>
+      <button onclick="showSupport()" style="background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.3);color:var(--blue);padding:6px 12px;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s">💬 Support</button>
+      <button onclick="showPartner()" style="background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:var(--green);padding:6px 12px;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s">🤝 Partner</button>
+      <button onclick="claimDailyFree()" style="background:linear-gradient(135deg,var(--gold),#ff9f40);color:#111;border:none;padding:6px 12px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s">🆓 Daily Free</button>
+      <div id="vipBadge" style="display:none;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:20px;background:linear-gradient(135deg,#f0c040,#ff9f40);color:#111;letter-spacing:1px"></div>
+      <button onclick="claimBonus()" id="bonusBtn" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;display:none">🎁 Bonus Al!</button>
+      <div class="bal-chip">💰 <span id="headerBal">10,000</span> aXC</div>
+    </div>
+  </div>
+</header>
+
+<!-- PROFILE -->
+<section class="hero" id="profile">
+  <div class="hero-inner">
+    <a href="https://www.instagram.com/alper.20x/" target="_blank" class="profile-pic-wrap" title="Instagram'a git">
+      <img class="profile-pic" src="alper.png" alt="alper.20x" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="profile-pic-inner" style="display:none">🧑</div>
+    </a>
+    <div class="profile-info">
+      <h1><span>alper.20x</span></h1>
+      <div class="bio">alper &bull; Denizli<br><em>"All eyes are on me"</em> ❤️‍🔥🔥</div>
+      <a class="ig-btn" href="https://www.instagram.com/alper.20x/" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram'a Git
+      </a>
+      <div class="stats">
+        <div class="stat-item"><b>181</b><span>Takipçi</span></div>
+        <div class="stat-item"><b>380</b><span>Takip</span></div>
+        <div class="stat-item"><b id="statBal">10,000</b><span>aXC Bakiye</span></div>
+        <div class="stat-item"><b id="statWins">0</b><span>Kazanılan</span></div>
+        <div class="stat-item"><b id="statLoss">0</b><span>Kaybedilen</span></div>
+      </div>
+    </div>
+    <!-- Live Ticker -->
+    <div class="ticker-wrap" style="flex-basis:100%;overflow:hidden;margin-top:16px;border-top:1px solid var(--border);padding-top:14px">
+      <div class="ticker-inner" id="tickerInner" style="display:flex;gap:32px;white-space:nowrap;animation:tickerScroll 30s linear infinite">
+        <span style="color:var(--muted);font-size:.8rem">₿ BTC: <b id="t_BTC" style="color:#f7931a">--</b></span>
+        <span style="color:var(--muted);font-size:.8rem">Ξ ETH: <b id="t_ETH" style="color:#627eea">--</b></span>
+        <span style="color:var(--muted);font-size:.8rem">◎ SOL: <b id="t_SOL" style="color:#9945ff">--</b></span>
+        <span style="color:var(--muted);font-size:.8rem">Ð DOGE: <b id="t_DOGE" style="color:#c2a633">--</b></span>
+        <span style="color:var(--muted);font-size:.8rem">🎰 Casino Oyunları: <b style="color:var(--gold)">4 aktif</b></span>
+        <span style="color:var(--muted);font-size:.8rem">🎈 Crash: <b style="color:var(--green)">Online</b></span>
+        <span style="color:var(--muted);font-size:.8rem">💰 Toplam Kazanç: <b id="t_total" style="color:var(--gold)">0</b> aXC</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRYPTO TRADING -->
+<section id="trade">
+  <div class="section">
+    <div class="sec-title">📈 KRİPTO TRADİNG</div>
+    <div class="coin-tabs">
+      <div class="coin-tab active" data-coin="BTC" onclick="switchCoin('BTC',this)">₿ Bitcoin</div>
+      <div class="coin-tab" data-coin="ETH" onclick="switchCoin('ETH',this)">Ξ Ethereum</div>
+      <div class="coin-tab" data-coin="SOL" onclick="switchCoin('SOL',this)">◎ Solana</div>
+      <div class="coin-tab" data-coin="DOGE" onclick="switchCoin('DOGE',this)">Ð Dogecoin</div>
+    </div>
+    <div class="trade-layout">
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="coin-info">
+            <div class="coin-icon" id="coinIcon">₿</div>
+            <div>
+              <div class="coin-name" id="coinName">Bitcoin (BTC)</div>
+              <div style="font-size:.75rem;color:var(--muted)">aXC / Sahte Para</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="coin-price" id="coinPrice">42,000</div>
+            <div class="coin-change up" id="coinChange">+0.00%</div>
+          </div>
+        </div>
+        <canvas id="chartCv" height="260"></canvas>
+      </div>
+      <div class="trade-panel">
+        <div class="panel-box">
+          <h3>İşlem Yap</h3>
+          <div class="trade-form">
+            <div>
+              <label>Miktar (aXC)</label>
+              <input type="number" id="tradeAmt" value="500" min="10" step="10"/>
+            </div>
+            <div class="amount-presets">
+              <div class="preset" onclick="setAmt(100)">100</div>
+              <div class="preset" onclick="setAmt(500)">500</div>
+              <div class="preset" onclick="setAmt(1000)">1K</div>
+              <div class="preset" onclick="setAmt(2500)">2.5K</div>
+            </div>
+            <div class="tf-row">
+              <button class="tf-btn buy-btn" onclick="tradeBuy()">AL</button>
+              <button class="tf-btn sell-all-btn" onclick="tradeQuickSell()">SAT (Tümü)</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>Açık Pozisyonlar</h3>
+          <div class="pos-list" id="posList">
+            <div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">Henüz pozisyon yok</div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>Portföy</h3>
+          <div id="portfolioInfo" style="font-size:.82rem;display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CS:GO CASES -->
+<section id="cases">
+  <div class="section">
+    <div class="sec-title">💎 CS:GO KASA AÇMA SİSTEMİ</div>
+    
+    <!-- Case Categories -->
+    <div class="case-categories" style="display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap">
+      <button class="case-cat-btn active" onclick="filterCases('all')" style="background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;border:none;padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;transition:.2s">Tüm Kasalar</button>
+      <button class="case-cat-btn" onclick="filterCases('reaper')" style="background:rgba(255,255,255,.1);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;transition:.2s">⚔ Reaper</button>
+      <button class="case-cat-btn" onclick="filterCases('premium')" style="background:rgba(255,255,255,.1);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;transition:.2s">👑 Premium</button>
+      <button class="case-cat-btn" onclick="filterCases('danger')" style="background:rgba(255,255,255,.1);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;transition:.2s">☠ Danger Zone</button>
+    </div>
+
+    <!-- Featured Banner -->
+    <div class="featured-banner" style="background:linear-gradient(135deg,rgba(255,0,0,.1),rgba(139,0,139,.1));border:2px solid rgba(255,0,0,.3);border-radius:20px;padding:32px;margin-bottom:40px;text-align:center;position:relative;overflow:hidden">
+      <div class="banner-particles" style="position:absolute;inset:0;pointer-events:none"></div>
+      <h2 style="font-family:'Orbitron',sans-serif;font-size:2.5rem;font-weight:900;margin-bottom:12px;background:linear-gradient(90deg,#ff0000,#8b008b);-webkit-background-clip:text;-webkit-text-fill-color:transparent">⚔ REAPER KOLEKSİYONU ⚔</h2>
+      <p style="color:var(--muted);font-size:1.1rem;margin-bottom:20px">En nadir ve değerli skinler burada! Şansını dene!</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 20px">
+          <div style="font-size:.8rem;color:var(--muted)">Toplam Değer</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:1.3rem;color:var(--gold);font-weight:700">2,450,000 aXC</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 20px">
+          <div style="font-size:.8rem;color:var(--muted)">Açılan Kasa</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:1.3rem;color:var(--accent);font-weight:700">1,247</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cases Grid -->
+    <div class="cases-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px">
+      
+      <!-- Umbra Case -->
+      <div class="case-card-premium" data-category="reaper" onclick="openCase('umbra')">
+        <div class="case-icon-premium">⚔</div>
+        <div class="case-name-premium">Umbra</div>
+        <div class="case-price-premium">39 aXC</div>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--muted)">Nadirlik: Orta</div>
+      </div>
+
+      <!-- Dusk Case -->
+      <div class="case-card-premium" data-category="reaper" onclick="openCase('dusk')">
+        <div class="case-icon-premium">🌅</div>
+        <div class="case-name-premium">Dusk</div>
+        <div class="case-price-premium">99 aXC</div>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--muted)">Nadirlik: Yüksek</div>
+      </div>
+
+      <!-- Jocasta Case -->
+      <div class="case-card-premium" data-category="reaper" onclick="openCase('jocasta')">
+        <div class="case-icon-premium">👑</div>
+        <div class="case-name-premium">Jocasta</div>
+        <div class="case-price-premium">199 aXC</div>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--muted)">Nadirlik: Çok Yüksek</div>
+      </div>
+
+      <!-- Keir Case -->
+      <div class="case-card-premium" data-category="reaper" onclick="openCase('keir')">
+        <div class="case-icon-premium">💎</div>
+        <div class="case-name-premium">Keir</div>
+        <div class="case-price-premium">399 aXC</div>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--muted)">Nadirlik: Efsanevi</div>
+      </div>
+
+      <!-- Solanine Case -->
+      <div class="case-card-premium" data-category="danger" onclick="openCase('solanine')">
+        <div class="case-icon-premium">☠</div>
+        <div class="case-name-premium">Solanine</div>
+        <div class="case-price-premium">799 aXC</div>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--muted)">Nadirlik: Mitik</div>
+      </div>
+
+      <!-- Dragon Case -->
+      <div class="case-card-premium" data-category="premium" onclick="openCase('dragon')">
+        <div class="case-icon-premium">🐉</div>
+        <div class="case-name-premium">Dragon Lore</div>
+        <div class="case-price-premium">1499 aXC</div>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--muted)">Nadirlik: Efsanevi</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INVENTORY -->
+<section id="inventory">
+  <div class="section">
+    <div class="sec-title">🎒 ENVANTER</div>
+    <div class="inventory-grid" id="inventoryGrid">
+      <!-- Inventory items will be generated by JavaScript -->
+      <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px">
+        <div style="font-size:3rem;margin-bottom:16px">🎒</div>
+        <div>Envanterin boş. Kasaları açarak eşyalar kazan!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UPGRADE -->
+<section id="upgrade">
+  <div class="section">
+    <div class="sec-title">⬆ YÜKSELTME SİSTEMİ</div>
+    <div class="upgrade-layout">
+      <div class="upgrade-area">
+        <h3 style="font-family:'Orbitron',sans-serif;font-size:1.3rem;margin-bottom:24px;color:#fff">Eşyalarını Yükselt</h3>
+        <div class="upgrade-slots">
+          <div class="upgrade-slot" id="upgradeFrom">
+            <span style="color:var(--muted)">📦</span>
+          </div>
+          <div class="upgrade-arrow">→</div>
+          <div class="upgrade-slot target" id="upgradeTo">
+            <span style="color:var(--muted)">🎯</span>
+          </div>
+        </div>
+        <div class="upgrade-chance">
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:8px">Başarı Oranı</div>
+          <div class="upgrade-success-rate" id="upgradeChance">75%</div>
+        </div>
+        <button class="upgrade-btn upgrade-btn-success" id="upgradeBtn" onclick="performUpgrade()" disabled>YÜKSELT</button>
+      </div>
+      <div>
+        <div class="panel-box">
+          <h3>Yükseltme Kuralları</h3>
+          <div style="font-size:.8rem;color:var(--muted);line-height:1.8">
+            • Aynı nadirlikte 3 eşya birleştir<br>
+            • Başarı oranı nadirliğe bağlı<br>
+            • Başarısız olursa eşyalar kaybolur<br>
+            • Efsanevi eşyalar yükseltilemez
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>İstatistikler</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:.8rem">
+            <div style="display:flex;justify-content:space-between">
+              <span>Başarılı Yükseltme</span>
+              <b id="upgradeSuccess" style="color:var(--green)">0</b>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span>Başarısız Yükseltme</span>
+              <b id="upgradeFailed" style="color:var(--red)">0</b>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span>Toplam Değer</span>
+              <b id="upgradeValue" style="color:var(--gold)">0 aXC</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Case Opening Modal -->
+<div class="case-modal" id="caseModal">
+  <div class="case-modal-content">
+    <div class="case-modal-header">
+      <h2 class="case-modal-title" id="caseModalTitle">Kasa Açılışı</h2>
+      <button class="case-modal-close" onclick="closeCaseModal()">✕</button>
+    </div>
+    <div class="case-modal-body">
+      <div class="case-roulette">
+        <div class="case-roulette-arrow"></div>
+        <div class="case-roulette-track" id="rouletteTrack">
+          <!-- Items will be generated by JavaScript -->
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div id="caseResult" style="font-family:'Orbitron',sans-serif;font-size:1.2rem;margin-bottom:16px"></div>
+        <button class="big-btn" onclick="closeCaseModal()" style="background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff">DEVAM ET</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CRASH / BALLOON -->
+  <div class="section">
+    <div class="sec-title">🎈 BALON CRASH — Para Biriktirir, Patlamadan Çek!</div>
+    <div class="crash-layout">
+      <div class="crash-box">
+        <canvas id="crashCv" height="320"></canvas>
+        <div class="mult-display safe" id="multDisplay">1.00x</div>
+        <div class="crash-status" id="crashStatus">Bahis gir ve BAŞLAT'a bas</div>
+      </div>
+      <div class="crash-panel">
+        <div class="panel-box">
+          <h3>Bahis</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div>
+              <label>Bahis Miktarı (aXC)</label>
+              <input type="number" id="crashBet" value="200" min="10" step="10"/>
+            </div>
+            <div class="amount-presets">
+              <div class="preset" onclick="document.getElementById('crashBet').value=100">100</div>
+              <div class="preset" onclick="document.getElementById('crashBet').value=500">500</div>
+              <div class="preset" onclick="document.getElementById('crashBet').value=1000">1K</div>
+            </div>
+            <div>
+              <label>Otomatik Çekiş (0 = manuel)</label>
+              <input type="number" id="autoOut" value="0" min="0" step="0.1"/>
+            </div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.83rem;color:var(--text)">
+              <input type="checkbox" id="autoRepeat" style="width:auto;accent-color:var(--gold)"/>
+              Otomatik Tekrar (tur bitince otomatik başlasın)
+            </label>
+            <button class="big-btn start-round-btn" id="startCrashBtn" onclick="startCrash()">🎈 BAŞLAT</button>
+            <button class="big-btn cashout-btn" id="cashoutBtn" onclick="cashOut()" disabled>💸 ÇEK!</button>
+            <button class="big-btn" id="replayCrashBtn" onclick="startCrash()" style="display:none;background:linear-gradient(135deg,#6c63ff,#8b5cf6);color:#fff;font-family:'Orbitron',sans-serif;letter-spacing:1px">🔄 TEKRAR OYNA</button>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>Son Turlar</h3>
+          <div class="crash-history" id="crashHistory">
+            <div style="color:var(--muted);font-size:.8rem;text-align:center">Henüz tur yok</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASINO -->
+<section id="casino">
+  <div class="section">
+    <div class="sec-title">🎰 CASINO OYUNLARI</div>
+    <div class="casino-grid">
+
+      <!-- COIN FLIP -->
+      <div class="casino-card">
+        <div class="casino-header"><div class="casino-icon">🪙</div><div class="casino-title">COIN FLIP</div></div>
+        <div class="casino-body">
+          <div class="result-display" id="cfResult"><span>🪙</span></div>
+          <div class="result-msg" id="cfMsg"></div>
+          <div>
+            <label>Bahis (aXC)</label>
+            <input type="number" id="cfBet" value="100" min="10"/>
+          </div>
+          <div class="pick-row">
+            <button class="pick-btn selected" id="cfYazi" onclick="selectCF('yazi')">YAZI</button>
+            <button class="pick-btn" id="cfTura" onclick="selectCF('tura')">TURA</button>
+          </div>
+          <button class="game-btn purple-btn" onclick="playCoinFlip()">Oyna (2x)</button>
+        </div>
+      </div>
+
+      <!-- DICE -->
+      <div class="casino-card">
+        <div class="casino-header"><div class="casino-icon">🎲</div><div class="casino-title">ZAR AT</div></div>
+        <div class="casino-body">
+          <div class="result-display" id="diceResult"><span>🎲</span></div>
+          <div class="result-msg" id="diceMsg"></div>
+          <div>
+            <label>Bahis (aXC)</label>
+            <input type="number" id="diceBet" value="100" min="10"/>
+          </div>
+          <div class="pick-row" style="flex-wrap:wrap;gap:5px">
+            <button class="pick-btn selected" id="dLow" onclick="selectDice('low')">1-3 (2x)</button>
+            <button class="pick-btn" id="dHigh" onclick="selectDice('high')">4-6 (2x)</button>
+            <button class="pick-btn" id="dSix" onclick="selectDice('six')">6 (5x)</button>
+          </div>
+          <button class="game-btn gold-btn" onclick="playDice()">Zar At</button>
+        </div>
+      </div>
+
+      <!-- ROULETTE -->
+      <div class="casino-card">
+        <div class="casino-header"><div class="casino-icon">🎡</div><div class="casino-title">RULET</div></div>
+        <div class="casino-body">
+          <canvas id="roulCv" width="180" height="180"></canvas>
+          <div class="result-msg" id="roulMsg" style="text-align:center"></div>
+          <div>
+            <label>Bahis (aXC)</label>
+            <input type="number" id="roulBet" value="100" min="10"/>
+          </div>
+          <div class="roul-bets">
+            <button class="rb rb-r" id="rbR" onclick="selectRoul('red')">KIRMIZI (2x)</button>
+            <button class="rb rb-b" id="rbB" onclick="selectRoul('blue')">SİYAH (2x)</button>
+            <button class="rb rb-g" id="rbG" onclick="selectRoul('green')">YEŞİL (14x)</button>
+          </div>
+          <button class="game-btn blue-btn" onclick="spinRoulette()">Çevir!</button>
+        </div>
+      </div>
+
+      <!-- MINES -->
+      <div class="casino-card">
+        <div class="casino-header"><div class="casino-icon">💎</div><div class="casino-title">MADENCİ</div></div>
+        <div class="casino-body">
+          <div id="minesGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px"></div>
+          <div class="result-msg" id="minesMsg" style="text-align:center"></div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)">
+            <span>Çarpan: <b id="minesMult" style="color:#fff">1.0x</b></span>
+            <span>Güvenli: <b id="minesSafe" style="color:#fff">0</b></span>
+          </div>
+          <div>
+            <label>Bahis (aXC)</label>
+            <input type="number" id="minesBet" value="200" min="10"/>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="game-btn purple-btn" style="flex:1" onclick="startMines()">Başlat</button>
+            <button class="game-btn gold-btn" style="flex:1" id="minesCashBtn" onclick="cashoutMines()" disabled>Çek</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLOT MACHINE -->
+      <div class="casino-card">
+        <div class="casino-header"><div class="casino-icon">🎰</div><div class="casino-title">SLOT MAKİNESİ</div></div>
+        <div class="casino-body">
+          <div style="background:linear-gradient(135deg,#1a0a2a,#2a0f3a);border-radius:14px;padding:16px;text-align:center;border:2px solid rgba(108,99,255,.3)">
+            <div style="display:flex;justify-content:center;gap:6px;margin-bottom:10px">
+              <div class="slot-reel" id="sr0" style="width:64px;height:72px;background:#0d1117;border-radius:10px;border:2px solid rgba(108,99,255,.4);display:flex;align-items:center;justify-content:center;font-size:2.2rem;transition:all .1s">🎰</div>
+              <div class="slot-reel" id="sr1" style="width:64px;height:72px;background:#0d1117;border-radius:10px;border:2px solid rgba(108,99,255,.4);display:flex;align-items:center;justify-content:center;font-size:2.2rem;transition:all .1s">🎰</div>
+              <div class="slot-reel" id="sr2" style="width:64px;height:72px;background:#0d1117;border-radius:10px;border:2px solid rgba(108,99,255,.4);display:flex;align-items:center;justify-content:center;font-size:2.2rem;transition:all .1s">🎰</div>
+            </div>
+            <div id="slotWinLine" style="font-size:.75rem;color:var(--muted);min-height:18px"></div>
+          </div>
+          <div class="result-msg" id="slotMsg"></div>
+          <div><label>Bahis (aXC)</label><input type="number" id="slotBet" value="100" min="10"/></div>
+          <button class="game-btn purple-btn" id="slotBtn" onclick="playSLot()">🎰 ÇEVİR!</button>
+          <div style="font-size:.7rem;color:var(--muted);line-height:1.8">
+            3 aynı 💎=50x &bull; 🍒=20x &bull; ⭐=10x &bull; 🎯=8x<br>
+            2 aynı 💎=4x &bull; 🍒=3x &bull; Diğer=2x
+          </div>
+        </div>
+      </div>
+
+      <!-- BLACKJACK -->
+      <div class="casino-card" style="grid-column:span 1">
+        <div class="casino-header"><div class="casino-icon">🃏</div><div class="casino-title">BLACKJACK</div></div>
+        <div class="casino-body">
+          <div style="background:#0a120a;border-radius:12px;padding:12px;border:1px solid rgba(34,197,94,.2)">
+            <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">KRUPIYE <span id="bjDealerScore" style="color:#fff"></span></div>
+            <div id="bjDealerCards" style="display:flex;gap:5px;flex-wrap:wrap;min-height:44px;margin-bottom:10px"></div>
+            <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">SEN <span id="bjPlayerScore" style="color:#fff"></span></div>
+            <div id="bjPlayerCards" style="display:flex;gap:5px;flex-wrap:wrap;min-height:44px"></div>
+          </div>
+          <div class="result-msg" id="bjMsg" style="text-align:center;min-height:20px"></div>
+          <div><label>Bahis (aXC)</label><input type="number" id="bjBet" value="200" min="10"/></div>
+          <div style="display:flex;gap:6px">
+            <button class="game-btn purple-btn" id="bjDealBtn" onclick="bjDeal()" style="flex:1">Dağıt</button>
+            <button class="game-btn blue-btn" id="bjHitBtn" onclick="bjHit()" disabled style="flex:1">Kart Al</button>
+            <button class="game-btn gold-btn" id="bjStandBtn" onclick="bjStand()" disabled style="flex:1">Dur</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KENO -->
+      <div class="casino-card">
+        <div class="casino-header"><div class="casino-icon">🔢</div><div class="casino-title">KENO</div></div>
+        <div class="casino-body">
+          <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">5 sayı seç (1-40)</div>
+          <div id="kenoGrid" style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:8px"></div>
+          <div class="result-msg" id="kenoMsg" style="text-align:center"></div>
+          <div><label>Bahis (aXC)</label><input type="number" id="kenoBet" value="150" min="10"/></div>
+          <div style="display:flex;gap:6px">
+            <button class="game-btn purple-btn" onclick="playKeno()" style="flex:2">Oyna</button>
+            <button class="game-btn" onclick="kenoReset()" style="flex:1;background:rgba(255,255,255,.07);color:var(--muted)">Sıfırla</button>
+          </div>
+          <div style="font-size:.7rem;color:var(--muted)">5/5=100x • 4/5=15x • 3/5=3x • 2/5=1.5x</div>
+        </div>
+      </div>
+
+      <!-- HI-LO -->
+      <div class="casino-card">
+        <div class="casino-header"><div class="casino-icon">🎴</div><div class="casino-title">HI-LO</div></div>
+        <div class="casino-body">
+          <div style="background:linear-gradient(135deg,#0a0a1a,#1a0a2a);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,.08)">
+            <div style="font-size:.75rem;color:var(--muted);margin-bottom:6px">Mevcut Kart</div>
+            <div id="hiloCard" style="font-size:3.5rem;line-height:1;margin-bottom:4px">🎴</div>
+            <div id="hiloCardName" style="font-size:.85rem;font-weight:700;color:#fff"></div>
+          </div>
+          <div class="result-msg" id="hiloMsg" style="text-align:center"></div>
+          <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)">
+            <span>Seri: <b id="hiloStreak" style="color:var(--gold)">0</b></span>
+            <span>Çarpan: <b id="hiloCurrent" style="color:#fff">1.0x</b></span>
+          </div>
+          <div><label>Bahis (aXC)</label><input type="number" id="hiloBet" value="100" min="10"/></div>
+          <div style="display:flex;gap:6px">
+            <button class="game-btn blue-btn" id="hiloHighBtn" onclick="playHilo('high')" style="flex:1">⬆ YÜKSEK</button>
+            <button class="game-btn" id="hiloNewBtn" onclick="hiloNew()" style="flex:1;background:rgba(255,255,255,.07);color:var(--muted)">Yeni</button>
+            <button class="game-btn red-btn" id="hiloLowBtn" onclick="playHilo('low')" style="flex:1;background:var(--red);color:#fff">⬇ DÜŞÜK</button>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="game-btn gold-btn" id="hiloCashBtn" onclick="hiloCashout()" disabled style="flex:1">💰 Çek (0 aXC)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CS:GO CASE OPENING -->
+      <div class="casino-card" style="grid-column:span 3; background: linear-gradient(135deg, #0d1117, #161b22); border: 1px solid rgba(255,215,0,0.2);">
+        <div class="casino-header" style="background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.1)); border-bottom: 1px solid rgba(255,215,0,0.3);">
+          <div class="casino-icon">📦</div>
+          <div class="casino-title" style="color: #ffd700; font-family: 'Orbitron', sans-serif; font-size: 1.3rem;">CS:GO KASA AÇIMI</div>
+        </div>
+        <div class="casino-body" style="padding: 0;">
+          
+          <!-- Case Selection -->
+          <div style="background: rgba(0,0,0,0.4); padding: 25px; border-bottom: 1px solid rgba(255,215,0,0.15);">
+            <div style="text-align: center; margin-bottom: 25px;">
+              <h3 style="color: #ffd700; font-family: 'Orbitron', sans-serif; margin-bottom: 15px; font-size: 1.4rem; text-shadow: 0 0 10px rgba(255,215,0,0.5);">KASA SEÇ</h3>
+              <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <button class="case-card-premium" onclick="selectCase('dreams')" data-case="dreams">
+                  <div class="case-icon-premium">💭</div>
+                  <div class="case-name-premium">Dreams</div>
+                  <div class="case-price-premium">50 aXC</div>
+                </button>
+                <button class="case-card-premium" onclick="selectCase('nightmare')" data-case="nightmare">
+                  <div class="case-icon-premium">👹</div>
+                  <div class="case-name-premium">Nightmare</div>
+                  <div class="case-price-premium">100 aXC</div>
+                </button>
+                <button class="case-card-premium" onclick="selectCase('legendary')" data-case="legendary">
+                  <div class="case-icon-premium">⚡</div>
+                  <div class="case-name-premium">Legendary</div>
+                  <div class="case-price-premium">250 aXC</div>
+                </button>
+                <button class="case-card-premium" onclick="selectCase('fracture')" data-case="fracture">
+                  <div class="case-icon-premium">💎</div>
+                  <div class="case-name-premium">Fracture</div>
+                  <div class="case-price-premium">500 aXC</div>
+                </button>
+                <button class="case-card-premium" onclick="selectCase('horizon')" data-case="horizon">
+                  <div class="case-icon-premium">🌅</div>
+                  <div class="case-name-premium">Horizon</div>
+                  <div class="case-price-premium">1000 aXC</div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Case Opening Area -->
+          <div id="caseOpeningArea" style="display: none; min-height: 600px;">
+            
+            <!-- Roulette Container -->
+            <div style="position: relative; background: linear-gradient(135deg, #0a0e1a, #1a1f2e); padding: 50px 20px; border-bottom: 2px solid rgba(255,215,0,0.3);">
+              
+              <!-- Spinning Bar -->
+              <div id="spinningBar" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 250px; background: linear-gradient(to bottom, transparent, #ffd700, transparent); z-index: 10; opacity: 0; transition: opacity 0.3s; box-shadow: 0 0 20px rgba(255,215,0,0.8);">
+                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #ffd700; filter: drop-shadow(0 0 10px rgba(255,215,0,0.8));"></div>
+                <div style="position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 30px solid #ffd700; filter: drop-shadow(0 0 10px rgba(255,215,0,0.8));"></div>
+              </div>
+
+              <!-- Roulette Track -->
+              <div style="position: relative; height: 140px; overflow: hidden; border-radius: 15px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,215,0,0.2);">
+                <div id="caseRoulette" style="display: flex; gap: 3px; height: 100%; transition: none;">
+                  <!-- Items will be dynamically added here -->
+                </div>
+              </div>
+
+              <!-- Glow Effects -->
+              <div class="glow-effect" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, rgba(255,215,0,0.15) 0%, transparent 70%); pointer-events: none;"></div>
+            </div>
+
+            <!-- Result Display -->
+            <div id="caseResult" style="text-align: center; padding: 40px; min-height: 200px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2);">
+              <div style="color: #666; font-size: 1.2rem;">Kasa seçerek başlayın...</div>
+            </div>
+
+            <!-- Controls -->
+            <div style="text-align: center; padding: 30px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,215,0,0.15);">
+              <button id="openCaseBtn" class="open-case-btn-premium" onclick="openCase()" disabled>
+                <span class="btn-text">KASA SEÇİN</span>
+              </button>
+              
+              <div style="margin-top: 20px; display: flex; gap: 30px; justify-content: center; align-items: center;">
+                <div style="color: #ccc; font-size: 1rem;">
+                  <span>🎯 Kazanma Oranı:</span>
+                  <span id="winChance" style="color: #ffd700; font-weight: bold; margin-left: 5px;">--</span>
+                </div>
+                <div style="color: #ccc; font-size: 1rem;">
+                  <span>💰 Potansiyel Değer:</span>
+                  <span id="potentialValue" style="color: #4CAF50; font-weight: bold; margin-left: 5px;">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Drops -->
+          <div style="padding: 25px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,215,0,0.15);">
+            <div style="color: #ffd700; font-size: 1rem; margin-bottom: 15px; text-align: center; font-family: 'Orbitron', sans-serif;">🎁 SON KAZANÇLAR</div>
+            <div id="recentDrops" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; min-height: 50px;">
+              <!-- Recent drops will appear here -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="notif" id="notifContainer"></div>
+
+<!-- AVIATOR -->
+<section id="aviator" style="background:var(--bg);border-bottom:1px solid var(--border)">
+  <div class="section">
+    <div class="sec-title">✈️ AVİATOR — Uçak düşmeden önce çek!</div>
+    <div style="display:grid;grid-template-columns:1fr 260px;gap:20px;align-items:start">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center">
+        <canvas id="avCv" width="600" height="300" style="width:100%;border-radius:12px;display:block;background:#04060e"></canvas>
+        <div id="avMult" style="font-family:'Orbitron',sans-serif;font-size:2.8rem;font-weight:900;margin:10px 0;color:var(--blue)">1.00x</div>
+        <div id="avStatus" style="font-size:.9rem;color:var(--muted);min-height:22px">Bahis gir ve UÇUR'a bas</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="panel-box">
+          <h3>Bahis</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div><label>Miktar (aXC)</label><input type="number" id="avBet" value="200" min="10"/></div>
+            <div class="amount-presets">
+              <div class="preset" onclick="document.getElementById('avBet').value=100">100</div>
+              <div class="preset" onclick="document.getElementById('avBet').value=500">500</div>
+              <div class="preset" onclick="document.getElementById('avBet').value=1000">1K</div>
+            </div>
+            <div><label>Otomatik Çekiş (0=manuel)</label><input type="number" id="avAuto" value="0" min="0" step="0.1"/></div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.83rem"><input type="checkbox" id="avAutoRepeat" style="width:auto;accent-color:var(--blue)"/>Otomatik Tekrar</label>
+            <button class="big-btn" id="avStartBtn" onclick="avStart()" style="background:linear-gradient(135deg,var(--blue),#0284c7);color:#fff;font-family:'Orbitron',sans-serif">✈️ UÇUR</button>
+            <button class="big-btn cashout-btn" id="avCashBtn" onclick="avCash()" disabled>💸 ÇEK!</button>
+            <button class="big-btn" id="avReplayBtn" onclick="avStart()" style="display:none;background:linear-gradient(135deg,#6c63ff,#8b5cf6);color:#fff;font-family:'Orbitron',sans-serif">🔄 TEKRAR</button>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h3>Son Turlar</h3>
+          <div id="avHistory" style="display:flex;flex-direction:column;gap:5px;max-height:160px;overflow-y:auto">
+            <div style="color:var(--muted);font-size:.8rem;text-align:center">Henüz tur yok</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIMBO -->
+<section id="limbo" style="background:var(--bg);border-bottom:1px solid var(--border)">
+  <div class="section">
+    <div class="sec-title">🎯 LİMBO — Hedef belirle, altında kalırsa kazan!</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:700px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center">
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:8px;letter-spacing:1px">SONUÇ</div>
+        <div id="limboResult" style="font-family:'Orbitron',sans-serif;font-size:3.5rem;font-weight:900;color:#fff;margin-bottom:8px">—</div>
+        <div id="limboMsg" style="font-size:.9rem;min-height:20px"></div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+        <div><label>Bahis (aXC)</label><input type="number" id="limboBet" value="100" min="10"/></div>
+        <div>
+          <label>Hedef Çarpan: <b id="limboTargetLabel" style="color:var(--accent)">2.0x</b></label>
+          <input type="range" id="limboTarget" min="1.1" max="100" step="0.1" value="2" oninput="document.getElementById('limboTargetLabel').textContent=parseFloat(this.value).toFixed(1)+'x'"/>
+        </div>
+        <div style="font-size:.78rem;color:var(--muted)">Kazanma ihtimali: <b id="limboChance" style="color:#fff">50%</b></div>
+        <button class="game-btn purple-btn" onclick="playLimbo()">🎯 OYNA</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section id="leaderboard" style="background:var(--bg);border-bottom:1px solid var(--border)">
+  <div class="section">
+    <div class="sec-title">🏆 LİDERLİK TABLOSU</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px">
+        <div style="font-size:.8rem;color:var(--muted);letter-spacing:1px;margin-bottom:14px">EN YÜKSEK BAKİYE</div>
+        <div id="lbList" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:6px">Adını kaydet:</div>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="lbName" placeholder="İsmin..." maxlength="16" style="flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);color:#fff;border-radius:8px;padding:7px 10px;font-size:.85rem;outline:none"/>
+            <button onclick="saveScore()" style="background:var(--accent);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.82rem">Kaydet</button>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px">
+        <div style="font-size:.8rem;color:var(--muted);letter-spacing:1px;margin-bottom:14px">OTURUM İSTATİSTİKLERİ</div>
+        <div id="sessionStats" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>&copy; 2025 alper20x — Tüm paralar sahtedir, eğlence amaçlıdır.</footer>
+
+<script>
+// ============================================================
+//  GLOBAL STATE
+// ============================================================
+let balance = 10000;
+let totalWon = 0, totalLost = 0, wins = 0, losses = 0;
+
+function fmt(n){return Math.round(n).toLocaleString('tr-TR');}
+function updateBalance(delta){
+  balance = Math.max(0, balance + delta);
+  document.getElementById('headerBal').textContent = fmt(balance);
+  document.getElementById('statBal').textContent = fmt(balance);
+  if(delta>0){totalWon+=delta;wins++;}
+  else if(delta<0){totalLost+=Math.abs(delta);losses++;}
+  document.getElementById('statWins').textContent = wins;
+  document.getElementById('statLoss').textContent = losses;
+  const tt=document.getElementById('t_total');if(tt)tt.textContent=fmt(totalWon);
+  updatePortfolio();
+}
+function showNotif(msg, type='info'){
+  const c = document.getElementById('notifContainer');
+  const d = document.createElement('div');
+  d.className = `notif-item ${type}-toast`;
+  d.textContent = msg;
+  c.appendChild(d);
+  setTimeout(()=>d.remove(), 3000);
+}
+
+// ============================================================
+//  CRYPTO CHART
+// ============================================================
+const COINS = {
+  BTC: {name:'Bitcoin (BTC)', icon:'₿', base:42000, vol:800, color:'#f7931a'},
+  ETH: {name:'Ethereum (ETH)', icon:'Ξ', base:2200, vol:60, color:'#627eea'},
+  SOL: {name:'Solana (SOL)', icon:'◎', base:120, vol:4, color:'#9945ff'},
+  DOGE:{name:'Dogecoin (DOGE)',icon:'Ð', base:0.12, vol:0.005, color:'#c2a633'}
+};
+let activeCoin = 'BTC';
+let coinPrices = {};
+let candleData = {};
+
+Object.keys(COINS).forEach(k=>{
+  const c = COINS[k];
+  let p = c.base;
+  candleData[k] = Array.from({length:60},()=>{
+    const o=p, move=(Math.random()-.48)*c.vol*2;
+    const h=o+Math.abs(move)*1.5, l=o-Math.abs(move)*1.5;
+    const cl=o+move; p=cl;
+    return{o,h,l,c:cl};
+  });
+  coinPrices[k] = p;
+});
+
+const chartCv = document.getElementById('chartCv');
+const chartCtx = chartCv.getContext('2d');
+
+function switchCoin(k, el){
+  activeCoin = k;
+  document.querySelectorAll('.coin-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const c = COINS[k];
+  document.getElementById('coinIcon').textContent = c.icon;
+  document.getElementById('coinName').textContent = c.name;
+  drawChart();
+}
+
+function drawChart(){
+  const c = COINS[activeCoin];
+  const data = candleData[activeCoin];
+  const W = chartCv.clientWidth || 600;
+  chartCv.width = W;
+  const H = 260;
+  chartCtx.clearRect(0,0,W,H);
+
+  chartCtx.fillStyle = '#090b14';
+  chartCtx.fillRect(0,0,W,H);
+
+  const visible = data.slice(-50);
+  const allH = visible.map(d=>d.h), allL = visible.map(d=>d.l);
+  const maxP = Math.max(...allH), minP = Math.min(...allL);
+  const range = maxP - minP || 1;
+  const pad = {t:16,b:24,l:8,r:8};
+  const cW = (W - pad.l - pad.r) / visible.length;
+
+  // Grid
+  for(let i=0;i<5;i++){
+    const y = pad.t + (H-pad.t-pad.b)*i/4;
+    chartCtx.strokeStyle = 'rgba(255,255,255,.04)';
+    chartCtx.lineWidth=1;
+    chartCtx.beginPath();chartCtx.moveTo(pad.l,y);chartCtx.lineTo(W-pad.r,y);chartCtx.stroke();
+    const price = maxP - range*i/4;
+    chartCtx.fillStyle='rgba(255,255,255,.25)';chartCtx.font='10px monospace';chartCtx.textAlign='right';
+    chartCtx.fillText(price>=1?price.toFixed(0):price.toFixed(4), W-pad.r-2, y-3);
+  }
+
+  function toY(p){return pad.t + (maxP-p)/range*(H-pad.t-pad.b);}
+
+  visible.forEach((d,i)=>{
+    const x = pad.l + i*cW + cW*0.1;
+    const bW = cW * 0.8;
+    const isUp = d.c >= d.o;
+    const col = isUp ? '#22c55e' : '#ef4444';
+
+    // wick
+    chartCtx.strokeStyle=col;chartCtx.lineWidth=1;
+    chartCtx.beginPath();chartCtx.moveTo(x+bW/2,toY(d.h));chartCtx.lineTo(x+bW/2,toY(d.l));chartCtx.stroke();
+
+    // body
+    const top = Math.min(toY(d.o),toY(d.c));
+    const bH = Math.max(Math.abs(toY(d.c)-toY(d.o)),1);
+    chartCtx.fillStyle=col;
+    chartCtx.fillRect(x,top,bW,bH);
+  });
+
+  // Price line
+  const last = visible[visible.length-1];
+  const ly = toY(last.c);
+  chartCtx.strokeStyle=c.color;chartCtx.lineWidth=1.5;chartCtx.setLineDash([4,4]);
+  chartCtx.beginPath();chartCtx.moveTo(pad.l,ly);chartCtx.lineTo(W-pad.r,ly);chartCtx.stroke();
+  chartCtx.setLineDash([]);
+}
+
+// Price tick
+setInterval(()=>{
+  Object.keys(COINS).forEach(k=>{
+    const c = COINS[k];
+    const last = candleData[k][candleData[k].length-1];
+    const move = (Math.random()-.48)*c.vol*1.2;
+    const newC = Math.max(last.c*0.9, last.c+move);
+    if(Math.random()<0.25){
+      candleData[k].push({o:last.c,h:Math.max(last.c,newC)+Math.abs(move)*0.5,l:Math.min(last.c,newC)-Math.abs(move)*0.5,c:newC});
+      if(candleData[k].length>100)candleData[k].shift();
+    } else {
+      last.c=newC;last.h=Math.max(last.h,newC);last.l=Math.min(last.l,newC);
+    }
+    coinPrices[k]=newC;
+  });
+  const p = coinPrices[activeCoin];
+  const first = candleData[activeCoin][0].o;
+  const pct = ((p-first)/first*100);
+  document.getElementById('coinPrice').textContent = p>=1?fmt(p):p.toFixed(5);
+  const chEl = document.getElementById('coinChange');
+  chEl.textContent=(pct>=0?'+':'')+pct.toFixed(2)+'%';
+  chEl.className='coin-change '+(pct>=0?'up':'dn');
+  drawChart();
+  updatePositions();
+  // Ticker
+  ['BTC','ETH','SOL','DOGE'].forEach(k=>{
+    const el=document.getElementById('t_'+k);
+    if(el)el.textContent=coinPrices[k]>=1?fmt(coinPrices[k]):coinPrices[k].toFixed(5);
+  });
+}, 800);
+
+// Positions
+let positions = [];
+function tradeBuy(){
+  const amt = parseFloat(document.getElementById('tradeAmt').value)||0;
+  if(amt<=0||amt>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-amt);
+  const price = coinPrices[activeCoin];
+  positions.push({coin:activeCoin,buyPrice:price,amount:amt,qty:amt/price});
+  showNotif(`${COINS[activeCoin].icon} ${activeCoin} alındı: ${fmt(amt)} aXC`,'info');
+  renderPositions();
+}
+function tradeQuickSell(){
+  const myPos = positions.filter(p=>p.coin===activeCoin);
+  if(!myPos.length){showNotif('Bu coinde açık pozisyon yok','lose');return;}
+  let total=0;
+  myPos.forEach(p=>{const cur=coinPrices[p.coin];const val=p.qty*cur;total+=val;});
+  positions=positions.filter(p=>p.coin!==activeCoin);
+  updateBalance(total);
+  showNotif(`${COINS[activeCoin].icon} Satıldı: ${fmt(total)} aXC alındı`,'win');
+  renderPositions();
+}
+function sellPos(idx){
+  const p=positions[idx];
+  const val=p.qty*coinPrices[p.coin];
+  updateBalance(val);
+  const profit=val-p.amount;
+  showNotif(`${COINS[p.coin].icon} Satıldı: ${fmt(val)} aXC (${profit>=0?'+':''}${fmt(profit)})`,'win');
+  positions.splice(idx,1);
+  renderPositions();
+}
+function renderPositions(){
+  const el=document.getElementById('posList');
+  if(!positions.length){el.innerHTML='<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">Henüz pozisyon yok</div>';return;}
+  el.innerHTML=positions.map((p,i)=>{
+    const cur=coinPrices[p.coin];const val=p.qty*cur;const profit=val-p.amount;const isUp=profit>=0;
+    return`<div class="pos-item">
+      <div class="pi-row"><span>${COINS[p.coin].icon} ${p.coin}</span><button class="sell-btn" onclick="sellPos(${i})">SAT</button></div>
+      <div style="display:flex;justify-content:space-between;font-size:.75rem">
+        <span style="color:var(--muted)">Değer: <b style="color:#fff">${fmt(val)}</b></span>
+        <span style="color:${isUp?'var(--green)':'var(--red)'}">${isUp?'+':''}${fmt(profit)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+function updatePositions(){renderPositions();updatePortfolio();}
+function updatePortfolio(){
+  const el=document.getElementById('portfolioInfo');
+  if(!positions.length){el.innerHTML='<div style="color:var(--muted);font-size:.8rem">Portföy boş</div>';return;}
+  let total=0;positions.forEach(p=>{total+=p.qty*coinPrices[p.coin];});
+  const invested=positions.reduce((s,p)=>s+p.amount,0);
+  const profit=total-invested;
+  el.innerHTML=`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:.78rem">Toplam Değer</span><b>${fmt(total)} aXC</b></div>
+  <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:.78rem">Kâr/Zarar</span><b style="color:${profit>=0?'var(--green)':'var(--red)'}">${profit>=0?'+':''}${fmt(profit)} aXC</b></div>
+  <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:.78rem">Nakit</span><b>${fmt(balance)} aXC</b></div>`;
+}
+function setAmt(v){document.getElementById('tradeAmt').value=v;}
+updatePortfolio();
+
+// ============================================================
+//  CRASH / BALLOON GAME
+// ============================================================
+const crashCv = document.getElementById('crashCv');
+const crashCtx = crashCv.getContext('2d');
+let crashState = 'idle'; // idle, countdown, flying, popped
+let crashMult = 1.0;
+let crashPopAt = 1.0;
+let crashBetAmt = 0;
+let cashedOut = false;
+let crashRaf = null;
+let crashHistory = [];
+let balloonRadius = 0;
+let balloonMaxR = 0;
+
+function randomCrashPoint(){
+  const r=Math.random();
+  // Minimum 3x, surprise factor, max 500x
+  if(r<0.30)return 3+(Math.random()*2);        // 3x–5x  (%30)
+  if(r<0.55)return 5+(Math.random()*10);        // 5x–15x (%25)
+  if(r<0.75)return 15+(Math.random()*35);       // 15x–50x (%20)
+  if(r<0.90)return 50+(Math.random()*150);      // 50x–200x (%15)
+  return 200+(Math.random()*300);               // 200x–500x (%10)
+}
+
+function startCrash(){
+  if(crashState==='flying')return;
+  if(crashRaf){cancelAnimationFrame(crashRaf);crashRaf=null;}
+  clearInterval(autoRepeatTimer);
+  const bet=parseFloat(document.getElementById('crashBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Geçersiz veya yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  crashBetAmt=bet;
+  crashMult=1.0;
+  cashedOut=false;
+  crashPopAt=randomCrashPoint();
+  balloonRadius=20;
+  balloonMaxR=130;
+  crashState='flying';
+  document.getElementById('startCrashBtn').disabled=true;
+  document.getElementById('cashoutBtn').disabled=false;
+  document.getElementById('replayCrashBtn').style.display='none'; // hide replay during round
+  const md=document.getElementById('multDisplay');
+  md.className='mult-display safe';
+  md.textContent='1.00x';
+  document.getElementById('crashStatus').textContent='Bahis: '+fmt(bet)+' aXC — Çekmek için düğmeye bas!';
+  crashLoop();
+}
+
+function cashOut(){
+  if(crashState!=='flying'||cashedOut)return;
+  cashedOut=true;
+  crashState='cashed';
+  if(crashRaf){cancelAnimationFrame(crashRaf);crashRaf=null;}
+  const win=crashBetAmt*crashMult;
+  updateBalance(win);
+  const profit=win-crashBetAmt;
+  showNotif(`${crashMult.toFixed(2)}x — ${fmt(win)} aXC kazandın! (+${fmt(profit)})`, 'win');
+  document.getElementById('cashoutBtn').disabled=true;
+  document.getElementById('startCrashBtn').disabled=false;  // ← DÜZELTME
+  document.getElementById('replayCrashBtn').style.display='block'; // ← TEKRAR OYNA
+  document.getElementById('crashStatus').textContent=`✅ ${crashMult.toFixed(2)}x'de çektin! +${fmt(profit)} aXC kâr`;
+  const md=document.getElementById('multDisplay');
+  md.className='mult-display safe';
+  md.textContent=crashMult.toFixed(2)+'x ✅';
+  addCrashHistory(crashMult.toFixed(2)+'x', true);
+  drawBalloon();
+  scheduleAutoRepeat();
+}
+
+function crashLoop(){
+  if(crashState!=='flying'){crashRaf=null;return;}
+  const auto=parseFloat(document.getElementById('autoOut').value)||0;
+  crashMult+=0.015*(1+crashMult*0.025);
+  balloonRadius=Math.min(balloonMaxR, 20+crashMult*14);
+
+  if(auto>1&&crashMult>=auto)cashOut();
+  if(crashState!=='flying'){crashRaf=null;return;} // cashOut may have changed state
+
+  const md=document.getElementById('multDisplay');
+  md.textContent=crashMult.toFixed(2)+'x';
+  md.className='mult-display '+(crashMult<2?'safe':crashMult<5?'danger':'danger');
+  const curWin=crashBetAmt*crashMult;
+  document.getElementById('crashStatus').textContent=`Anlık: ${fmt(curWin)} aXC (${crashMult.toFixed(2)}x) — Çek!`;
+
+  drawBalloon();
+
+  if(crashMult>=crashPopAt){
+    // BOOM
+    crashState='popped';
+    crashRaf=null;
+    md.className='mult-display popped';
+    md.textContent='💥 PATLADII';
+    document.getElementById('crashStatus').textContent=`${crashPopAt.toFixed(2)}x'de patladı! -${fmt(crashBetAmt)} aXC`;
+    showNotif(`💥 Balon ${crashPopAt.toFixed(2)}x'de patladı! -${fmt(crashBetAmt)} aXC`, 'lose');
+    addCrashHistory(crashPopAt.toFixed(2)+'x', false);
+    document.getElementById('startCrashBtn').disabled=false;
+    document.getElementById('cashoutBtn').disabled=true;
+    document.getElementById('replayCrashBtn').style.display='block'; // ← TEKRAR OYNA
+    drawBalloonPop();
+    scheduleAutoRepeat();
+    return;
+  }
+  crashRaf=requestAnimationFrame(crashLoop);
+}
+
+let autoRepeatTimer=null;
+function scheduleAutoRepeat(){
+  const autoOn=document.getElementById('autoRepeat');
+  if(!autoOn||!autoOn.checked)return;
+  document.getElementById('startCrashBtn').disabled=true;
+  let cd=3;
+  const statusEl=document.getElementById('crashStatus');
+  clearInterval(autoRepeatTimer);
+  autoRepeatTimer=setInterval(()=>{
+    statusEl.textContent=`⏳ Sonraki tur: ${cd}s...`;
+    cd--;
+    if(cd<0){clearInterval(autoRepeatTimer);startCrash();}
+  },1000);
+}
+
+function drawBalloon(){
+  const W=crashCv.clientWidth||600;
+  crashCv.width=W;const H=320;
+  crashCtx.fillStyle='#08060f';crashCtx.fillRect(0,0,W,H);
+
+  // Glow
+  const grd=crashCtx.createRadialGradient(W/2,H/2,5,W/2,H/2,balloonRadius+40);
+  grd.addColorStop(0,crashMult<2?'rgba(34,197,94,.15)':crashMult<5?'rgba(240,159,0,.15)':'rgba(239,68,68,.15)');
+  grd.addColorStop(1,'transparent');
+  crashCtx.fillStyle=grd;crashCtx.fillRect(0,0,W,H);
+
+  // String
+  crashCtx.strokeStyle='rgba(255,255,255,.3)';crashCtx.lineWidth=1.5;
+  crashCtx.beginPath();crashCtx.moveTo(W/2,H/2+balloonRadius);crashCtx.lineTo(W/2,H-20);crashCtx.stroke();
+
+  // Balloon body
+  const col=crashMult<2?'#22c55e':crashMult<5?'#f59e0b':'#ef4444';
+  const bg2=crashCtx.createRadialGradient(W/2-balloonRadius*0.3,H/2-balloonRadius*0.3,2,W/2,H/2,balloonRadius);
+  bg2.addColorStop(0,'#fff');bg2.addColorStop(0.3,col);bg2.addColorStop(1,col+'99');
+  crashCtx.beginPath();crashCtx.ellipse(W/2,H/2,balloonRadius,balloonRadius*1.15,0,0,Math.PI*2);
+  crashCtx.fillStyle=bg2;crashCtx.fill();
+
+  // Shine
+  crashCtx.beginPath();crashCtx.ellipse(W/2-balloonRadius*0.28,H/2-balloonRadius*0.3,balloonRadius*0.22,balloonRadius*0.14,Math.PI*0.3,0,Math.PI*2);
+  crashCtx.fillStyle='rgba(255,255,255,.45)';crashCtx.fill();
+
+  // Multiplier inside
+  crashCtx.fillStyle='rgba(0,0,0,.55)';crashCtx.font=`bold ${Math.max(14,balloonRadius*0.36)}px Orbitron,monospace`;
+  crashCtx.textAlign='center';crashCtx.textBaseline='middle';
+  crashCtx.fillText(crashMult.toFixed(2)+'x',W/2,H/2);
+
+  // Win amount
+  if(!cashedOut){
+    const cur=crashBetAmt*crashMult;
+    crashCtx.fillStyle='rgba(255,255,255,.7)';crashCtx.font='12px Inter,sans-serif';
+    crashCtx.fillText(fmt(cur)+' aXC',W/2,H/2+balloonRadius*0.5);
+  }
+}
+
+function drawBalloonPop(){
+  const W=crashCv.clientWidth||600;
+  crashCv.width=W;const H=320;
+  crashCtx.fillStyle='#08060f';crashCtx.fillRect(0,0,W,H);
+  crashCtx.font='64px serif';crashCtx.textAlign='center';crashCtx.textBaseline='middle';
+  crashCtx.fillText('💥',W/2,H/2);
+  crashCtx.fillStyle='var(--red,#ef4444)';crashCtx.font='bold 28px Orbitron,monospace';
+  crashCtx.fillText(crashPopAt.toFixed(2)+'x — PATLADII!',W/2,H*0.78);
+}
+
+function addCrashHistory(label, won){
+  crashHistory.unshift({label,won});
+  if(crashHistory.length>15)crashHistory.pop();
+  const el=document.getElementById('crashHistory');
+  el.innerHTML=crashHistory.map(h=>`<div class="ch-item">
+    <span>${h.won?'✅':'💥'} ${h.label}</span>
+    <span style="color:${h.won?'var(--green)':'var(--red)'}">${h.won?'KAZANÇ':'PATLADI'}</span>
+  </div>`).join('');
+}
+
+drawBalloon();
+
+// ============================================================
+//  COIN FLIP
+// ============================================================
+let cfChoice='yazi';
+function selectCF(c){cfChoice=c;document.getElementById('cfYazi').classList.toggle('selected',c==='yazi');document.getElementById('cfTura').classList.toggle('selected',c==='tura');}
+function playCoinFlip(){
+  const bet=parseFloat(document.getElementById('cfBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  const res=Math.random()<0.5?'yazi':'tura';
+  const win=res===cfChoice;
+  document.getElementById('cfResult').innerHTML=`<span style="font-size:2rem">${res==='yazi'?'🪙':'🔮'}</span><span style="font-size:1rem;font-weight:700;color:${win?'var(--green)':'var(--red)'}">${res.toUpperCase()}</span>`;
+  if(win){updateBalance(bet*2);document.getElementById('cfMsg').innerHTML=`<span style="color:var(--green)">KAZANDIN! +${fmt(bet)} aXC</span>`;showNotif(`Coin Flip: +${fmt(bet)} aXC`,'win');}
+  else{document.getElementById('cfMsg').innerHTML=`<span style="color:var(--red)">KAYBETTİN! -${fmt(bet)} aXC</span>`;showNotif(`Coin Flip: -${fmt(bet)} aXC`,'lose');}
+}
+
+// ============================================================
+//  DICE
+// ============================================================
+const DICE_EMOJI=['🎲','⚀','⚁','⚂','⚃','⚄','⚅'];
+let diceChoice='low';
+function selectDice(c){
+  diceChoice=c;
+  ['dLow','dHigh','dSix'].forEach(id=>document.getElementById(id).classList.remove('selected'));
+  document.getElementById(c==='low'?'dLow':c==='high'?'dHigh':'dSix').classList.add('selected');
+}
+function playDice(){
+  const bet=parseFloat(document.getElementById('diceBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  const roll=Math.floor(Math.random()*6)+1;
+  let win=false,mult=1;
+  if(diceChoice==='low'&&roll<=3){win=true;mult=2;}
+  else if(diceChoice==='high'&&roll>=4){win=true;mult=2;}
+  else if(diceChoice==='six'&&roll===6){win=true;mult=5;}
+  document.getElementById('diceResult').innerHTML=`<span>${DICE_EMOJI[roll]}</span><span style="font-size:.9rem;font-weight:700;color:${win?'var(--green)':'var(--red)'}">${roll}</span>`;
+  if(win){updateBalance(bet*mult);document.getElementById('diceMsg').innerHTML=`<span style="color:var(--green)">KAZANDIN! +${fmt(bet*(mult-1))} aXC</span>`;showNotif(`Zar: ${roll} — +${fmt(bet*(mult-1))} aXC`,'win');}
+  else{document.getElementById('diceMsg').innerHTML=`<span style="color:var(--red)">KAYBETTİN! Zar: ${roll}</span>`;showNotif(`Zar: ${roll} — Kaybettin`,'lose');}
+}
+
+// ============================================================
+//  ROULETTE
+// ============================================================
+const roulCv=document.getElementById('roulCv');
+const roulCtx=roulCv.getContext('2d');
+const ROUL_COLORS=['red','blue','red','blue','red','blue','green','red','blue','red','blue','red','blue','red'];
+let roulChoice='red';
+let roulSpinning=false;
+let roulAngle=0;
+
+function selectRoul(c){
+  roulChoice=c;
+  ['rbR','rbB','rbG'].forEach(id=>document.getElementById(id).classList.remove('sel'));
+  document.getElementById(c==='red'?'rbR':c==='blue'?'rbB':'rbG').classList.add('sel');
+}
+function drawRoulette(angle){
+  const W=180,H=180,cx=90,cy=90,r=75;
+  roulCtx.clearRect(0,0,W,H);
+  const segs=ROUL_COLORS.length;
+  ROUL_COLORS.forEach((col,i)=>{
+    const a0=angle+i*(Math.PI*2/segs),a1=angle+(i+1)*(Math.PI*2/segs);
+    roulCtx.beginPath();roulCtx.moveTo(cx,cy);roulCtx.arc(cx,cy,r,a0,a1);roulCtx.closePath();
+    roulCtx.fillStyle=col==='red'?'#dc2626':col==='blue'?'#1d4ed8':'#16a34a';roulCtx.fill();
+    roulCtx.strokeStyle='rgba(0,0,0,.4)';roulCtx.lineWidth=1;roulCtx.stroke();
+  });
+  roulCtx.beginPath();roulCtx.arc(cx,cy,10,0,Math.PI*2);roulCtx.fillStyle='#fff';roulCtx.fill();
+  // Pointer
+  roulCtx.beginPath();roulCtx.moveTo(cx+r-8,cy);roulCtx.lineTo(cx+r+16,cy-6);roulCtx.lineTo(cx+r+16,cy+6);
+  roulCtx.closePath();roulCtx.fillStyle='#f0c040';roulCtx.fill();
+}
+drawRoulette(0);
+function spinRoulette(){
+  if(roulSpinning)return;
+  const bet=parseFloat(document.getElementById('roulBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  roulSpinning=true;
+  document.getElementById('roulMsg').textContent='';
+  const totalSpin=Math.PI*2*8+Math.random()*Math.PI*2;
+  let spun=0;const dur=3000,start=Date.now();
+  function frame(){
+    const elapsed=Date.now()-start,prog=elapsed/dur;
+    const eased=1-Math.pow(1-prog,3);
+    roulAngle=eased*totalSpin;
+    drawRoulette(roulAngle);
+    if(elapsed<dur){requestAnimationFrame(frame);}
+    else{
+      roulSpinning=false;
+      const finalAngle=roulAngle%(Math.PI*2);
+      const segs=ROUL_COLORS.length;
+      const segAngle=Math.PI*2/segs;
+      const pointer=0;
+      const idx=Math.floor(((pointer-finalAngle%(Math.PI*2)+Math.PI*2)%(Math.PI*2))/segAngle)%segs;
+      const result=ROUL_COLORS[idx];
+      let win=false,mult=1;
+      if(result===roulChoice){win=true;mult=result==='green'?14:2;}
+      if(win){updateBalance(bet*mult);document.getElementById('roulMsg').innerHTML=`<span style="color:var(--green)">KAZANDIN! +${fmt(bet*(mult-1))} aXC (${mult}x)</span>`;showNotif(`Rulet: ${result} — +${fmt(bet*(mult-1))} aXC`,'win');}
+      else{document.getElementById('roulMsg').innerHTML=`<span style="color:var(--red)">KAYBETTİN! Çıkan: ${result}</span>`;showNotif(`Rulet: ${result} — Kaybettin`,'lose');}
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+// ============================================================
+//  MINES (Miner)
+// ============================================================
+let minesActive=false;
+let minesBoard=[];
+let minesSafeCount=0;
+let minesBetAmt=0;
+const MINE_MULT=[1,1.12,1.26,1.42,1.6,1.82,2.1,2.45,2.9,3.5,4.2,5.1,6.2,7.8,10,13,17,22,30,40,55,75,100];
+function startMines(){
+  const bet=parseFloat(document.getElementById('minesBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  minesBetAmt=bet;minesSafeCount=0;minesActive=true;
+  document.getElementById('minesMult').textContent='1.0x';
+  document.getElementById('minesSafe').textContent='0';
+  document.getElementById('minesCashBtn').disabled=false;
+  // Place mines randomly (5 mines on 25 tiles)
+  minesBoard=Array(25).fill('gem');
+  let m=0;while(m<5){const i=Math.floor(Math.random()*25);if(minesBoard[i]==='gem'){minesBoard[i]='mine';m++;}}
+  renderMines(false);
+}
+function renderMines(reveal){
+  const grid=document.getElementById('minesGrid');
+  grid.innerHTML='';
+  minesBoard.forEach((type,i)=>{
+    const btn=document.createElement('button');
+    btn.style.cssText='width:100%;aspect-ratio:1;border-radius:6px;border:none;font-size:1.1rem;cursor:pointer;transition:all .2s;';
+    if(!minesActive||(!reveal)){
+      btn.style.background='rgba(255,255,255,.08)';btn.textContent='?';
+      btn.onclick=()=>clickMine(i);
+    } else {
+      btn.style.background=type==='gem'?'rgba(34,197,94,.2)':'rgba(239,68,68,.3)';
+      btn.textContent=type==='gem'?'💎':'💣';btn.disabled=true;
+    }
+    grid.appendChild(btn);
+  });
+}
+function clickMine(i){
+  if(!minesActive)return;
+  const btn=document.querySelectorAll('#minesGrid button')[i];
+  if(minesBoard[i]==='mine'){
+    minesActive=false;document.getElementById('minesCashBtn').disabled=true;
+    btn.style.background='rgba(239,68,68,.4)';btn.textContent='💣';
+    renderMines(true);
+    document.getElementById('minesMsg').innerHTML=`<span style="color:var(--red)">BOMBA! -${fmt(minesBetAmt)} aXC</span>`;
+    showNotif(`Madenci: Bomba! -${fmt(minesBetAmt)} aXC`,'lose');
+  } else {
+    btn.style.background='rgba(34,197,94,.25)';btn.textContent='💎';btn.disabled=true;
+    minesSafeCount++;
+    const mult=MINE_MULT[Math.min(minesSafeCount,MINE_MULT.length-1)];
+    document.getElementById('minesMult').textContent=mult.toFixed(2)+'x';
+    document.getElementById('minesSafe').textContent=minesSafeCount;
+    document.getElementById('minesMsg').innerHTML=`<span style="color:var(--green)">💎 +${minesSafeCount} Elmas — Çekersen: ${fmt(minesBetAmt*mult)} aXC</span>`;
+  }
+}
+function cashoutMines(){
+  if(!minesActive)return;
+  minesActive=false;document.getElementById('minesCashBtn').disabled=true;
+  const mult=MINE_MULT[Math.min(minesSafeCount,MINE_MULT.length-1)];
+  const win=minesBetAmt*mult;
+  updateBalance(win);
+  renderMines(true);
+  document.getElementById('minesMsg').innerHTML=`<span style="color:var(--green)">Çekildi! ${fmt(win)} aXC kazandın!</span>`;
+  showNotif(`Madenci: +${fmt(win-minesBetAmt)} aXC kâr!`,'win');
+}
+
+// ============================================================
+//  SLOT MACHINE
+// ============================================================
+const SLOT_SYMS = ['💎','💎','🍒','🍒','🍒','⭐','⭐','⭐','⭐','🎯','🎯','🎯','🔔','🔔','🍋','🍋','🍋','🍋','🔥','🎲'];
+const SLOT_MULT3 = {'💎':50,'🍒':20,'⭐':10,'🎯':8,'🔔':6,'🍋':4,'🔥':12,'🎲':7};
+const SLOT_MULT2 = {'💎':4,'🍒':3,'⭐':2.5,'🎯':2,'🔔':2,'🍋':1.5,'🔥':3,'🎲':2};
+let slotSpinning=false;
+
+function playSLot(){
+  if(slotSpinning)return;
+  const bet=parseFloat(document.getElementById('slotBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  slotSpinning=true;
+  document.getElementById('slotBtn').disabled=true;
+  document.getElementById('slotMsg').innerHTML='';
+  document.getElementById('slotWinLine').textContent='';
+
+  const reels=[0,1,2];
+  const finalSyms=reels.map(()=>SLOT_SYMS[Math.floor(Math.random()*SLOT_SYMS.length)]);
+  let spins=0;
+  const spinInterval=setInterval(()=>{
+    reels.forEach(i=>{
+      document.getElementById('sr'+i).textContent=SLOT_SYMS[Math.floor(Math.random()*SLOT_SYMS.length)];
+    });
+    spins++;
+    if(spins>18){
+      clearInterval(spinInterval);
+      // Reveal final one by one
+      let reveal=0;
+      const revInt=setInterval(()=>{
+        document.getElementById('sr'+reveal).textContent=finalSyms[reveal];
+        document.getElementById('sr'+reveal).style.borderColor='rgba(240,192,64,.8)';
+        reveal++;
+        if(reveal===3){
+          clearInterval(revInt);
+          slotSpinning=false;
+          document.getElementById('slotBtn').disabled=false;
+          evaluateSlot(finalSyms,bet);
+        }
+      },200);
+    }
+  },60);
+  reels.forEach(i=>document.getElementById('sr'+i).style.borderColor='rgba(108,99,255,.4)');
+}
+
+function evaluateSlot(syms,bet){
+  const [a,b,c]=syms;
+  let mult=0,msg='';
+  if(a===b&&b===c){mult=SLOT_MULT3[a]||5;msg=`🎉 JACKPOT! 3x ${a} = ${mult}x`;}
+  else if(a===b||b===c||a===c){
+    const pair=a===b?a:b===c?b:a;
+    mult=SLOT_MULT2[pair]||1.5;msg=`✨ 2x ${pair} = ${mult}x`;
+  } else {msg='Kazanç yok. Tekrar dene!';}
+  if(mult>0){
+    const win=bet*mult;
+    updateBalance(win);
+    document.getElementById('slotMsg').innerHTML=`<span style="color:var(--green)">${msg} → +${fmt(win)} aXC!</span>`;
+    document.getElementById('slotWinLine').textContent='★ KAZANDIN ★';
+    document.getElementById('slotWinLine').style.color='var(--gold)';
+    showNotif(`Slot: ${msg} → ${fmt(win)} aXC`,'win');
+    // Flash winning reels
+    [0,1,2].forEach(i=>{
+      if(mult>10)document.getElementById('sr'+i).style.borderColor='var(--gold)';
+    });
+  } else {
+    document.getElementById('slotMsg').innerHTML=`<span style="color:var(--red)">${msg}</span>`;
+  }
+}
+
+// ============================================================
+//  BLACKJACK
+// ============================================================
+const SUITS=['♠','♥','♦','♣'];
+const RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+let bjDeck=[],bjPlayer=[],bjDealer=[],bjBetAmt=0,bjActive=false;
+
+function bjNewDeck(){
+  bjDeck=[];
+  for(let s of SUITS)for(let r of RANKS)bjDeck.push({s,r});
+  bjDeck.sort(()=>Math.random()-.5);
+}
+function bjCardVal(r){
+  if(['J','Q','K'].includes(r))return 10;
+  if(r==='A')return 11;
+  return parseInt(r);
+}
+function bjScore(hand){
+  let s=hand.reduce((t,c)=>t+bjCardVal(c.r),0);
+  let aces=hand.filter(c=>c.r==='A').length;
+  while(s>21&&aces-->0)s-=10;
+  return s;
+}
+function bjCardHTML(c,hidden=false){
+  if(hidden)return`<div style="width:36px;height:52px;background:linear-gradient(135deg,#6c63ff,#8b5cf6);border-radius:6px;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem">🂠</div>`;
+  const red=['♥','♦'].includes(c.s);
+  return`<div style="width:36px;height:52px;background:#fff;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;color:${red?'#dc2626':'#1e293b'};border:1px solid #ccc;line-height:1.2"><span>${c.r}</span><span style="font-size:1rem">${c.s}</span></div>`;
+}
+function bjRender(hideDealer=false){
+  document.getElementById('bjDealerCards').innerHTML=bjDealer.map((c,i)=>bjCardHTML(c,hideDealer&&i===1)).join('');
+  document.getElementById('bjPlayerCards').innerHTML=bjPlayer.map(c=>bjCardHTML(c)).join('');
+  document.getElementById('bjPlayerScore').textContent=bjScore(bjPlayer);
+  document.getElementById('bjDealerScore').textContent=hideDealer?'?':bjScore(bjDealer);
+}
+function bjDeal(){
+  const bet=parseFloat(document.getElementById('bjBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);bjBetAmt=bet;bjActive=true;
+  bjNewDeck();bjPlayer=[];bjDealer=[];
+  bjPlayer.push(bjDeck.pop(),bjDeck.pop());
+  bjDealer.push(bjDeck.pop(),bjDeck.pop());
+  bjRender(true);
+  document.getElementById('bjMsg').textContent='';
+  document.getElementById('bjDealBtn').disabled=true;
+  document.getElementById('bjHitBtn').disabled=false;
+  document.getElementById('bjStandBtn').disabled=false;
+  if(bjScore(bjPlayer)===21){bjStand();}
+}
+function bjHit(){
+  if(!bjActive)return;
+  bjPlayer.push(bjDeck.pop());bjRender(true);
+  if(bjScore(bjPlayer)>21){bjEnd('bust');}
+}
+function bjStand(){
+  if(!bjActive)return;
+  bjActive=false;
+  bjRender(false);
+  // Dealer draws to 17
+  const doDraw=()=>{
+    if(bjScore(bjDealer)<17){
+      setTimeout(()=>{bjDealer.push(bjDeck.pop());bjRender(false);doDraw();},400);
+    } else {bjEnd('stand');}
+  };doDraw();
+}
+function bjEnd(reason){
+  bjActive=false;
+  document.getElementById('bjHitBtn').disabled=true;
+  document.getElementById('bjStandBtn').disabled=true;
+  document.getElementById('bjDealBtn').disabled=false;
+  bjRender(false);
+  const ps=bjScore(bjPlayer),ds=bjScore(bjDealer);
+  let msg='',win=0;
+  if(reason==='bust'||ps>21){msg=`💥 Battın! (${ps}) -${fmt(bjBetAmt)} aXC`;}
+  else if(ps===21&&bjPlayer.length===2){win=bjBetAmt*2.5;msg=`🎉 BLACKJACK! +${fmt(win-bjBetAmt)} aXC`;}
+  else if(ds>21){win=bjBetAmt*2;msg=`✅ Krupiye battı! +${fmt(win-bjBetAmt)} aXC`;}
+  else if(ps>ds){win=bjBetAmt*2;msg=`✅ Kazandın! ${ps} vs ${ds} → +${fmt(win-bjBetAmt)} aXC`;}
+  else if(ps===ds){win=bjBetAmt;msg=`🤝 Berabere! Bahis iade.`;}
+  else{msg=`❌ Kaybettin! ${ps} vs ${ds} → -${fmt(bjBetAmt)} aXC`;}
+  if(win>0){updateBalance(win);showNotif('Blackjack: '+msg,'win');}
+  else{showNotif('Blackjack: '+msg,'lose');}
+  document.getElementById('bjMsg').innerHTML=`<span style="color:${win>0?'var(--green)':win===bjBetAmt?'var(--gold)':'var(--red)'}">${msg}</span>`;
+}
+
+// ============================================================
+//  KENO
+// ============================================================
+let kenoSelected=new Set();
+function initKeno(){
+  const grid=document.getElementById('kenoGrid');grid.innerHTML='';
+  for(let i=1;i<=40;i++){
+    const btn=document.createElement('button');
+    btn.textContent=i;btn.dataset.n=i;
+    btn.style.cssText='padding:4px 0;border-radius:5px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--muted);font-size:.72rem;cursor:pointer;transition:.15s;font-weight:600';
+    btn.onclick=()=>kenoToggle(i,btn);
+    grid.appendChild(btn);
+  }
+}
+function kenoToggle(n,btn){
+  if(kenoSelected.has(n)){kenoSelected.delete(n);btn.style.background='rgba(255,255,255,.05)';btn.style.color='var(--muted)';btn.style.borderColor='rgba(255,255,255,.1)';}
+  else if(kenoSelected.size<5){kenoSelected.add(n);btn.style.background='rgba(108,99,255,.35)';btn.style.color='#fff';btn.style.borderColor='var(--accent)';}
+}
+function kenoReset(){kenoSelected.clear();initKeno();document.getElementById('kenoMsg').textContent='';}
+function playKeno(){
+  if(kenoSelected.size<5){showNotif('5 sayı seçmelisin!','lose');return;}
+  const bet=parseFloat(document.getElementById('kenoBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  // Draw 10 numbers
+  const pool=Array.from({length:40},(_,i)=>i+1).sort(()=>Math.random()-.5).slice(0,10);
+  const hits=[...kenoSelected].filter(n=>pool.includes(n)).length;
+  // Highlight drawn numbers
+  document.querySelectorAll('#kenoGrid button').forEach(btn=>{
+    const n=parseInt(btn.dataset.n);
+    if(pool.includes(n)&&kenoSelected.has(n)){btn.style.background='rgba(34,197,94,.5)';btn.style.borderColor='var(--green)';}
+    else if(pool.includes(n)){btn.style.background='rgba(239,68,68,.2)';btn.style.borderColor='var(--red)';}
+  });
+  const multMap={5:100,4:15,3:3,2:1.5};
+  const mult=multMap[hits]||0;
+  if(mult>0){
+    const win=bet*mult;updateBalance(win);
+    document.getElementById('kenoMsg').innerHTML=`<span style="color:var(--green)">🎯 ${hits}/5 isabet! ${mult}x → +${fmt(win)} aXC</span>`;
+    showNotif(`Keno: ${hits}/5 isabet! +${fmt(win)} aXC`,'win');
+  } else {
+    document.getElementById('kenoMsg').innerHTML=`<span style="color:var(--red)">😞 ${hits}/5 isabet. Kazanç yok.</span>`;
+    showNotif(`Keno: ${hits}/5 — Kazanç yok`,'lose');
+  }
+  setTimeout(()=>{kenoSelected.clear();initKeno();},2500);
+}
+initKeno();
+
+// ============================================================
+//  HI-LO
+// ============================================================
+const CARD_NAMES=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const CARD_EMOJIS=['🂡','🂢','🂣','🂤','🂥','🂦','🂧','🂨','🂩','🂪','🂫','🂭','🂮'];
+const SUIT_EMOJIS=['♠️','♥️','♦️','♣️'];
+let hiloCurrentVal=0,hiloStreak=0,hiloBetAmt=0,hiloMult=1,hiloActive=false;
+
+function hiloNew(){
+  hiloBetAmt=0;hiloStreak=0;hiloMult=1;hiloActive=false;
+  hiloCurrentVal=Math.floor(Math.random()*13);
+  const suit=SUIT_EMOJIS[Math.floor(Math.random()*4)];
+  document.getElementById('hiloCard').textContent=suit;
+  document.getElementById('hiloCardName').textContent=CARD_NAMES[hiloCurrentVal];
+  document.getElementById('hiloStreak').textContent='0';
+  document.getElementById('hiloCurrent').textContent='1.0x';
+  document.getElementById('hiloMsg').textContent='';
+  document.getElementById('hiloCashBtn').disabled=true;
+  document.getElementById('hiloCashBtn').textContent='💰 Çek (0 aXC)';
+}
+function playHilo(dir){
+  const bet=parseFloat(document.getElementById('hiloBet').value)||0;
+  if(!hiloActive){
+    if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+    updateBalance(-bet);hiloBetAmt=bet;hiloActive=true;
+    document.getElementById('hiloCashBtn').disabled=false;
+  }
+  const newVal=Math.floor(Math.random()*13);
+  const suit=SUIT_EMOJIS[Math.floor(Math.random()*4)];
+  const correct=(dir==='high'&&newVal>hiloCurrentVal)||(dir==='low'&&newVal<hiloCurrentVal);
+  const tie=newVal===hiloCurrentVal;
+  document.getElementById('hiloCard').textContent=suit;
+  document.getElementById('hiloCardName').textContent=CARD_NAMES[newVal];
+  if(tie){
+    document.getElementById('hiloMsg').innerHTML=`<span style="color:var(--gold)">🤝 Berabere! Tekrar dene.</span>`;
+    return;
+  }
+  hiloCurrentVal=newVal;
+  if(correct){
+    hiloStreak++;hiloMult=parseFloat((1+hiloStreak*0.7).toFixed(1));
+    document.getElementById('hiloStreak').textContent=hiloStreak;
+    document.getElementById('hiloCurrent').textContent=hiloMult+'x';
+    const cur=Math.round(hiloBetAmt*hiloMult);
+    document.getElementById('hiloCashBtn').textContent=`💰 Çek (${fmt(cur)} aXC)`;
+    document.getElementById('hiloMsg').innerHTML=`<span style="color:var(--green)">✅ Doğru! Seri: ${hiloStreak} — Çarpan: ${hiloMult}x</span>`;
+  } else {
+    hiloActive=false;
+    document.getElementById('hiloCashBtn').disabled=true;
+    document.getElementById('hiloMsg').innerHTML=`<span style="color:var(--red)">❌ Yanlış! -${fmt(hiloBetAmt)} aXC kaybettin.</span>`;
+    showNotif(`Hi-Lo: Yanlış tahmin! -${fmt(hiloBetAmt)} aXC`,'lose');
+    hiloStreak=0;hiloMult=1;hiloBetAmt=0;
+    document.getElementById('hiloStreak').textContent='0';
+    document.getElementById('hiloCurrent').textContent='1.0x';
+  }
+}
+function hiloCashout(){
+  if(!hiloActive||hiloBetAmt===0)return;
+  const win=Math.round(hiloBetAmt*hiloMult);
+  updateBalance(win);
+  showNotif(`Hi-Lo: ${hiloMult}x → +${fmt(win-hiloBetAmt)} aXC kâr!`,'win');
+  document.getElementById('hiloMsg').innerHTML=`<span style="color:var(--green)">💰 ${hiloMult}x'de çektin! +${fmt(win-hiloBetAmt)} aXC kâr!</span>`;
+  hiloActive=false;hiloBetAmt=0;hiloStreak=0;hiloMult=1;
+  document.getElementById('hiloCashBtn').disabled=true;
+  document.getElementById('hiloCashBtn').textContent='💰 Çek (0 aXC)';
+  document.getElementById('hiloStreak').textContent='0';
+  document.getElementById('hiloCurrent').textContent='1.0x';
+}
+hiloNew();
+
+// ============================================================
+//  SOUND ENGINE (Web Audio API)
+// ============================================================
+const AC = new (window.AudioContext||window.webkitAudioContext)();
+function playSound(type){
+  try{
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    if(type==='win'){o.frequency.setValueAtTime(520,AC.currentTime);o.frequency.exponentialRampToValueAtTime(880,AC.currentTime+.15);g.gain.setValueAtTime(.18,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.4);}
+    else if(type==='bigwin'){[0,.12,.22].forEach((t,i)=>{o.frequency.setValueAtTime([660,880,1100][i],AC.currentTime+t)});g.gain.setValueAtTime(.22,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.6);}
+    else if(type==='lose'){o.frequency.setValueAtTime(300,AC.currentTime);o.frequency.exponentialRampToValueAtTime(120,AC.currentTime+.3);g.gain.setValueAtTime(.15,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.4);}
+    else if(type==='click'){o.frequency.setValueAtTime(440,AC.currentTime);g.gain.setValueAtTime(.08,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.1);}
+    else if(type==='spin'){o.type='sawtooth';o.frequency.setValueAtTime(200,AC.currentTime);o.frequency.linearRampToValueAtTime(80,AC.currentTime+.25);g.gain.setValueAtTime(.1,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.3);}
+    o.start();o.stop(AC.currentTime+.7);
+  }catch(e){}
+}
+
+// ============================================================
+//  CONFETTI + COIN FLOAT ANIMATIONS
+// ============================================================
+function launchConfetti(x,y){
+  const colors=['#6c63ff','#f0c040','#22c55e','#ff6584','#38bdf8','#ff9f40','#fff'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.left=(x||Math.random()*100)+'%';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.width=(6+Math.random()*10)+'px';
+    el.style.height=(6+Math.random()*10)+'px';
+    el.style.borderRadius=Math.random()>.5?'50%':'2px';
+    el.style.animationDuration=(.8+Math.random()*1.4)+'s';
+    el.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2400);
+  }
+}
+function floatCoins(amt){
+  const count=Math.min(8,Math.floor(amt/100)+1);
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='coin-float';
+      el.textContent='💰';
+      el.style.left=(20+Math.random()*60)+'%';
+      el.style.top=(30+Math.random()*40)+'%';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),900);
+    },i*120);
+  }
+}
+function celebrateWin(amount){
+  if(amount>=500){launchConfetti();playSound('bigwin');}
+  else{playSound('win');}
+  floatCoins(amount);
+}
+
+// Override updateBalance to add celebrations
+const _origUpdateBalance=updateBalance;
+// patch showNotif to trigger effects
+const _origShowNotif=showNotif;
+function showNotif(msg,type='info'){
+  const c=document.getElementById('notifContainer');
+  const d=document.createElement('div');
+  d.className=`notif-item ${type}-toast`;
+  d.textContent=msg;
+  c.appendChild(d);
+  setTimeout(()=>d.remove(),3500);
+  if(type==='win'){const m=msg.match(/\+?([\d,]+)/);if(m){const v=parseInt(m[1].replace(/,/g,''));if(v>0)celebrateWin(v);}}
+  if(type==='lose')playSound('lose');
+}
+
+// ============================================================
+//  VIP SYSTEM
+// ============================================================
+function updateVIP(){
+  const vip=document.getElementById('vipBadge');
+  if(!vip)return;
+  if(balance>=100000){vip.style.display='block';vip.textContent='👑 DIAMOND';}
+  else if(balance>=50000){vip.style.display='block';vip.textContent='💎 PLATINUM';}
+  else if(balance>=20000){vip.style.display='block';vip.textContent='🥇 GOLD';}
+  else if(balance>=5000){vip.style.display='block';vip.textContent='🥈 SILVER';}
+  else{vip.style.display='none';}
+}
+
+// ============================================================
+//  DAILY BONUS
+// ============================================================
+function checkBonus(){
+  const last=localStorage.getItem('alper20x_bonus');
+  const today=new Date().toDateString();
+  const btn=document.getElementById('bonusBtn');
+  if(last!==today&&btn)btn.style.display='block';
+}
+function claimBonus(){
+  const today=new Date().toDateString();
+  const last=localStorage.getItem('alper20x_bonus');
+  if(last===today){showNotif('Bugünkü bonusunu zaten aldın! Yarın tekrar gel.','info');return;}
+  const bonus=1000+Math.floor(Math.random()*2000);
+  localStorage.setItem('alper20x_bonus',today);
+  updateBalance(bonus);
+  document.getElementById('bonusBtn').style.display='none';
+  launchConfetti();
+  playSound('bigwin');
+  showNotif(`🎁 Günlük bonus: +${fmt(bonus)} aXC! Yarın tekrar gel!`,'win');
+}
+checkBonus();
+
+// ============================================================
+//  LEADERBOARD
+// ============================================================
+function getLeaderboard(){return JSON.parse(localStorage.getItem('alper20x_lb')||'[]');}
+function saveScore(){
+  const name=document.getElementById('lbName').value.trim()||'Anonim';
+  const lb=getLeaderboard();
+  lb.push({name,score:balance,date:new Date().toLocaleDateString('tr-TR')});
+  lb.sort((a,b)=>b.score-a.score);
+  lb.splice(10);
+  localStorage.setItem('alper20x_lb',JSON.stringify(lb));
+  renderLeaderboard();
+  showNotif(`✅ ${name} — ${fmt(balance)} aXC kaydedildi!`,'info');
+}
+function renderLeaderboard(){
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+  const lb=getLeaderboard();
+  const el=document.getElementById('lbList');
+  if(!lb.length){el.innerHTML='<div style="color:var(--muted);font-size:.82rem;text-align:center">Henüz kayıt yok</div>';return;}
+  el.innerHTML=lb.map((e,i)=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px;${i===0?'border:1px solid rgba(240,192,64,.3)':''}">
+      <span style="font-size:1rem">${medals[i]||'•'}</span>
+      <span style="font-weight:600;flex:1;margin-left:8px;font-size:.88rem">${e.name}</span>
+      <span style="font-family:'Orbitron',sans-serif;font-size:.82rem;color:var(--gold)">${fmt(e.score)}</span>
+    </div>`).join('');
+}
+function renderSessionStats(){
+  const el=document.getElementById('sessionStats');
+  const net=totalWon-totalLost;
+  const wr=wins+losses>0?Math.round(wins/(wins+losses)*100):0;
+  el.innerHTML=[
+    ['💰 Başlangıç Bakiye','10,000 aXC'],
+    ['💵 Mevcut Bakiye',fmt(balance)+' aXC'],
+    ['📈 Net Kâr/Zarar',(net>=0?'+':'')+fmt(net)+' aXC',net>=0?'var(--green)':'var(--red)'],
+    ['✅ Kazanılan Oyun',wins+' tur'],
+    ['❌ Kaybedilen Oyun',losses+' tur'],
+    ['🎯 Kazanma Oranı',wr+'%'],
+  ].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;font-size:.82rem"><span style="color:var(--muted)">${l}</span><b style="color:${c||'#fff'}">${v}</b></div>`).join('');
+}
+renderLeaderboard();
+setInterval(renderSessionStats,2000);
+
+// ============================================================
+//  AVIATOR GAME
+// ============================================================
+const avCv=document.getElementById('avCv'),avCtx=avCv.getContext('2d');
+let avState='idle',avMult=1,avPopAt=1,avBetAmt=0,avCashed=false,avRaf=null,avTimer=null;
+let avTrail=[],avPlaneX=0,avPlaneY=0;
+
+function avRandPop(){
+  const r=Math.random();
+  if(r<0.20)return 1.5+Math.random()*1.5;
+  if(r<0.45)return 3+Math.random()*7;
+  if(r<0.70)return 10+Math.random()*40;
+  if(r<0.88)return 50+Math.random()*150;
+  return 200+Math.random()*300;
+}
+function avStart(){
+  if(avState==='flying')return;
+  if(avRaf){cancelAnimationFrame(avRaf);avRaf=null;}
+  clearTimeout(avTimer);
+  const bet=parseFloat(document.getElementById('avBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);avBetAmt=bet;avMult=1;avCashed=false;
+  avPopAt=avRandPop();avTrail=[];avState='flying';
+  document.getElementById('avStartBtn').disabled=true;
+  document.getElementById('avCashBtn').disabled=false;
+  document.getElementById('avReplayBtn').style.display='none';
+  document.getElementById('avMult').style.color='var(--blue)';
+  avLoop();
+}
+function avCash(){
+  if(avState!=='flying'||avCashed)return;
+  avCashed=true;avState='cashed';
+  if(avRaf){cancelAnimationFrame(avRaf);avRaf=null;}
+  const win=avBetAmt*avMult;updateBalance(win);
+  showNotif(`✈️ ${avMult.toFixed(2)}x — ${fmt(win)} aXC kazandın!`,'win');
+  document.getElementById('avCashBtn').disabled=true;
+  document.getElementById('avStartBtn').disabled=false;
+  document.getElementById('avReplayBtn').style.display='block';
+  document.getElementById('avStatus').textContent=`✅ ${avMult.toFixed(2)}x'de çektin! +${fmt(win-avBetAmt)} aXC`;
+  document.getElementById('avMult').textContent=avMult.toFixed(2)+'x ✅';
+  avAddHistory(avMult.toFixed(2)+'x',true);
+  avScheduleRepeat();
+}
+function avLoop(){
+  if(avState!=='flying'){avRaf=null;return;}
+  const autoV=parseFloat(document.getElementById('avAuto').value)||0;
+  avMult+=0.012*(1+avMult*0.022);
+  if(autoV>1&&avMult>=autoV)avCash();
+  if(avState!=='flying'){avRaf=null;return;}
+  document.getElementById('avMult').textContent=avMult.toFixed(2)+'x';
+  document.getElementById('avMult').style.color=avMult<3?'var(--blue)':avMult<10?'#38bdf8':'#a78bfa';
+  document.getElementById('avStatus').textContent=`✈️ Anlık: ${fmt(avBetAmt*avMult)} aXC`;
+  drawAviator();
+  if(avMult>=avPopAt){
+    avState='crashed';avRaf=null;
+    document.getElementById('avMult').textContent='💥 ÇAKILDII';
+    document.getElementById('avMult').style.color='var(--red)';
+    document.getElementById('avStatus').textContent=`${avPopAt.toFixed(2)}x'de çakıldı! -${fmt(avBetAmt)} aXC`;
+    showNotif(`💥 Uçak ${avPopAt.toFixed(2)}x'de çakıldı!`,'lose');
+    avAddHistory(avPopAt.toFixed(2)+'x',false);
+    document.getElementById('avStartBtn').disabled=false;
+    document.getElementById('avCashBtn').disabled=true;
+    document.getElementById('avReplayBtn').style.display='block';
+    drawAviatorCrash();
+    avScheduleRepeat();
+    return;
+  }
+  avRaf=requestAnimationFrame(avLoop);
+}
+function drawAviator(){
+  const W=avCv.clientWidth||600,H=300;
+  avCv.width=W;avCtx.fillStyle='#04060e';avCtx.fillRect(0,0,W,H);
+  // Grid
+  for(let i=0;i<6;i++){avCtx.strokeStyle='rgba(255,255,255,.04)';avCtx.lineWidth=1;avCtx.beginPath();avCtx.moveTo(0,H*i/5);avCtx.lineTo(W,H*i/5);avCtx.stroke();}
+  for(let i=0;i<8;i++){avCtx.beginPath();avCtx.moveTo(W*i/7,0);avCtx.lineTo(W*i/7,H);avCtx.stroke();}
+  // Progress curve
+  const prog=Math.min(1,(avMult-1)/(avPopAt-1));
+  avPlaneX=80+prog*(W-160);avPlaneY=H-60-prog*(H-120);
+  if(avTrail.length>60)avTrail.shift();
+  avTrail.push({x:avPlaneX,y:avPlaneY});
+  if(avTrail.length>1){
+    avCtx.beginPath();avCtx.moveTo(avTrail[0].x,avTrail[0].y);
+    avTrail.forEach(p=>avCtx.lineTo(p.x,p.y));
+    avCtx.strokeStyle=avMult<3?'rgba(56,189,248,.7)':avMult<10?'rgba(108,99,255,.7)':'rgba(167,139,250,.7)';
+    avCtx.lineWidth=2.5;avCtx.stroke();
+  }
+  // Plane emoji
+  avCtx.font='28px serif';avCtx.textAlign='center';avCtx.textBaseline='middle';
+  avCtx.fillText('✈️',avPlaneX,avPlaneY);
+  // Multiplier inside canvas
+  avCtx.fillStyle='rgba(255,255,255,.15)';avCtx.font='bold 18px Orbitron,monospace';
+  avCtx.textAlign='left';avCtx.fillText(avMult.toFixed(2)+'x',12,28);
+}
+function drawAviatorCrash(){
+  const W=avCv.clientWidth||600,H=300;
+  avCtx.fillStyle='rgba(239,68,68,.08)';avCtx.fillRect(0,0,W,H);
+  avCtx.font='48px serif';avCtx.textAlign='center';avCtx.textBaseline='middle';avCtx.fillText('💥',avPlaneX,avPlaneY);
+  avCtx.fillStyle='var(--red,#ef4444)';avCtx.font='bold 22px Orbitron,monospace';avCtx.fillText(avPopAt.toFixed(2)+'x',W/2,H/2+60);
+}
+function avAddHistory(label,won){
+  const el=document.getElementById('avHistory');
+  const d=document.createElement('div');
+  d.style.cssText='display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);border-radius:8px;padding:6px 10px;font-size:.8rem';
+  d.innerHTML=`<span>${won?'✅':'💥'} ${label}</span><span style="color:${won?'var(--green)':'var(--red)'}">${won?'KAZANÇ':'ÇAKILDI'}</span>`;
+  if(el.children[0]&&el.children[0].style.textAlign==='center')el.innerHTML='';
+  el.prepend(d);if(el.children.length>12)el.lastChild.remove();
+}
+let avAutoTimer=null;
+function avScheduleRepeat(){
+  if(!document.getElementById('avAutoRepeat').checked)return;
+  document.getElementById('avStartBtn').disabled=true;
+  let cd=3;const st=document.getElementById('avStatus');
+  clearInterval(avAutoTimer);
+  avAutoTimer=setInterval(()=>{st.textContent=`⏳ Sonraki tur: ${cd}s...`;cd--;if(cd<0){clearInterval(avAutoTimer);avStart();}},1000);
+}
+drawAviator();
+
+// ============================================================
+//  LIMBO GAME
+// ============================================================
+document.getElementById('limboTarget').addEventListener('input',function(){
+  const t=parseFloat(this.value);
+  const chance=Math.round((1/t)*100);
+  document.getElementById('limboChance').textContent=Math.min(99,Math.max(1,chance))+'%';
+});
+function playLimbo(){
+  const bet=parseFloat(document.getElementById('limboBet').value)||0;
+  if(bet<=0||bet>balance){showNotif('Yetersiz bakiye!','lose');return;}
+  updateBalance(-bet);
+  const target=parseFloat(document.getElementById('limboTarget').value);
+  // Random result: exponential distribution
+  const result=parseFloat((1/(-Math.log(1-Math.random())*.5+.01)).toFixed(2));
+  const bounded=Math.max(1.01,Math.min(999,result));
+  const rEl=document.getElementById('limboResult');
+  rEl.style.color='#fff';rEl.textContent='...';
+  setTimeout(()=>{
+    rEl.textContent=bounded.toFixed(2)+'x';
+    if(bounded>=target){
+      const win=bet*target;updateBalance(win);
+      rEl.style.color='var(--green)';
+      document.getElementById('limboMsg').innerHTML=`<span style="color:var(--green)">✅ ${bounded.toFixed(2)}x ≥ ${target}x — +${fmt(win-bet)} aXC!</span>`;
+      showNotif(`Limbo: ${bounded.toFixed(2)}x ≥ ${target}x → +${fmt(win-bet)} aXC`,'win');
+    } else {
+      rEl.style.color='var(--red)';
+      document.getElementById('limboMsg').innerHTML=`<span style="color:var(--red)">❌ ${bounded.toFixed(2)}x < ${target}x — Kaybettin!</span>`;
+      showNotif(`Limbo: ${bounded.toFixed(2)}x < ${target}x — Kaybettin`,'lose');
+    }
+  },400);
+}
+
+// Patch updateBalance to also update VIP
+const _origUB=updateBalance;
+updateBalance=function(delta){
+  _origUB(delta);
+  updateVIP();
+  renderSessionStats();
+};
+updateVIP();
+renderSessionStats();
+
+// ============================================================
+//  CS:GO CASE OPENING - PROFESSIONAL VERSION
+// ============================================================
+const csgoCases = {
+  dreams: {
+    name: 'Dreams & Nightmares',
+    price: 50,
+    icon: '💭',
+    items: [
+      { name: 'AK-47 | Redline', rarity: 'rare', price: 15, icon: '🔫' },
+      { name: 'AWP | Dragon Lore', rarity: 'legendary', price: 500, icon: '🎯' },
+      { name: 'Knife | Butterfly', rarity: 'epic', price: 200, icon: '🔪' },
+      { name: 'Glock-18 | Water Elemental', rarity: 'uncommon', price: 8, icon: '🔫' },
+      { name: 'USP-S | Kill Confirmed', rarity: 'common', price: 5, icon: '🔫' },
+      { name: 'M4A4 | Howl', rarity: 'ancient', price: 1000, icon: '🔫' },
+      { name: 'Desert Eagle | Blaze', rarity: 'rare', price: 25, icon: '🔫' },
+      { name: 'Nova | Hyper Beast', rarity: 'uncommon', price: 10, icon: '🔫' }
+    ]
+  },
+  nightmare: {
+    name: 'Nightmare Collection',
+    price: 100,
+    icon: '👹',
+    items: [
+      { name: 'AK-47 | Vulcan', rarity: 'epic', price: 80, icon: '🔫' },
+      { name: 'AWP | Medusa', rarity: 'legendary', price: 600, icon: '🎯' },
+      { name: 'Karambit | Fade', rarity: 'ancient', price: 1500, icon: '🔪' },
+      { name: 'M4A1-S | Hyper Beast', rarity: 'rare', price: 40, icon: '🔫' },
+      { name: 'Glock-18 | Fade', rarity: 'epic', price: 120, icon: '🔫' },
+      { name: 'USP-S | Orion', rarity: 'rare', price: 35, icon: '🔫' },
+      { name: 'Desert Eagle | Code Red', rarity: 'uncommon', price: 15, icon: '🔫' },
+      { name: 'P250 | Asiimov', rarity: 'rare', price: 30, icon: '🔫' }
+    ]
+  },
+  legendary: {
+    name: 'Legendary Collection',
+    price: 250,
+    icon: '⚡',
+    items: [
+      { name: 'AK-47 | Fire Serpent', rarity: 'ancient', price: 800, icon: '🔫' },
+      { name: 'AWP | Gungnir', rarity: 'immortal', price: 2000, icon: '🎯' },
+      { name: 'Bayonet | Doppler', rarity: 'legendary', price: 400, icon: '🔪' },
+      { name: 'M4A4 | Poseidon', rarity: 'legendary', price: 350, icon: '🔫' },
+      { name: 'Glock-18 | Nuclear Waste', rarity: 'epic', price: 150, icon: '🔫' },
+      { name: 'USP-S | Monster Mashup', rarity: 'epic', price: 140, icon: '🔫' },
+      { name: 'Desert Eagle | Golden Koi', rarity: 'ancient', price: 500, icon: '🔫' },
+      { name: 'Five-SeveN | Hyper Beast', rarity: 'rare', price: 60, icon: '🔫' }
+    ]
+  },
+  fracture: {
+    name: 'Fracture Collection',
+    price: 500,
+    icon: '💎',
+    items: [
+      { name: 'AK-47 | The Empress', rarity: 'immortal', price: 1200, icon: '🔫' },
+      { name: 'AWP | Oni Taiji', rarity: 'immortal', price: 1800, icon: '🎯' },
+      { name: 'M9 Bayonet | Doppler', rarity: 'legendary', price: 600, icon: '🔪' },
+      { name: 'M4A1-S | Decimator', rarity: 'ancient', price: 900, icon: '🔫' },
+      { name: 'Glock-18 | Wasteland Princess', rarity: 'epic', price: 200, icon: '🔫' },
+      { name: 'USP-S | Kill Confirmed', rarity: 'rare', price: 80, icon: '🔫' },
+      { name: 'Desert Eagle | Mecha Industries', rarity: 'epic', price: 180, icon: '🔫' },
+      { name: 'R8 Revolver | Fade', rarity: 'ancient', price: 700, icon: '🔫' }
+    ]
+  },
+  horizon: {
+    name: 'Horizon Collection',
+    price: 1000,
+    icon: '🌅',
+    items: [
+      { name: 'AK-47 | Point Disarray', rarity: 'immortal', price: 2500, icon: '🔫' },
+      { name: 'AWP | Duality', rarity: 'immortal', price: 3000, icon: '🎯' },
+      { name: 'Karambit | Gamma Doppler', rarity: 'immortal', price: 4000, icon: '🔪' },
+      { name: 'M4A4 | Emperor', rarity: 'ancient', price: 1500, icon: '🔫' },
+      { name: 'Glock-18 | Water Damage', rarity: 'legendary', price: 500, icon: '🔫' },
+      { name: 'USP-S | Neo-Noir', rarity: 'epic', price: 300, icon: '🔫' },
+      { name: 'Desert Eagle | Blaze', rarity: 'rare', price: 150, icon: '🔫' },
+      { name: 'M249 | Nebula Crusader', rarity: 'ancient', price: 1200, icon: '🔫' }
+    ]
+  }
+};
+
+let selectedCase = null;
+let isSpinning = false;
+let userInventory = [];
+let currentRouletteItems = [];
+let audioContext = null;
+
+// Initialize Audio Context
+function initAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+// Sound Effects
+function playSound(type) {
+  initAudio();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  
+  switch(type) {
+    case 'click':
+      oscillator.frequency.value = 800;
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+      break;
+      
+    case 'spin':
+      oscillator.frequency.value = 200;
+      oscillator.type = 'sawtooth';
+      gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+      break;
+      
+    case 'win':
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+      break;
+      
+    case 'rare':
+      oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
+      oscillator.frequency.setValueAtTime(554.37, audioContext.currentTime + 0.15); // C#5
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.3); // E5
+      gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.8);
+      break;
+      
+    case 'legendary':
+      oscillator.frequency.setValueAtTime(261.63, audioContext.currentTime); // C4
+      oscillator.frequency.setValueAtTime(329.63, audioContext.currentTime + 0.2); // E4
+      oscillator.frequency.setValueAtTime(392.00, audioContext.currentTime + 0.4); // G4
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime + 0.6); // C5
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.8); // E5
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.2);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 1.2);
+      break;
+  }
+}
+
+function selectCase(caseType) {
+  selectedCase = caseType;
+  playSound('click');
+  
+  // Update button states
+  document.querySelectorAll('.case-card-premium').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  document.querySelector(`[data-case="${caseType}"]`).classList.add('selected');
+  
+  // Show opening area
+  document.getElementById('caseOpeningArea').style.display = 'block';
+  
+  // Update button text
+  const caseData = csgoCases[caseType];
+  document.getElementById('openCaseBtn').disabled = false;
+  document.querySelector('#openCaseBtn .btn-text').textContent = `KASAYI AÇ (${caseData.price} aXC)`;
+  
+  // Calculate statistics
+  updateCaseStats(caseType);
+  
+  // Initialize roulette with items
+  initializeRoulette(caseType);
+}
+
+function updateCaseStats(caseType) {
+  const caseData = csgoCases[caseType];
+  
+  // Calculate win chance for rare+
+  const rareItems = caseData.items.filter(item => 
+    ['rare', 'epic', 'legendary', 'ancient', 'immortal'].includes(item.rarity)
+  );
+  const winChance = ((rareItems.length / caseData.items.length) * 100).toFixed(1);
+  
+  // Calculate potential value (average of top 3 items)
+  const sortedItems = [...caseData.items].sort((a, b) => b.price - a.price);
+  const potentialValue = Math.round(
+    sortedItems.slice(0, 3).reduce((sum, item) => sum + item.price, 0) / 3
+  );
+  
+  document.getElementById('winChance').textContent = `${winChance}%`;
+  document.getElementById('potentialValue').textContent = `${potentialValue} aXC`;
+}
+
+function initializeRoulette(caseType) {
+  const roulette = document.getElementById('caseRoulette');
+  const caseData = csgoCases[caseType];
+  
+  // Create extended array for roulette effect
+  currentRouletteItems = [];
+  for (let i = 0; i < 100; i++) {
+    const randomItem = caseData.items[Math.floor(Math.random() * caseData.items.length)];
+    currentRouletteItems.push({...randomItem, id: i});
+  }
+  
+  // Render roulette items
+  roulette.innerHTML = '';
+  currentRouletteItems.forEach(item => {
+    const itemEl = document.createElement('div');
+    itemEl.className = `case-item rarity-${item.rarity}`;
+    itemEl.innerHTML = `
+      <div style="font-size: 1.8rem; margin-bottom: 4px;">${item.icon}</div>
+      <div style="font-size: 0.65rem; font-weight: 600; margin: 2px 0; line-height: 1.2;">${item.name}</div>
+      <div style="font-size: 0.6rem; color: #ffd700; font-weight: 500;">${item.price} aXC</div>
+    `;
+    roulette.appendChild(itemEl);
+  });
+}
+
+function createParticles(x, y, color = '#ffd700') {
+  const container = document.getElementById('caseOpeningArea');
+  const particleCount = 20;
+  
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.cssText = `
+      position: absolute;
+      left: ${x}px;
+      top: ${y}px;
+      width: 4px;
+      height: 4px;
+      background: ${color};
+      border-radius: 50%;
+      --x: ${(Math.random() - 0.5) * 200}px;
+      --y: ${(Math.random() - 0.5) * 200}px;
+    `;
+    container.appendChild(particle);
+    
+    setTimeout(() => particle.remove(), 2000);
+  }
+}
+
+function openCase() {
+  if (!selectedCase || isSpinning) return;
+  
+  const caseData = csgoCases[selectedCase];
+  if (balance < caseData.price) {
+    showNotif('Yetersiz bakiye!', 'lose');
+    playSound('click');
+    return;
+  }
+  
+  isSpinning = true;
+  updateBalance(-caseData.price);
+  playSound('click');
+  
+  // Update button state
+  const btn = document.getElementById('openCaseBtn');
+  btn.disabled = true;
+  btn.classList.add('spinning');
+  document.querySelector('#openCaseBtn .btn-text').textContent = 'AÇILIYOR...';
+  
+  // Show spinning bar
+  const spinningBar = document.getElementById('spinningBar');
+  spinningBar.classList.add('active');
+  
+  // Play spinning sound
+  playSound('spin');
+  
+  // Calculate winning item with better odds for display
+  const weights = caseData.items.map(item => {
+    switch(item.rarity) {
+      case 'common': return 40;
+      case 'uncommon': return 25;
+      case 'rare': return 20;
+      case 'epic': return 10;
+      case 'legendary': return 3;
+      case 'ancient': return 1.5;
+      case 'immortal': return 0.5;
+      default: return 1;
+    }
+  });
+  
+  const totalWeight = weights.reduce((a, b) => a + b, 0);
+  let random = Math.random() * totalWeight;
+  let winningIndex = 0;
+  
+  for (let i = 0; i < weights.length; i++) {
+    random -= weights[i];
+    if (random <= 0) {
+      winningIndex = i;
+      break;
+    }
+  }
+  
+  const winningItem = caseData.items[winningIndex];
+  
+  // Start spinning animation
+  const roulette = document.getElementById('caseRoulette');
+  roulette.style.transition = 'transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+  
+  // Calculate final position (center of roulette)
+  const itemWidth = 94; // Width of each item + gap
+  const containerWidth = roulette.parentElement.clientWidth;
+  const targetPosition = -(winningIndex * itemWidth - containerWidth / 2 + itemWidth / 2);
+  
+  // Apply transform
+  roulette.style.transform = `translateX(${targetPosition}px)`;
+  
+  // Show result after animation
+  setTimeout(() => {
+    // Hide spinning bar
+    spinningBar.classList.remove('active');
+    
+    // Add winner glow to center item
+    const items = roulette.querySelectorAll('.case-item');
+    const centerIndex = Math.floor(items.length / 2);
+    const winnerElement = items[centerIndex];
+    winnerElement.classList.add('winner');
+    
+    // Play appropriate sound based on rarity
+    if (['immortal', 'ancient'].includes(winningItem.rarity)) {
+      playSound('legendary');
+    } else if (['legendary', 'epic'].includes(winningItem.rarity)) {
+      playSound('rare');
+    } else {
+      playSound('win');
+    }
+    
+    // Create particle effects
+    const rect = winnerElement.getBoundingClientRect();
+    const containerRect = roulette.parentElement.getBoundingClientRect();
+    createParticles(
+      rect.left - containerRect.left + rect.width / 2,
+      rect.top - containerRect.top + rect.height / 2,
+      getRarityColor(winningItem.rarity)
+    );
+    
+    // Show result with animation
+    const resultDiv = document.getElementById('caseResult');
+    resultDiv.innerHTML = `
+      <div class="result-item" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 12px; filter: drop-shadow(0 0 20px ${getRarityColor(winningItem.rarity)});">
+          ${winningItem.icon}
+        </div>
+        <div style="font-size: 1.4rem; font-weight: 700; color: ${getRarityColor(winningItem.rarity)}; margin-bottom: 8px; font-family: 'Orbitron', sans-serif;">
+          ${winningItem.name}
+        </div>
+        <div style="font-size: 1rem; color: #ffd700; margin-bottom: 8px; font-weight: 600;">
+          Değer: ${winningItem.price} aXC
+        </div>
+        <div style="font-size: 1rem; margin-top: 12px; padding: 8px 16px; border-radius: 20px; display: inline-block; font-weight: 600; ${
+          winningItem.price > caseData.price 
+            ? 'background: linear-gradient(135deg, #4CAF50, #45a049); color: white;' 
+            : 'background: rgba(255,255,255,0.1); color: #888;'
+        }">
+          ${winningItem.price > caseData.price 
+            ? `🎉 KAR: +${winningItem.price - caseData.price} aXC!` 
+            : '💫 Kayıp'}
+        </div>
+      </div>
+    `;
+    
+    // Add to inventory
+    userInventory.push({...winningItem, timestamp: Date.now()});
+    
+    // Update recent drops
+    updateRecentDrops(winningItem);
+    
+    // Update balance if profitable
+    if (winningItem.price > caseData.price) {
+      updateBalance(winningItem.price - caseData.price);
+      showNotif(`💎 BÜYÜK KAZANÇ: ${winningItem.name} (+${winningItem.price - caseData.price} aXC)`, 'win');
+    } else {
+      showNotif(`🎁 Kazandı: ${winningItem.name}`, 'info');
+    }
+    
+    // Re-enable button
+    btn.disabled = false;
+    btn.classList.remove('spinning');
+    document.querySelector('#openCaseBtn .btn-text').textContent = `KASAYI AÇ (${caseData.price} aXC)`;
+    isSpinning = false;
+    
+    // Reset roulette position after a delay
+    setTimeout(() => {
+      roulette.style.transition = 'none';
+      roulette.style.transform = 'translateX(0)';
+      winnerElement.classList.remove('winner');
+      setTimeout(() => {
+        roulette.style.transition = 'transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+      }, 50);
+    }, 3000);
+  }, 4000);
+}
+
+function getRarityColor(rarity) {
+  const colors = {
+    common: '#b0c3d9',
+    uncommon: '#5e98d9',
+    rare: '#4b69ff',
+    epic: '#8847ff',
+    legendary: '#d32ce6',
+    ancient: '#eb4b4b',
+    immortal: '#e4ae39'
+  };
+  return colors[rarity] || '#ffffff';
+}
+
+function updateRecentDrops(item) {
+  const dropsContainer = document.getElementById('recentDrops');
+  const dropEl = document.createElement('div');
+  dropEl.className = `case-item rarity-${item.rarity}`;
+  dropEl.style.cssText = 'min-width: 70px; padding: 6px; font-size: 0.7rem; animation: slide-in 0.3s ease-out;';
+  dropEl.innerHTML = `
+    <div style="font-size: 1.2rem;">${item.icon}</div>
+    <div style="font-size: 0.55rem; font-weight: 600; line-height: 1.2;">${item.name.split(' | ')[0]}</div>
+  `;
+  
+  dropsContainer.insertBefore(dropEl, dropsContainer.firstChild);
+  
+  // Keep only last 10 drops
+  while (dropsContainer.children.length > 10) {
+    dropsContainer.removeChild(dropsContainer.lastChild);
+  }
+}
+
+// LEADERBOARD FUNCTIONS
+let currentLeaderboardType = 'wealth';
+
+const mockLeaderboardData = {
+  wealth: [
+    { rank: 1, name: "alper20x", avatar: "👑", balance: 250000, wins: 1240, loss: 890, winRate: "58.2%" },
+    { rank: 2, name: "CryptoKing", avatar: "👑", balance: 185000, wins: 980, loss: 720, winRate: "57.6%" },
+    { rank: 3, name: "LuckyStar", avatar: "👑", balance: 142000, wins: 750, loss: 680, winRate: "52.5%" },
+    { rank: 4, name: "BetMaster", avatar: "🎯", balance: 98000, wins: 520, loss: 480, winRate: "52.0%" },
+    { rank: 5, name: "HighRoller", avatar: "💎", balance: 76000, wins: 380, loss: 420, winRate: "47.5%" },
+    { rank: 6, name: "CasinoPro", avatar: "🎰", balance: 65000, wins: 420, loss: 380, winRate: "52.5%" },
+    { rank: 7, name: "RiskTaker", avatar: "🔥", balance: 54000, wins: 290, loss: 310, winRate: "48.3%" },
+    { rank: 8, name: "SmartBettor", avatar: "🧠", balance: 48000, wins: 340, loss: 260, winRate: "56.7%" }
+  ],
+  wins: [
+    { rank: 1, name: "alper20x", avatar: "👑", balance: 250000, wins: 1240, loss: 890, winRate: "58.2%" },
+    { rank: 2, name: "CryptoKing", avatar: "👑", balance: 185000, wins: 980, loss: 720, winRate: "57.6%" },
+    { rank: 3, name: "LuckyStar", avatar: "👑", balance: 142000, wins: 750, loss: 680, winRate: "52.5%" },
+    { rank: 4, name: "SmartBettor", avatar: "🧠", balance: 48000, wins: 340, loss: 260, winRate: "56.7%" },
+    { rank: 5, name: "BetMaster", avatar: "🎯", balance: 98000, wins: 520, loss: 480, winRate: "52.0%" },
+    { rank: 6, name: "CasinoPro", avatar: "🎰", balance: 65000, wins: 420, loss: 380, winRate: "52.5%" },
+    { rank: 7, name: "RiskTaker", avatar: "🔥", balance: 54000, wins: 290, loss: 310, winRate: "48.3%" },
+    { rank: 8, name: "HighRoller", avatar: "💎", balance: 76000, wins: 380, loss: 420, winRate: "47.5%" }
+  ],
+  crash: [
+    { rank: 1, name: "CrashMaster", avatar: "🎈", balance: 89000, wins: 680, loss: 220, winRate: "75.6%", crashHigh: "124.5x" },
+    { rank: 2, name: "alper20x", avatar: "👑", balance: 250000, wins: 450, loss: 180, winRate: "71.4%", crashHigh: "89.2x" },
+    { rank: 3, name: "BalloonHunter", avatar: "🎯", balance: 67000, wins: 380, loss: 150, winRate: "71.7%", crashHigh: "67.8x" },
+    { rank: 4, name: "CashoutKing", avatar: "💰", balance: 45000, wins: 290, loss: 120, winRate: "70.7%", crashHigh: "45.3x" },
+    { rank: 5, name: "RiskGuru", avatar: "🔥", balance: 38000, wins: 220, loss: 95, winRate: "69.9%", crashHigh: "38.9x" }
+  ]
+};
+
+function switchLeaderboard(type) {
+  currentLeaderboardType = type;
+  
+  // Update tab states
+  document.querySelectorAll('.lb-tab').forEach(tab => tab.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  // Update leaderboard content
+  updateLeaderboard();
+}
+
+function updateLeaderboard() {
+  const leaderboardList = document.getElementById('leaderboardList');
+  const data = mockLeaderboardData[currentLeaderboardType] || [];
+  
+  leaderboardList.innerHTML = '';
+  
+  data.forEach(player => {
+    const rankClass = player.rank === 1 ? 'gold' : player.rank === 2 ? 'silver' : player.rank === 3 ? 'bronze' : '';
+    
+    const playerElement = document.createElement('div');
+    playerElement.className = 'lb-item';
+    playerElement.innerHTML = `
+      <div class="lb-rank ${rankClass}">#${player.rank}</div>
+      <div class="lb-avatar">${player.avatar}</div>
+      <div class="lb-info">
+        <div class="lb-name">${player.name}</div>
+        <div class="lb-stats">
+          <div class="lb-stat">
+            <span>Bakiye</span>
+            <b>${player.balance.toLocaleString()} aXC</b>
+          </div>
+          <div class="lb-stat">
+            <span>Kazanma</span>
+            <b>${player.wins}</b>
+          </div>
+          <div class="lb-stat">
+            <span>Kaybetme</span>
+            <b>${player.loss}</b>
+          </div>
+          <div class="lb-stat">
+            <span>Win Rate</span>
+            <b>${player.winRate}</b>
+          </div>
+          ${player.crashHigh ? `
+          <div class="lb-stat">
+            <span>En Yüksek</span>
+            <b>${player.crashHigh}</b>
+          </div>
+          ` : ''}
+        </div>
+      </div>
+      <div class="lb-value">${player.balance.toLocaleString()} aXC</div>
+    `;
+    
+    leaderboardList.appendChild(playerElement);
+  });
+}
+
+// CS:GO CASE OPENING SYSTEM
+const caseData = {
+  umbra: {
+    name: 'Umbra',
+    price: 39,
+    items: [
+      { name: 'AK-47 | Umbra', icon: '🔫', rarity: 'common', price: 25, chance: 35 },
+      { name: 'AWP | Duality', icon: '🏹', rarity: 'common', price: 30, chance: 30 },
+      { name: 'M4A4 | Emperor', icon: '👑', rarity: 'rare', price: 45, chance: 20 },
+      { name: 'Karambit | Doppler', icon: '🔪', rarity: 'epic', price: 80, chance: 10 },
+      { name: 'Butterfly | Fade', icon: '🦋', rarity: 'legendary', price: 150, chance: 5 }
+    ]
+  },
+  dusk: {
+    name: 'Dusk',
+    price: 99,
+    items: [
+      { name: 'Glock-18 | Water Elemental', icon: '💧', rarity: 'common', price: 60, chance: 30 },
+      { name: 'USP-S | Kill Confirmed', icon: '🎯', rarity: 'common', price: 70, chance: 25 },
+      { name: 'Desert Eagle | Blaze', icon: '🔥', rarity: 'rare', price: 120, chance: 20 },
+      { name: 'M9 Bayonet | Marble Fade', icon: '⚔️', rarity: 'epic', price: 200, chance: 15 },
+      { name: 'Bayonet | Autotronic', icon: '🗡️', rarity: 'legendary', price: 350, chance: 10 }
+    ]
+  },
+  jocasta: {
+    name: 'Jocasta',
+    price: 199,
+    items: [
+      { name: 'M4A1-S | Hyper Beast', icon: '🦄', rarity: 'rare', price: 150, chance: 25 },
+      { name: 'AK-47 | Redline', icon: '🔴', rarity: 'rare', price: 180, chance: 20 },
+      { name: 'AWP | Dragon Lore', icon: '🐉', rarity: 'epic', price: 400, chance: 15 },
+      { name: 'M9 Bayonet | Doppler', icon: '🌈', rarity: 'epic', price: 450, chance: 12 },
+      { name: 'Karambit | Marble Fade', icon: '💎', rarity: 'legendary', price: 800, chance: 8 }
+    ]
+  },
+  keir: {
+    name: 'Keir',
+    price: 399,
+    items: [
+      { name: 'AK-47 | Vulcan', icon: '🌋', rarity: 'epic', price: 300, chance: 20 },
+      { name: 'AWP | Medusa', icon: '🐍', rarity: 'epic', price: 350, chance: 18 },
+      { name: 'M4A4 | Howl', icon: '🐺', rarity: 'legendary', price: 800, chance: 10 },
+      { name: 'Karambit | Fade', icon: '🌅', rarity: 'legendary', price: 1200, chance: 8 },
+      { name: 'Butterfly | Ruby', icon: '💍', rarity: 'legendary', price: 1500, chance: 6 }
+    ]
+  },
+  solanine: {
+    name: 'Solanine',
+    price: 799,
+    items: [
+      { name: 'M4A4 | Howl', icon: '🐺', rarity: 'legendary', price: 900, chance: 15 },
+      { name: 'AWP | Dragon Lore', icon: '🐉', rarity: 'legendary', price: 1000, chance: 12 },
+      { name: 'Karambit | Fade', icon: '🌅', rarity: 'legendary', price: 1800, chance: 10 },
+      { name: 'Butterfly | Doppler', icon: '🦋', rarity: 'legendary', price: 2000, chance: 8 },
+      { name: 'Gloves | Pandora\'s Box', icon: '📦', rarity: 'legendary', price: 2500, chance: 5 }
+    ]
+  },
+  dragon: {
+    name: 'Dragon Lore',
+    price: 1499,
+    items: [
+      { name: 'AK-47 | Fire Serpent', icon: '🔥', rarity: 'legendary', price: 1500, chance: 20 },
+      { name: 'M4A4 | Howl', icon: '🐺', rarity: 'legendary', price: 2000, chance: 15 },
+      { name: 'AWP | Dragon Lore', icon: '🐉', rarity: 'legendary', price: 3000, chance: 12 },
+      { name: 'Karambit | Lore', icon: '📖', rarity: 'legendary', price: 5000, chance: 8 },
+      { name: 'Butterfly | Dragon Lore', icon: '🦋', rarity: 'legendary', price: 8000, chance: 5 }
+    ]
+  }
+};
+
+let upgradeStats = { success: 0, failed: 0, value: 0 };
+
+function openCase(caseId) {
+  const caseInfo = caseData[caseId];
+  if (!caseInfo) return;
+  
+  const balance = parseInt(document.getElementById('headerBal').textContent.replace(',', ''));
+  if (balance < caseInfo.price) {
+    showNotif('❌ Yetersiz bakiye!', 'lose');
+    return;
+  }
+  
+  // Deduct cost
+  updateBalance(-caseInfo.price);
+  
+  // Show modal
+  const modal = document.getElementById('caseModal');
+  const title = document.getElementById('caseModalTitle');
+  title.textContent = `${caseInfo.name} Kasa Açılışı`;
+  modal.classList.add('open');
+  
+  // Generate roulette items
+  const rouletteTrack = document.getElementById('rouletteTrack');
+  rouletteTrack.innerHTML = '';
+  
+  // Create extended item list for roulette
+  const items = [];
+  for (let i = 0; i < 50; i++) {
+    const randomItem = getRandomItem(caseInfo.items);
+    items.push(randomItem);
+  }
+  
+  // Add items to roulette
+  items.forEach(item => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'case-item';
+    itemDiv.innerHTML = item.icon;
+    itemDiv.title = `${item.name} (${item.price} aXC)`;
+    rouletteTrack.appendChild(itemDiv);
+  });
+  
+  // Determine winning item (last item in roulette)
+  const winningItem = items[items.length - 1];
+  
+  // Start roulette animation
+  setTimeout(() => {
+    const itemWidth = 116; // item width + margin
+    const targetPosition = -(items.length - 25) * itemWidth; // Center on winning item
+    rouletteTrack.style.transform = `translateX(${targetPosition}px)`;
+    
+    // Show result after animation
+    setTimeout(() => {
+      // Highlight winning item
+      const itemElements = rouletteTrack.querySelectorAll('.case-item');
+      itemElements[itemElements.length - 1].classList.add('winner');
+      
+      // Show result
+      const resultDiv = document.getElementById('caseResult');
+      resultDiv.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 12px; filter: drop-shadow(0 0 20px ${getRarityColor(winningItem.rarity)});">
+            ${winningItem.icon}
+          </div>
+          <div style="font-size: 1.4rem; font-weight: 700; color: ${getRarityColor(winningItem.rarity)}; margin-bottom: 8px; font-family: 'Orbitron', sans-serif;">
+            ${winningItem.name}
+          </div>
+          <div style="font-size: 1rem; color: #ffd700; margin-bottom: 8px; font-weight: 600;">
+            Değer: ${winningItem.price} aXC
+          </div>
+          <div style="font-size: 1rem; margin-top: 12px; padding: 8px 16px; border-radius: 20px; display: inline-block; font-weight: 600; ${
+            winningItem.price > caseInfo.price 
+              ? 'background: linear-gradient(135deg, #4CAF50, #45a049); color: white;' 
+              : 'background: rgba(255,255,255,0.1); color: #888;'
+          }">
+            ${winningItem.price > caseInfo.price 
+              ? `🎉 KAR: +${winningItem.price - caseInfo.price} aXC!` 
+              : '💫 Kayıp'}
+          </div>
+        </div>
+      `;
+      
+      // Add to inventory
+      userInventory.push({...winningItem, timestamp: Date.now()});
+      updateInventory();
+      
+      // Update balance if profitable
+      if (winningItem.price > caseInfo.price) {
+        updateBalance(winningItem.price - caseInfo.price);
+        showNotif(`💎 BÜYÜK KAZANÇ: ${winningItem.name} (+${winningItem.price - caseInfo.price} aXC)`, 'win');
+      } else {
+        showNotif(`🎁 Kazandı: ${winningItem.name}`, 'info');
+      }
+    }, 4000);
+  }, 100);
+}
+
+function getRandomItem(items) {
+  const totalChance = items.reduce((sum, item) => sum + item.chance, 0);
+  let random = Math.random() * totalChance;
+  
+  for (const item of items) {
+    random -= item.chance;
+    if (random <= 0) {
+      return {...item};
+    }
+  }
+  
+  return items[0];
+}
+
+function getRarityColor(rarity) {
+  const colors = {
+    common: '#b0c3d9',
+    rare: '#4b69ff',
+    epic: '#8847ff',
+    legendary: '#ffd700'
+  };
+  return colors[rarity] || '#ffffff';
+}
+
+function closeCaseModal() {
+  document.getElementById('caseModal').classList.remove('open');
+}
+
+function filterCases(category) {
+  const buttons = document.querySelectorAll('.case-cat-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const cases = document.querySelectorAll('.case-card-premium');
+  cases.forEach(caseCard => {
+    if (category === 'all' || caseCard.dataset.category === category) {
+      caseCard.style.display = 'block';
+    } else {
+      caseCard.style.display = 'none';
+    }
+  });
+}
+
+function updateInventory() {
+  const grid = document.getElementById('inventoryGrid');
+  
+  if (userInventory.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px">
+        <div style="font-size:3rem;margin-bottom:16px">🎒</div>
+        <div>Envanterin boş. Kasaları açarak eşyalar kazan!</div>
+      </div>
+    `;
+    return;
+  }
+  
+  grid.innerHTML = '';
+  userInventory.forEach((item, index) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'inventory-item';
+    itemDiv.innerHTML = `
+      <div class="inventory-item-rarity rarity-${item.rarity}">${item.rarity.toUpperCase()}</div>
+      <div class="inventory-item-icon">${item.icon}</div>
+      <div class="inventory-item-name">${item.name}</div>
+      <div class="inventory-item-value">${item.price} aXC</div>
+    `;
+    itemDiv.onclick = () => selectForUpgrade(index);
+    grid.appendChild(itemDiv);
+  });
+}
+
+function selectForUpgrade(index) {
+  const item = userInventory[index];
+  if (item.rarity === 'legendary') {
+    showNotif('⚠️ Efsanevi eşyalar yükseltilemez!', 'info');
+    return;
+  }
+  
+  const fromSlot = document.getElementById('upgradeFrom');
+  fromSlot.innerHTML = `<span style="font-size: 2rem">${item.icon}</span>`;
+  fromSlot.dataset.itemIndex = index;
+  
+  // Calculate upgrade chance
+  const chance = calculateUpgradeChance(item.rarity);
+  document.getElementById('upgradeChance').textContent = `${chance}%`;
+  
+  // Enable upgrade button
+  document.getElementById('upgradeBtn').disabled = false;
+}
+
+function calculateUpgradeChance(rarity) {
+  const chances = {
+    common: 75,
+    rare: 60,
+    epic: 40
+  };
+  return chances[rarity] || 0;
+}
+
+function performUpgrade() {
+  const fromSlot = document.getElementById('upgradeFrom');
+  const itemIndex = fromSlot.dataset.itemIndex;
+  
+  if (!itemIndex) return;
+  
+  const item = userInventory[itemIndex];
+  const chance = calculateUpgradeChance(item.rarity);
+  const success = Math.random() * 100 < chance;
+  
+  if (success) {
+    // Upgrade successful
+    const newRarity = getNextRarity(item.rarity);
+    const upgradedItem = {
+      ...item,
+      rarity: newRarity,
+      price: Math.floor(item.price * 2.5),
+      name: `${item.name} (Upgraded)`
+    };
+    
+    userInventory[itemIndex] = upgradedItem;
+    upgradeStats.success++;
+    upgradeStats.value += upgradedItem.price;
+    
+    showNotif(`🎉 YÜKSELTME BAŞARILI: ${upgradedItem.name}`, 'win');
+    
+    // Show success animation
+    const toSlot = document.getElementById('upgradeTo');
+    toSlot.innerHTML = `<span style="font-size: 2rem; filter: drop-shadow(0 0 20px ${getRarityColor(newRarity)})">${upgradedItem.icon}</span>`;
+    toSlot.classList.add('winner');
+    setTimeout(() => toSlot.classList.remove('winner'), 1000);
+  } else {
+    // Upgrade failed
+    userInventory.splice(itemIndex, 1);
+    upgradeStats.failed++;
+    
+    showNotif(`💔 YÜKSELTME BAŞARISIZ: ${item.name} kayboldu!`, 'lose');
+    
+    // Show failure animation
+    const fromSlot = document.getElementById('upgradeFrom');
+    fromSlot.innerHTML = '<span style="color: var(--red); font-size: 2rem">💀</span>';
+  }
+  
+  // Update displays
+  updateInventory();
+  updateUpgradeStats();
+  
+  // Reset upgrade slots
+  setTimeout(() => {
+    document.getElementById('upgradeFrom').innerHTML = '<span style="color:var(--muted)">📦</span>';
+    document.getElementById('upgradeFrom').dataset.itemIndex = '';
+    document.getElementById('upgradeTo').innerHTML = '<span style="color:var(--muted)">🎯</span>';
+    document.getElementById('upgradeBtn').disabled = true;
+    document.getElementById('upgradeChance').textContent = '75%';
+  }, 2000);
+}
+
+function getNextRarity(current) {
+  const progression = ['common', 'rare', 'epic', 'legendary'];
+  const index = progression.indexOf(current);
+  return progression[Math.min(index + 1, progression.length - 1)];
+}
+
+function updateUpgradeStats() {
+  document.getElementById('upgradeSuccess').textContent = upgradeStats.success;
+  document.getElementById('upgradeFailed').textContent = upgradeStats.failed;
+  document.getElementById('upgradeValue').textContent = upgradeStats.value.toLocaleString();
+}
+
+function showPromocode() {
+  const code = prompt('🎁 Promosyon kodunu girin:');
+  if (code) {
+    if (code.toUpperCase() === 'ALPER20X') {
+      updateBalance(500);
+      showNotif('🎉 Promosyon kodu kabul edildi! +500 aXC', 'win');
+    } else if (code.toUpperCase() === 'REAPER') {
+      updateBalance(1000);
+      showNotif('⚔ Reaper koleksiyonu bonusu! +1000 aXC', 'win');
+    } else {
+      showNotif('❌ Geçersiz promosyon kodu!', 'lose');
+    }
+  }
+}
+
+function showSupport() {
+  showNotif('💬 Destek ekibimizle iletişime geçin: support@alper20x.com', 'info');
+}
+
+function showPartner() {
+  showNotif('🤝 Ortaklık programı için: partner@alper20x.com', 'info');
+}
+
+function claimDailyFree() {
+  const lastClaim = localStorage.getItem('lastDailyClaim');
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+  
+  if (lastClaim && now - parseInt(lastClaim) < oneDay) {
+    const timeLeft = Math.ceil((oneDay - (now - parseInt(lastClaim))) / (60 * 60 * 1000));
+    showNotif(`⏰ Günlük bonus için ${timeLeft} saat beklemelisin!`, 'info');
+    return;
+  }
+  
+  updateBalance(100);
+  localStorage.setItem('lastDailyClaim', now.toString());
+  showNotif('🆓 Günlük bonus alındı! +100 aXC', 'win');
+}
+
+// INIT
+drawChart();
+updateLeaderboard();
+updateInventory();
+updateUpgradeStats();
+</script>
+</body>
+</html>

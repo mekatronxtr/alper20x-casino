@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Snake – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem;transition:color .2s}.back:hover{color:#fff}
+    .game-wrap{display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:16px;flex:1}
+    h1{font-family:monospace;font-size:1.5rem;letter-spacing:3px;color:#43e97b}
+    #info{display:flex;gap:32px;font-size:.9rem;color:#7a8394}
+    #info span b{color:#fff;font-size:1.1rem}
+    canvas{border:2px solid rgba(67,233,123,.3);border-radius:10px;background:#0a1410;box-shadow:0 0 40px rgba(67,233,123,.15)}
+    #msg{font-size:1rem;color:#7a8394;text-align:center;min-height:24px}
+    .btn{background:linear-gradient(135deg,#6c63ff,#8b5cf6);color:#fff;border:none;padding:10px 28px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;letter-spacing:1px;transition:opacity .2s}.btn:hover{opacity:.85}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="game-wrap">
+  <h1>🐍 SNAKE</h1>
+  <div id="info"><span>SKOR: <b id="score">0</b></span><span>EN İYİ: <b id="best">0</b></span><span>SEVİYE: <b id="lvl">1</b></span></div>
+  <canvas id="c" width="400" height="400"></canvas>
+  <div id="msg">SPACE veya Enter'a bas, başla!</div>
+  <button class="btn" id="startBtn">Başla</button>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const SZ=20,COLS=20,ROWS=20;
+let snake,dir,next,food,score,best=0,lvl,running,loop;
+function init(){
+  snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+  dir={x:1,y:0};next={x:1,y:0};
+  score=0;lvl=1;
+  placeFood();update();
+  running=false;
+  document.getElementById('msg').textContent='SPACE veya Enter\'a bas, başla!';
+}
+function placeFood(){
+  do{food={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}}
+  while(snake.some(s=>s.x===food.x&&s.y===food.y));
+}
+function step(){
+  dir=next;
+  const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+  if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS||snake.some(s=>s.x===head.x&&s.y===head.y)){
+    running=false;clearInterval(loop);
+    document.getElementById('msg').textContent='Oyun bitti! Tekrar başlamak için Başla\'ya bas.';
+    return;
+  }
+  snake.unshift(head);
+  if(head.x===food.x&&head.y===food.y){
+    score+=10;lvl=Math.floor(score/50)+1;
+    document.getElementById('score').textContent=score;
+    document.getElementById('lvl').textContent=lvl;
+    if(score>best){best=score;document.getElementById('best').textContent=best;}
+    placeFood();
+    clearInterval(loop);loop=setInterval(step,Math.max(60,200-lvl*15));
+  } else snake.pop();
+  draw();
+}
+function draw(){
+  ctx.fillStyle='#0a1410';ctx.fillRect(0,0,400,400);
+  ctx.fillStyle='rgba(67,233,123,.05)';
+  for(let x=0;x<COLS;x++)for(let y=0;y<ROWS;y++)if((x+y)%2===0)ctx.fillRect(x*SZ,y*SZ,SZ,SZ);
+  snake.forEach((s,i)=>{
+    const g=ctx.createRadialGradient(s.x*SZ+SZ/2,s.y*SZ+SZ/2,1,s.x*SZ+SZ/2,s.y*SZ+SZ/2,SZ/2);
+    g.addColorStop(0,i===0?'#7fffb0':'#43e97b');g.addColorStop(1,i===0?'#43e97b':'#1a7a40');
+    ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(s.x*SZ+1,s.y*SZ+1,SZ-2,SZ-2,4);ctx.fill();
+  });
+  const fg=ctx.createRadialGradient(food.x*SZ+SZ/2,food.y*SZ+SZ/2,1,food.x*SZ+SZ/2,food.y*SZ+SZ/2,SZ/2);
+  fg.addColorStop(0,'#ff8fa0');fg.addColorStop(1,'#ff6584');
+  ctx.fillStyle=fg;ctx.beginPath();ctx.arc(food.x*SZ+SZ/2,food.y*SZ+SZ/2,SZ/2-2,0,Math.PI*2);ctx.fill();
+}
+function start(){
+  if(running)return;
+  init();running=true;
+  document.getElementById('msg').textContent='';
+  loop=setInterval(step,200);
+}
+document.getElementById('startBtn').addEventListener('click',start);
+document.addEventListener('keydown',e=>{
+  if(e.key===' '||e.key==='Enter'){if(!running)start();return;}
+  if(!running)return;
+  const map={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};
+  const d=map[e.key];
+  if(d&&!(d.x===-dir.x&&d.y===-dir.y)){next=d;e.preventDefault();}
+});
+init();draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Pong – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
+    .wrap{display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:12px;flex:1}
+    h1{font-family:monospace;font-size:1.4rem;letter-spacing:3px;color:#43e97b}
+    canvas{border:2px solid rgba(67,233,123,.25);border-radius:10px;background:#020408;box-shadow:0 0 40px rgba(67,233,123,.1)}
+    #msg{font-size:.9rem;color:#7a8394;text-align:center}
+    .btn{background:linear-gradient(135deg,#43e97b,#0fa04a);color:#fff;border:none;padding:10px 28px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer}.btn:hover{opacity:.85}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap">
+  <h1>🏓 PONG</h1>
+  <canvas id="c" width="500" height="380"></canvas>
+  <div id="msg">W / S veya Ok Tuşları | Enter Başla</div>
+  <button class="btn" id="startBtn">Başla</button>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const W=500,H=380,PW=10,PH=70,BL=6;
+let p1,p2,ball,score1,score2,state='idle',keys={};
+function reset(){ball={x:W/2,y:H/2,vx:(Math.random()>0.5?1:-1)*4,vy:(Math.random()-.5)*5,r:BL};}
+function init(){p1={x:14,y:H/2-PH/2,dy:0};p2={x:W-14-PW,y:H/2-PH/2,dy:0};score1=0;score2=0;reset();state='play';}
+let aiY=H/2;
+function update(){
+  if(keys['w']||keys['W']||keys['ArrowUp'])p1.y=Math.max(0,p1.y-6);
+  if(keys['s']||keys['S']||keys['ArrowDown'])p1.y=Math.min(H-PH,p1.y+6);
+  aiY+=(ball.y-PH/2-aiY)*.07;p2.y=Math.max(0,Math.min(H-PH,aiY));
+  ball.x+=ball.vx;ball.y+=ball.vy;
+  if(ball.y-ball.r<0){ball.y=ball.r;ball.vy*=-1;}
+  if(ball.y+ball.r>H){ball.y=H-ball.r;ball.vy*=-1;}
+  if(ball.x-ball.r<p1.x+PW&&ball.y>p1.y&&ball.y<p1.y+PH&&ball.vx<0){ball.vx=Math.abs(ball.vx)*1.05;ball.vy+=((ball.y-(p1.y+PH/2))/PH)*4;ball.x=p1.x+PW+ball.r;}
+  if(ball.x+ball.r>p2.x&&ball.y>p2.y&&ball.y<p2.y+PH&&ball.vx>0){ball.vx=-Math.abs(ball.vx)*1.05;ball.vy+=((ball.y-(p2.y+PH/2))/PH)*4;ball.x=p2.x-ball.r;}
+  ball.vx=Math.max(-9,Math.min(9,ball.vx));ball.vy=Math.max(-8,Math.min(8,ball.vy));
+  if(ball.x<0){score2++;reset();}if(ball.x>W){score1++;reset();}
+  if(score1>=7||score2>=7)state='over';
+}
+function draw(){
+  ctx.fillStyle='#020408';ctx.fillRect(0,0,W,H);
+  ctx.setLineDash([10,14]);ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='rgba(255,255,255,.85)';ctx.fillRect(p1.x,p1.y,PW,PH);ctx.fillRect(p2.x,p2.y,PW,PH);
+  const bg=ctx.createRadialGradient(ball.x,ball.y,1,ball.x,ball.y,ball.r);bg.addColorStop(0,'#fff');bg.addColorStop(1,'#43e97b');
+  ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fillStyle=bg;ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 36px monospace';ctx.textAlign='center';ctx.fillText(score1,W/2-60,44);ctx.fillText(score2,W/2+60,44);
+  ctx.font='11px monospace';ctx.fillStyle='#7a8394';ctx.fillText('SEN',W/2-60,60);ctx.fillText('AI',W/2+60,60);
+  if(state==='idle'){ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#43e97b';ctx.font='bold 28px monospace';ctx.textAlign='center';ctx.fillText('PONG',W/2,H/2-20);ctx.fillStyle='#fff';ctx.font='15px monospace';ctx.fillText('W/S veya Ok Tuşları',W/2,H/2+12);ctx.fillText('7 sayı kazanır',W/2,H/2+34);}
+  if(state==='over'){ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(0,0,W,H);ctx.fillStyle=score1>score2?'#43e97b':'#ff6584';ctx.font='bold 26px monospace';ctx.textAlign='center';ctx.fillText(score1>score2?'KAZANDIN!':'KAYBETTİN!',W/2,H/2-20);ctx.fillStyle='#fff';ctx.font='14px monospace';ctx.fillText(score1+' - '+score2,W/2,H/2+10);ctx.font='13px monospace';ctx.fillStyle='#7a8394';ctx.fillText('Tekrar için Başla',W/2,H/2+38);}
+}
+function loop(){if(state==='play')update();draw();requestAnimationFrame(loop);}
+document.addEventListener('keydown',e=>{keys[e.key]=true;if(e.key==='Enter'){if(state!=='play')init();}if(['ArrowUp','ArrowDown'].includes(e.key))e.preventDefault();});
+document.addEventListener('keyup',e=>{keys[e.key]=false;});
+document.getElementById('startBtn').addEventListener('click',init);
+loop();
+</script>
+</body>
+</html>

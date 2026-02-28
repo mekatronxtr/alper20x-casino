@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>2048 – alper20x game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:linear-gradient(135deg,#0f0f23 0%,#1a1a2e 50%,#16213e 100%);color:#e2e8f0;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;position:relative;overflow:hidden}
+    
+    body::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 20% 50%,rgba(120,119,198,0.1) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,119,198,0.1) 0%,transparent 50%),radial-gradient(circle at 40% 80%,rgba(120,219,255,0.1) 0%,transparent 50%);pointer-events:none}
+    
+    header{width:100%;background:rgba(15,15,35,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.1);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;z-index:10}
+    .logo{font-family:'Inter',sans-serif;font-weight:900;font-size:1.2rem;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#94a3b8;text-decoration:none;font-size:.9rem;font-weight:500;transition:all 0.3s ease}.back:hover{color:#fff;transform:translateX(-2px)}
+    
+    .wrap{display:flex;flex-direction:column;align-items:center;padding:40px 20px;gap:24px;z-index:1}
+    h1{font-family:'Inter',sans-serif;font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;margin-bottom:8px}
+    
+    .info{display:flex;gap:32px}
+    .panel{background:rgba(30,30,50,0.9);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:transform 0.3s ease}
+    .panel:hover{transform:translateY(-2px)}
+    .panel label{font-size:.75rem;color:#94a3b8;display:block;letter-spacing:1px;font-weight:600;margin-bottom:4px}
+    .panel b{font-size:1.4rem;color:#fff;font-family:'Inter',sans-serif;font-weight:700}
+    
+    #board{position:relative;width:400px;height:400px;background:rgba(20,20,35,0.95);backdrop-filter:blur(10px);padding:12px;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.1)}
+    
+    .tile-container{position:absolute;width:88px;height:88px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:700;font-size:1.6rem;user-select:none;transition:all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);box-shadow:0 4px 12px rgba(0,0,0,0.3);will-change:transform,opacity}
+    
+    .tile-new{animation:appear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+    .tile-merged{animation:merge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+    
+    @keyframes appear{
+      0%{opacity:0;transform:scale(0) rotate(180deg) translateZ(0)}
+      50%{transform:scale(1.15) rotate(90deg) translateZ(0)}
+      100%{opacity:1;transform:scale(1) rotate(0deg) translateZ(0)}
+    }
+    
+    @keyframes merge{
+      0%{transform:scale(1) translateZ(0)}
+      50%{transform:scale(1.35);box-shadow:0 12px 32px rgba(0,0,0,0.6)}
+      100%{transform:scale(1);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+    }
+    
+    .tile-background{position:absolute;width:88px;height:88px;border-radius:12px;background:rgba(10,10,20,0.8);box-shadow:inset 0 2px 4px rgba(0,0,0,0.3)}
+    
+    #msg{font-size:1rem;color:#94a3b8;text-align:center;font-weight:500;min-height:24px}
+    
+    .btn{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);color:#fff;border:none;padding:14px 32px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(251,191,36,0.3)}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(251,191,36,0.4)}.btn:active{transform:translateY(0)}
+    
+    .score-add{position:absolute;color:#fbbf24;font-family:'Inter',sans-serif;font-weight:700;font-size:1.4rem;pointer-events:none;animation:scoreFloat 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;text-shadow:0 2px 8px rgba(251,191,36,0.5)}
+    
+    @keyframes scoreFloat{
+      0%{opacity:1;transform:translateY(0) scale(1) translateZ(0)}
+      25%{transform:translateY(-15px) scale(1.3) translateZ(0)}
+      50%{transform:translateY(-25px) scale(1.1) translateZ(0)}
+      100%{opacity:0;transform:translateY(-60px) scale(0.8) translateZ(0)}
+    }
+    
+    .game-over{animation:gameOver 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+    .victory{animation:victory 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+    
+    @keyframes gameOver{
+      0%{transform:scale(1) rotate(0deg)}
+      25%{transform:scale(0.95) rotate(-2deg)}
+      50%{transform:scale(1.05) rotate(2deg)}
+      75%{transform:scale(0.98) rotate(-1deg)}
+      100%{transform:scale(1) rotate(0deg)}
+    }
+    
+    @keyframes victory{
+      0%{transform:scale(1) rotate(0deg)}
+      25%{transform:scale(1.1) rotate(5deg)}
+      50%{transform:scale(1.2) rotate(-5deg)}
+      75%{transform:scale(1.1) rotate(2deg)}
+      100%{transform:scale(1) rotate(0deg)}
+    }
+    
+    .board-shake{animation:shake 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+    
+    @keyframes shake{
+      0%,100%{transform:translateX(0)}
+      10%,30%,50%,70%,90%{transform:translateX(-3px)}
+      20%,40%,60%,80%{transform:translateX(3px)}
+    }
+    
+    .floating-particles{position:absolute;width:100%;height:100%;overflow:hidden;pointer-events:none}
+    .particle{position:absolute;width:4px;height:4px;background:rgba(255,255,255,0.3);border-radius:50%;animation:float 8s infinite linear}
+    
+    @keyframes float{
+      0%{transform:translateY(100vh) rotate(0deg);opacity:0}
+      10%{opacity:1}
+      90%{opacity:1}
+      100%{transform:translateY(-100vh) rotate(360deg);opacity:0}
+    }
+    
+    .celebration-particle{position:absolute;width:6px;height:6px;border-radius:50%;pointer-events:none;animation:celebrate 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards}
+    
+    @keyframes celebrate{
+      0%{transform:translate(0,0) scale(0);opacity:1}
+      50%{transform:translate(var(--x),var(--y)) scale(1.5);opacity:1}
+      100%{transform:translate(calc(var(--x)*2),calc(var(--y)*2)) scale(0);opacity:0}
+    }
+    
+    .score-particle{position:absolute;color:#fbbf24;font-family:'Inter',sans-serif;font-weight:700;font-size:0.8rem;pointer-events:none;animation:scoreParticle 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;text-shadow:0 2px 4px rgba(251,191,36,0.5)}
+    
+    @keyframes scoreParticle{
+      0%{opacity:1;transform:translate(0,0) scale(1)}
+      100%{opacity:0;transform:translate(var(--x),var(--y)) scale(0.5)}
+    }
+    
+    .panel.score-updated{animation:scorePanel 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+    
+    @keyframes scorePanel{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.1);background:rgba(251,191,36,0.2)}
+      100%{transform:scale(1)}
+    }
+  </style>
+</head>
+<body>
+<div class="floating-particles" id="particles"></div>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap game-intro">
+  <h1>🎯 2048</h1>
+  <div class="info">
+    <div class="panel"><label>SKOR</label><b id="score">0</b></div>
+    <div class="panel"><label>EN İYİ</label><b id="best">0</b></div>
+  </div>
+  <div id="board"></div>
+  <div id="msg">Ok tuşlarıyla oynat</div>
+  <button class="btn" id="newBtn">🔄 Yeni Oyun</button>
+</div>
+<script>
+const COLORS={
+  0:'rgba(10,10,20,0.8)',
+  2:'linear-gradient(135deg,#4a5568 0%,#2d3748 100%)',
+  4:'linear-gradient(135deg,#718096 0%,#4a5568 100%)',
+  8:'linear-gradient(135deg,#ed8936 0%,#dd6b20 100%)',
+  16:'linear-gradient(135deg,#f56565 0%,#e53e3e 100%)',
+  32:'linear-gradient(135deg,#ed64a6 0%,#d53f8c 100%)',
+  64:'linear-gradient(135deg,#9f7aea 0%,#805ad5 100%)',
+  128:'linear-gradient(135deg,#667eea 0%,#5a67d8 100%)',
+  256:'linear-gradient(135deg,#4299e1 0%,#3182ce 100%)',
+  512:'linear-gradient(135deg,#48bb78 0%,#38a169 100%)',
+  1024:'linear-gradient(135deg,#38b2ac 0%,#319795 100%)',
+  2048:'linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%)'
+};
+
+const TC={
+  0:'transparent',
+  2:'#fff',4:'#fff',8:'#fff',16:'#fff',32:'#fff',64:'#fff',
+  128:'#fff',256:'#fff',512:'#fff',1024:'#fff',2048:'#1a202c'
+};
+
+let grid,score,best=0,tileId=0;
+const bd=document.getElementById('board');
+
+function createParticles(){const container=document.getElementById('particles');for(let i=0;i<20;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*8+'s';p.style.animationDuration=(8+Math.random()*4)+'s';container.appendChild(p);}}
+
+function createCelebrationParticles(){const board=document.getElementById('board');for(let i=0;i<12;i++){const p=document.createElement('div');p.className='celebration-particle';const angle=(Math.PI*2*i)/12;const distance=80+Math.random()*40;p.style.setProperty('--x',Math.cos(angle)*distance+'px');p.style.setProperty('--y',Math.sin(angle)*distance+'px');p.style.left='50%';p.style.top='50%';p.style.background=`hsl(${Math.random()*60+30},100%,50%)`;board.appendChild(p);setTimeout(()=>p.remove(),1500);}}
+
+function createScoreParticles(points, x, y){const board=document.getElementById('board');for(let i=0;i<3;i++){const p=document.createElement('div');p.className='score-particle';p.textContent='+'+Math.floor(points/3);const angle=(Math.PI*2*i)/3+Math.random()*0.5;p.style.setProperty('--x',Math.cos(angle)*30+'px');p.style.setProperty('--y',Math.sin(angle)*30+'px');p.style.left=x+'px';p.style.top=y+'px';board.appendChild(p);setTimeout(()=>p.remove(),1200);}}
+
+function newGrid(){return Array.from({length:4},()=>new Array(4).fill(0));}
+
+function addRandom(g){const e=[];for(let r=0;r<4;r++)for(let c=0;c<4;c++)if(!g[r][c])e.push([r,c]);if(!e.length)return;const[r,c]=e[Math.floor(Math.random()*e.length)];g[r][c]=Math.random()<.9?2:4;return[r,c];}
+
+function getTilePosition(row,col){return{left:12+col*98,top:12+row*98};}
+
+function createTile(value,row,col,isNew=false,isMerged=false){const pos=getTilePosition(row,col);const tile=document.createElement('div');tile.className='tile-container';tile.textContent=value||'';tile.style.background=COLORS[Math.min(value,2048)]||COLORS[2048];tile.style.color=TC[Math.min(value,2048)]||TC[2048];tile.style.left=pos.left+'px';tile.style.top=pos.top+'px';tile.id='tile-'+tileId++;if(value>99)tile.style.fontSize=value>999?'1.1rem':'1.3rem';if(isNew)tile.classList.add('tile-new');if(isMerged)tile.classList.add('tile-merged');return tile;}
+
+function renderBackground(){const existing=bd.querySelectorAll('.tile-background');existing.forEach(t=>t.remove());for(let r=0;r<4;r++)for(let c=0;c<4;c++){const pos=getTilePosition(r,c);const bg=document.createElement('div');bg.className='tile-background';bg.style.left=pos.left+'px';bg.style.top=pos.top+'px';bd.appendChild(bg);}}
+
+function render(){bd.innerHTML='';renderBackground();grid.forEach((row,r)=>row.forEach((v,c)=>{if(v){const tile=createTile(v,r,c);bd.appendChild(tile);}}));}
+
+function animateMoveAndRender(oldGrid,newGrid,mergedTiles,scoreAdd){bd.innerHTML='';renderBackground();const tiles=[];oldGrid.forEach((row,r)=>row.forEach((v,c)=>{if(v){const tile=createTile(v,r,c);bd.appendChild(tile);tiles.push({tile,value:v,row:r,col:c});}}));setTimeout(()=>{tiles.forEach(({tile,value,row,col})=>{let found=false;for(let r=0;r<4;r++){for(let c=0;c<4;c++){if(newGrid[r][c]===value&&!found){const toPos=getTilePosition(r,c);tile.style.left=toPos.left+'px';tile.style.top=toPos.top+'px';found=true;break;}}if(found)break;}});},50);setTimeout(()=>{bd.innerHTML='';renderBackground();newGrid.forEach((row,r)=>row.forEach((v,c)=>{if(v){const isMerged=mergedTiles.some(([mr,mc])=>mr===r&&mc===c);const tile=createTile(v,r,c,false,isMerged);bd.appendChild(tile);}}));if(scoreAdd>0){const scoreEl=document.createElement('div');scoreEl.className='score-add';scoreEl.textContent='+'+scoreAdd;scoreEl.style.left='50%';scoreEl.style.top='50%';scoreEl.style.transform='translate(-50%, -50%)';bd.appendChild(scoreEl);}},200);}
+
+function slide(row){let r=row.filter(v=>v);let pts=0;let merged=[];for(let i=0;i<r.length-1;i++){if(r[i]===r[i+1]){r[i]*=2;pts+=r[i];merged.push(i);r[i+1]=0;}}r=r.filter(v=>v);while(r.length<4)r.push(0);return{row:r,pts,merged};}
+
+function move(dir){let moved=false,pts=0;const g=grid.map(r=>[...r]);const oldGrid=grid.map(r=>[...r]);const mergedTiles=[];
+  if(dir==='left'){for(let r=0;r<4;r++){const{row,pts:p,merged}=slide(g[r]);if(JSON.stringify(row)!==JSON.stringify(g[r]))moved=true;g[r]=row;pts+=p;merged.forEach(idx=>mergedTiles.push([r,idx]));}}
+  else if(dir==='right'){for(let r=0;r<4;r++){const{row,pts:p,merged}=slide([...g[r]].reverse());if(JSON.stringify(row)!==JSON.stringify(g[r].slice().reverse()))moved=true;g[r]=row.reverse();pts+=p;merged.forEach(idx=>mergedTiles.push([r,3-idx]));}}
+  else if(dir==='up'){for(let c=0;c<4;c++){const col=[g[0][c],g[1][c],g[2][c],g[3][c]];const{row,pts:p,merged}=slide(col);if(JSON.stringify(row)!==JSON.stringify(col))moved=true;for(let r=0;r<4;r++)g[r][c]=row[r];pts+=p;merged.forEach(idx=>mergedTiles.push([idx,c]));}}
+  else if(dir==='down'){for(let c=0;c<4;c++){const col=[g[3][c],g[2][c],g[1][c],g[0][c]];const{row,pts:p,merged}=slide(col);if(JSON.stringify(row)!==JSON.stringify(col))moved=true;for(let r=0;r<4;r++)g[3-r][c]=row[r];pts+=p;merged.forEach(idx=>mergedTiles.push([3-idx,c]));}}
+  if(!moved){bd.classList.add('board-shake');setTimeout(()=>bd.classList.remove('board-shake'),500);}
+  if(moved){grid=g;score+=pts;if(score>best)best=score;const scorePanel=document.getElementById('score');scorePanel.textContent=score;scorePanel.parentElement.classList.add('score-updated');setTimeout(()=>scorePanel.parentElement.classList.remove('score-updated'),600);document.getElementById('best').textContent=best;animateMoveAndRender(oldGrid,grid,mergedTiles,pts);if(pts>0){const board=document.getElementById('board');const rect=board.getBoundingClientRect();createScoreParticles(pts,rect.width/2,rect.height/2);}setTimeout(()=>{const newTilePos=addRandom(grid);if(newTilePos){const [r,c]=newTilePos;const tile=createTile(grid[r][c],r,c,true);bd.appendChild(tile);}},250);}
+  if(grid.flat().includes(2048)){document.getElementById('msg').textContent='🎉 2048\'e ulaştın! Devam edebilirsin!';bd.classList.add('victory');createCelebrationParticles();setTimeout(()=>bd.classList.remove('victory'),1000);}
+  else{let dead=true;outer:for(let r=0;r<4;r++)for(let c=0;c<4;c++){if(!grid[r][c]){dead=false;break outer;}if(c<3&&grid[r][c]===grid[r][c+1]){dead=false;break outer;}if(r<3&&grid[r][c]===grid[r+1][c]){dead=false;break outer;}}if(dead){document.getElementById('msg').textContent='😔 Oyun bitti! Hamle kalmadı.';bd.classList.add('game-over');setTimeout(()=>bd.classList.remove('game-over'),800);}}
+}
+
+document.addEventListener('keydown',e=>{
+  const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};
+  if(map[e.key]){e.preventDefault();move(map[e.key]);}
+});
+
+let tx=0,ty=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>Math.abs(dy)){move(dx>0?'right':'left');}else{move(dy>0?'down':'up');}});
+
+document.getElementById('newBtn').addEventListener('click',init);
+
+function init(){grid=newGrid();score=0;tileId=0;document.getElementById('score').textContent=0;document.getElementById('best').textContent=best;document.getElementById('msg').textContent='Ok tuşlarıyla oynat';addRandom(grid);addRandom(grid);render();}
+
+createParticles();
+init();
+</script>
+</body>
+</html>

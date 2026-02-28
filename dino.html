@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dino Run – alper20x game</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#06080e;color:#e2e8f0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+    header{width:100%;background:rgba(6,8,14,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .back{color:#7a8394;text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
+    .wrap{display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:12px;flex:1}
+    h1{font-family:monospace;font-size:1.4rem;letter-spacing:3px;color:#fff}
+    canvas{border:2px solid rgba(255,255,255,.12);border-radius:10px;cursor:pointer;box-shadow:0 0 30px rgba(255,255,255,.05)}
+    #msg{font-size:.9rem;color:#7a8394;text-align:center}
+    .btn{background:linear-gradient(135deg,#555,#333);color:#fff;border:none;padding:10px 28px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer}.btn:hover{opacity:.85}
+  </style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Geri</a>
+  <div class="logo">alper20x game</div>
+  <div></div>
+</header>
+<div class="wrap">
+  <h1>🦕 DİNO RUN</h1>
+  <canvas id="c" width="500" height="220"></canvas>
+  <div id="msg">SPACE veya Yukarı Ok ile zıpla</div>
+  <button class="btn" id="startBtn">Başla</button>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const W=500,H=220,GY=170;
+let dino,obstacles,score,best=0,state='idle',spd,frame,clouds;
+function init(){
+  dino={x:60,y:GY,w:36,h:44,vy:0,onGround:true,legPhase:0};
+  obstacles=[];score=0;spd=4;frame=0;
+  clouds=[{x:400,y:30},{x:250,y:55},{x:100,y:40}];
+  state='play';document.getElementById('msg').textContent='';
+}
+const JUMP=-13,GRAVITY=.7;
+function jump(){if(dino.onGround){dino.vy=JUMP;dino.onGround=false;}}
+function addObstacle(){
+  const h=30+Math.random()*30,w=18+Math.random()*14;
+  obstacles.push({x:W,y:GY+dino.h-h,w,h});
+}
+function update(){
+  frame++;spd=4+Math.floor(score/200)*0.4;
+  dino.vy+=GRAVITY;dino.y+=dino.vy;
+  if(dino.y>=GY){dino.y=GY;dino.vy=0;dino.onGround=true;}
+  if(dino.onGround)dino.legPhase=Math.floor(frame/5)%2;
+  obstacles.forEach(o=>o.x-=spd);
+  obstacles=obstacles.filter(o=>o.x>-50);
+  if(frame%Math.max(50,90-Math.floor(score/100)*3)===0)addObstacle();
+  for(const o of obstacles){
+    if(dino.x+dino.w-6>o.x+4&&dino.x+6<o.x+o.w-4&&dino.y+dino.h-4>o.y+4){state='dead';if(score>best)best=score;return;}
+  }
+  score++;
+  clouds.forEach(c=>{c.x-=0.7;if(c.x<-80)c.x=W+50;});
+}
+function draw(){
+  ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,W,H);
+  clouds.forEach(c=>{ctx.fillStyle='rgba(255,255,255,.08)';ctx.beginPath();ctx.ellipse(c.x,c.y,35,14,0,0,Math.PI*2);ctx.fill();ctx.ellipse(c.x+20,c.y-8,20,10,0,0,Math.PI*2);ctx.fill();});
+  ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,GY+dino.h);ctx.lineTo(W,GY+dino.h);ctx.stroke();
+  obstacles.forEach(o=>{
+    const g=ctx.createLinearGradient(o.x,o.y,o.x+o.w,o.y+o.h);g.addColorStop(0,'#2a6a2a');g.addColorStop(1,'#1a4a1a');
+    ctx.fillStyle=g;ctx.fillRect(o.x,o.y,o.w,o.h);
+    ctx.fillStyle='rgba(255,255,255,.1)';ctx.fillRect(o.x+2,o.y+2,6,4);
+  });
+  const dx=dino.x,dy=dino.y,dw=dino.w,dh=dino.h;
+  ctx.fillStyle='#50e880';
+  ctx.beginPath();ctx.roundRect(dx+6,dy,dw-10,dh-12,6);ctx.fill();
+  ctx.fillStyle='#6aff9a';ctx.beginPath();ctx.roundRect(dx+8,dy+2,dw-20,14,4);ctx.fill();
+  ctx.fillStyle='#1a1a2e';ctx.beginPath();ctx.arc(dx+dw-14,dy+6,3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(dx+dw-15,dy+5,1.5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#50e880';
+  if(dino.onGround){
+    ctx.fillRect(dx+8,dy+dh-16,10,16);ctx.fillRect(dx+8+(dino.legPhase===0?0:12),dy+dh-4,10,4);
+  } else {ctx.fillRect(dx+8,dy+dh-16,10,10);ctx.fillRect(dx+14,dy+dh-14,10,10);}
+  ctx.fillStyle='#fff';ctx.font='bold 16px monospace';ctx.textAlign='right';ctx.fillText('HI: '+best,W-8,22);
+  ctx.textAlign='left';ctx.fillText(score,8,22);
+  if(state==='idle'){ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff';ctx.font='bold 22px monospace';ctx.textAlign='center';ctx.fillText('🦕 DİNO RUN',W/2,H/2-16);ctx.font='14px monospace';ctx.fillStyle='#7a8394';ctx.fillText('SPACE / Yukarı Ok ile başla',W/2,H/2+12);}
+  if(state==='dead'){ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ff6584';ctx.font='bold 22px monospace';ctx.textAlign='center';ctx.fillText('GAME OVER',W/2,H/2-22);ctx.fillStyle='#fff';ctx.font='15px monospace';ctx.fillText('Skor: '+score,W/2,H/2+4);ctx.font='13px monospace';ctx.fillStyle='#7a8394';ctx.fillText('Tekrar için SPACE',W/2,H/2+28);}
+}
+function loop(){if(state==='play')update();draw();requestAnimationFrame(loop);}
+document.addEventListener('keydown',e=>{
+  if(e.key===' '||e.key==='ArrowUp'){e.preventDefault();if(state!=='play')init();else jump();}
+});
+cv.addEventListener('click',()=>{if(state!=='play')init();else jump();});
+document.getElementById('startBtn').addEventListener('click',()=>{init();});
+loop();
+</script>
+</body>
+</html>
